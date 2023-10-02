@@ -34,6 +34,11 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double LATERAL_DISTANCE = 15.5; // in; distance between the left and right wheels
     public static double FORWARD_OFFSET = 8.5; // in; offset of the lateral wheel
 
+    // According to roadrunner docs this can have 1% difference but I'm not bothering so yea
+    // https://learnroadrunner.com/dead-wheels.html#adjusting-the-wheel-radius-2
+    public static double X_MULTIPLIER = 1; // Multiplier in the X direction
+    public static double Y_MULTIPLIER = 1; // Multiplier in the Y direction
+
     private Encoder leftEncoder, rightEncoder, frontEncoder;
 
     private List<Integer> lastEncPositions, lastEncVels;
@@ -72,9 +77,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         lastEncPositions.add(frontPos);
 
         return Arrays.asList(
-                encoderTicksToInches(leftPos),
-                encoderTicksToInches(rightPos),
-                encoderTicksToInches(frontPos)
+            encoderTicksToInches(leftPos) * X_MULTIPLIER,
+            encoderTicksToInches(rightPos) * X_MULTIPLIER,
+            encoderTicksToInches(frontPos) * Y_MULTIPLIER
         );
     }
 
