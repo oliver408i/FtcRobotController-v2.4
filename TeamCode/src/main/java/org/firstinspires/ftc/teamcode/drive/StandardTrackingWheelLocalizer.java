@@ -36,7 +36,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     // According to roadrunner docs this can have 1% difference but I'm not bothering so yea
     // https://learnroadrunner.com/dead-wheels.html#adjusting-the-wheel-radius-2
-    public static double X_MULTIPLIER = 1.043478260869565; // Multiplier in the X direction
+    public static double X_MULTIPLIER = 0.956555555555556; // Multiplier in the X direction
     // first trial: 115.02 inches
     //second: 114.75
     //third: 114.59
