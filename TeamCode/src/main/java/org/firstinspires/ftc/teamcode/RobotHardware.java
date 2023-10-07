@@ -71,7 +71,7 @@ public class RobotHardware {
     public DcMotor rightBack = null;
     public DcMotor ViperSlide = null;
 
-    public DcMotor EncoderTest = null;
+    //public DcMotor EncoderTest = null;
     //TODO: delete this after we're done testing the rev through bore encoders
 
     //RobotHardware.leftFront.setPower(0);
@@ -130,7 +130,7 @@ public class RobotHardware {
         leftBack = ahwMap.get(DcMotor.class, "leftBack");
         rightBack = ahwMap.get(DcMotor.class, "rightBack");
         ViperSlide = ahwMap.get(DcMotor.class, "ViperSlide");
-        EncoderTest = ahwMap.get(DcMotor.class, "EncoderTest");
+        //EncoderTest = ahwMap.get(DcMotor.class, "EncoderTest");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -140,7 +140,7 @@ public class RobotHardware {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
         ViperSlide.setDirection(DcMotor.Direction.REVERSE);
-        EncoderTest.setDirection(DcMotorSimple.Direction.FORWARD);
+        //EncoderTest.setDirection(DcMotorSimple.Direction.FORWARD);
 /*
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

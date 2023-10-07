@@ -89,6 +89,8 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
  */
 
+            robot.ViperSlide.setPower(gamepad2.left_stick_y);
+
             if(gamepad1.right_trigger > 0){
                 leftFrontPower = right_trig;
                 leftBackPower = -right_trig;
