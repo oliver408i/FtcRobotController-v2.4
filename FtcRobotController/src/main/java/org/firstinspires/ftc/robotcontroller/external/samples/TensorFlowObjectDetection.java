@@ -37,6 +37,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 /**
@@ -46,9 +49,8 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
-public class ConceptTensorFlowObjectDetection extends LinearOpMode {
+@TeleOp(name = "TensorFlow Object Detection", group = "Concept")
+public class TensorFlowObjectDetection extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -77,6 +79,15 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
             while (opModeIsActive()) {
 
                 telemetryTfod();
+                List<Recognition> recognitions = tfod.getRecognitions();
+                for (Recognition recognition : recognitions)
+                {
+                    String label = recognition.getLabel();
+                    float confidence = recognition.getConfidence();
+
+                    telemetry.addLine("Recognized Object: " + label);
+                    telemetry.addLine("Confidence: " + confidence);
+                }
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
