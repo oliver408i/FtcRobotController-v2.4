@@ -36,11 +36,19 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     // According to roadrunner docs this can have 1% difference but I'm not bothering so yea
     // https://learnroadrunner.com/dead-wheels.html#adjusting-the-wheel-radius-2
-    public static double X_MULTIPLIER = 0.956555555555556; // Multiplier in the X direction
+    public static double X_MULTIPLIER = 1.0454; // Multiplier in the X direction
     // first trial: 115.02 inches
     //second: 114.75
     //third: 114.59
-    public static double Y_MULTIPLIER = 1; // Multiplier in the Y direction
+    // 114.786
+    // value: 1.0454
+    public static double Y_MULTIPLIER = 1.0336; // Multiplier in the Y direction
+    // out of 108
+    // first try: 104.24 inches.
+    // second try: 104.702
+    // third try: 104.518
+    // total: 104.4867
+    // value: 1.0336
 
     private Encoder leftEncoder, rightEncoder, frontEncoder;
 
@@ -61,6 +69,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightFront"));
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
+        // leftEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
     public static double encoderTicksToInches(double ticks) {
