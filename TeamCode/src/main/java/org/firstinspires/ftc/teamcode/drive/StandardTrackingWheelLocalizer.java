@@ -31,8 +31,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double WHEEL_RADIUS = (35/2)/25.4 ; // in inches. 35mm diameter.
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double LATERAL_DISTANCE = 15.5; // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = 8.5; // in; offset of the lateral wheel
+    public static double LATERAL_DISTANCE = 15.5; // in; distance between the left and right wheels, previously 15.5
+    public static double FORWARD_OFFSET = 8.5; // in; offset of the lateral wheel, previously 8.5
+    // TODO: May be negative if wheel is behind???
 
     // According to roadrunner docs this can have 1% difference but I'm not bothering so yea
     // https://learnroadrunner.com/dead-wheels.html#adjusting-the-wheel-radius-2
@@ -69,7 +70,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightFront"));
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
-        rightEncoder.setDirection(Encoder.Direction.REVERSE);
+        //rightEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
     public static double encoderTicksToInches(double ticks) {
