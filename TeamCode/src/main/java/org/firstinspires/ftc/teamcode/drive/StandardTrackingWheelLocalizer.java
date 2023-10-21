@@ -32,7 +32,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
     public static double LATERAL_DISTANCE = 15.5; // in; distance between the left and right wheels, previously 15.5
-    public static double FORWARD_OFFSET = 8.5; // in; offset of the lateral wheel, previously 8.5
+    public static double FORWARD_OFFSET = -7; // in; offset of the lateral wheel, previously 8.5 (bugged)
     // TODO: May be negative if wheel is behind???
 
     // According to roadrunner docs this can have 1% difference but I'm not bothering so yea
