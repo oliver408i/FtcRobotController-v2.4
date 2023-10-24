@@ -109,16 +109,20 @@ public class tfodTest extends LinearOpMode {
         tfod = new TfodProcessor.Builder()
 
             // Use setModelAssetName() if the TF Model is built in as an asset.
-
+                .setModelFileName("object_test1.tflite")
             // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
             //.setModelAssetName(TFOD_MODEL_ASSET)
             //.setModelFileName(TFOD_MODEL_FILE)
 
+
             //.setModelLabels(LABELS)
+
             //.setIsModelTensorFlow2(true)
             //.setIsModelQuantized(true)
             //.setModelInputSize(300)
+                .setModelInputSize(300)
             //.setModelAspectRatio(16.0 / 9.0)
+                .setModelAspectRatio(16.0 / 9.0)
 
             .build();
 
