@@ -22,7 +22,7 @@ public class CustomSplineTest extends LinearOpMode{
         Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
                 .splineToConstantHeading(new Vector2d(10,20), Math.toRadians(0))
                 /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
+                .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
                 .build();
 
         waitForStart();
