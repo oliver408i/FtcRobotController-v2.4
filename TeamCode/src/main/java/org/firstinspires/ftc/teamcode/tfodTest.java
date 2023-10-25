@@ -29,6 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Size;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -120,14 +123,18 @@ public class tfodTest extends LinearOpMode {
             //.setIsModelTensorFlow2(true)
             //.setIsModelQuantized(true)
             //.setModelInputSize(300)
-                .setModelInputSize(300)
             //.setModelAspectRatio(16.0 / 9.0)
-                .setModelAspectRatio(16.0 / 9.0)
+
 
             .build();
 
+        WebcamName cam = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+        //FtcDashboard.getInstance().startCameraStream(,60);
+
         // Create the vision portal by using a builder.
         VisionPortal.Builder builder = new VisionPortal.Builder();
+
 
         // Set the camera (webcam vs. built-in RC phone camera).
         if (USE_WEBCAM) {
@@ -138,8 +145,10 @@ public class tfodTest extends LinearOpMode {
 
         // Choose a camera resolution. Not all cameras support all resolutions.
         //builder.setCameraResolution(new Size(640, 480));
+        builder.setCameraResolution(new Size(1280, 720));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
+        //builder.enableCameraMonitoring(true);
         //builder.enableCameraMonitoring(true);
 
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
