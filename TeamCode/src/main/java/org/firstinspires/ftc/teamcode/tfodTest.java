@@ -41,6 +41,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -89,6 +90,7 @@ public class tfodTest extends LinearOpMode {
 
         if (opModeIsActive()) {
             ExposureControl exposureControl;
+            GainControl gainControl;
 
 
             while (opModeIsActive()) {
@@ -107,9 +109,12 @@ public class tfodTest extends LinearOpMode {
                     visionPortal.resumeStreaming();
                 }
                 exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-                exposureControl.setMode(ExposureControl.Mode.Manual); // prev continuousAuto
+                exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
 
-                exposureControl.setExposure((long) 455, TimeUnit.MILLISECONDS); //prev 655
+                gainControl = visionPortal.getCameraControl(GainControl.class);
+                gainControl.setGain(255);
+
+                exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
 
                 
                 /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
@@ -219,6 +224,16 @@ public class tfodTest extends LinearOpMode {
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+            if(100 < x && x < 400){
+                telemetry.addData("Cube Pos: ", "left");
+            }
+            else if(500 < x && x < 900){
+                telemetry.addData("Cube Pos: ", "center");
+            }
+            else if(1000 < x && x < 1200){
+                telemetry.addData("Cube Pos: ", "right");
+            }
 
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);

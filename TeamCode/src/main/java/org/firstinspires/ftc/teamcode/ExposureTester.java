@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import android.util.Size;
 
@@ -71,7 +71,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @TeleOp(name="Optimize Tfod Exposure")
-@Disabled
+
 public class ExposureTester extends LinearOpMode
 {
     private VisionPortal visionPortal = null;        // Used to manage the video source.
