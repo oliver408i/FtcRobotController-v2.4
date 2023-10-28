@@ -59,7 +59,7 @@ import java.util.concurrent.TimeUnit;
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
 
-public class tfodTest extends LinearOpMode {
+public class canvasRedTeamAuto extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -83,48 +83,69 @@ public class tfodTest extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
+        ExposureControl exposureControl;
+        GainControl gainControl;
+        String cubePosition;
+
+        while(!opModeIsActive()){
+            telemetryTfod();
+
+            // Push telemetry to the Driver Station.
+            telemetry.update();
+
+            // Save CPU resources; can resume streaming when needed.
+            if (gamepad1.dpad_down) {
+                visionPortal.stopStreaming();
+            } else if (gamepad1.dpad_up) {
+                visionPortal.resumeStreaming();
+            }
+            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+
+            gainControl = visionPortal.getCameraControl(GainControl.class);
+            gainControl.setGain(255);
+
+            exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
+
+
+                /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
+                telemetry.addData("exposure max: ", exposureControl.getMaxExposure(TimeUnit.SECONDS));
+                telemetry.addData("exposiure :", exposureControl.getExposure(TimeUnit.SECONDS));
+                telemetry.update();*/
+
+            // Share the CPU.
+            sleep(20);
+
+            List<Recognition> currentRecognitions = tfod.getRecognitions();
+
+            // Step through the list of recognitions and display info for each one.
+            for (Recognition recognition : currentRecognitions) {
+                double x = (recognition.getLeft() + recognition.getRight()) / 2;
+                double y = (recognition.getTop() + recognition.getBottom()) / 2;
+
+                if (100 < x && x < 400) {
+                    cubePosition = "left";
+                } else if (500 < x && x < 900) {
+                    cubePosition = "center";
+                } else if (1000 < x && x < 1280) {
+                    cubePosition = "right";
+                }
+            }
+
+        }
+
 
 
 
         waitForStart();
 
         if (opModeIsActive()) {
-            ExposureControl exposureControl;
-            GainControl gainControl;
-
-
-            while (opModeIsActive()) {
 
 
 
-                telemetryTfod();
-
-                // Push telemetry to the Driver Station.
-                telemetry.update();
-
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
-                }
-                exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-                exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-
-                gainControl = visionPortal.getCameraControl(GainControl.class);
-                gainControl.setGain(255);
-
-                exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
-
-                
-                /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
-                telemetry.addData("exposure max: ", exposureControl.getMaxExposure(TimeUnit.SECONDS));
-                telemetry.addData("exposiure :", exposureControl.getExposure(TimeUnit.SECONDS));
-                telemetry.update();*/
-
-                // Share the CPU.
-                sleep(20);
-            }
+//            while (opModeIsActive()) {
+//
+//            }
         }
 
         // Save more CPU resources when camera is no longer needed.
@@ -140,26 +161,26 @@ public class tfodTest extends LinearOpMode {
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
-            // Use setModelAssetName() if the TF Model is built in as an asset.
+                // Use setModelAssetName() if the TF Model is built in as an asset.
 
                 //.setModelFileName("object_test1.tflite")
 
                 .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
 
-            // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-            //.setModelAssetName(TFOD_MODEL_ASSET)
-            //.setModelFileName(TFOD_MODEL_FILE)
+                // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
+                //.setModelAssetName(TFOD_MODEL_ASSET)
+                //.setModelFileName(TFOD_MODEL_FILE)
 
 
-            //.setModelLabels(LABELS)
+                //.setModelLabels(LABELS)
 
-            //.setIsModelTensorFlow2(true)
-            //.setIsModelQuantized(true)
-            //.setModelInputSize(300)
-            //.setModelAspectRatio(16.0 / 9.0)
+                //.setIsModelTensorFlow2(true)
+                //.setIsModelQuantized(true)
+                //.setModelInputSize(300)
+                //.setModelAspectRatio(16.0 / 9.0)
 
 
-            .build();
+                .build();
 
 
         WebcamName cam = hardwareMap.get(WebcamName.class, "Webcam 1");
