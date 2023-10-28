@@ -104,17 +104,14 @@ public class tfodTest extends LinearOpMode {
                 if (gamepad1.dpad_down) {
                     visionPortal.stopStreaming();
                 } else if (gamepad1.dpad_up) {
-
                     visionPortal.resumeStreaming();
-
-
-
-
                 }
                 exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-                exposureControl.setMode(ExposureControl.Mode.Manual);
+                exposureControl.setMode(ExposureControl.Mode.Manual); // prev continuousAuto
 
-                exposureControl.setExposure((long) 655, TimeUnit.MILLISECONDS);
+                exposureControl.setExposure((long) 455, TimeUnit.MILLISECONDS); //prev 655
+
+                
                 /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
                 telemetry.addData("exposure max: ", exposureControl.getMaxExposure(TimeUnit.SECONDS));
                 telemetry.addData("exposiure :", exposureControl.getExposure(TimeUnit.SECONDS));
