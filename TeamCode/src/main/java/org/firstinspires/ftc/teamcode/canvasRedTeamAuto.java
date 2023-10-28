@@ -81,6 +81,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
     public void runOpMode() {
 
         initTfod();
+        sleep(1500);
 
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
@@ -142,7 +143,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
-                .splineToConstantHeading(new Vector2d(10,50), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(12,36), Math.toRadians(270))
                 /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
                 .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
                 .build();
