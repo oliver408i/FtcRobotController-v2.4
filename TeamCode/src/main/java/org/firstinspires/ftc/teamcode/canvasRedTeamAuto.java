@@ -32,6 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -43,6 +46,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -57,7 +61,7 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
+@TeleOp(name = "CanvasLeftTrussRight", group = "Concept")
 
 public class canvasRedTeamAuto extends LinearOpMode {
 
@@ -135,14 +139,22 @@ public class canvasRedTeamAuto extends LinearOpMode {
         }
 
 
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
+                .splineToConstantHeading(new Vector2d(10,50), Math.toRadians(270))
+                /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
+                .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
+                .build();
 
 
         waitForStart();
 
+
+
         if (opModeIsActive()) {
 
-
-
+            drive.followTrajectory(myTrajectory);
 //            while (opModeIsActive()) {
 //
 //            }
