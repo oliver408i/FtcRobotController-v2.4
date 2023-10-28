@@ -35,14 +35,19 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
+import java.sql.Time;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This 2023-2024 OpMode illustrates the basics of TensorFlow Object Detection,
@@ -76,10 +81,19 @@ public class tfodTest extends LinearOpMode {
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
+
+
+
+
         waitForStart();
 
         if (opModeIsActive()) {
+            ExposureControl exposureControl;
+
+
             while (opModeIsActive()) {
+
+
 
                 telemetryTfod();
 
@@ -90,8 +104,21 @@ public class tfodTest extends LinearOpMode {
                 if (gamepad1.dpad_down) {
                     visionPortal.stopStreaming();
                 } else if (gamepad1.dpad_up) {
+
                     visionPortal.resumeStreaming();
+
+
+
+
                 }
+                exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+                exposureControl.setMode(ExposureControl.Mode.Manual);
+
+                exposureControl.setExposure((long) 655, TimeUnit.MILLISECONDS);
+                /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
+                telemetry.addData("exposure max: ", exposureControl.getMaxExposure(TimeUnit.SECONDS));
+                telemetry.addData("exposiure :", exposureControl.getExposure(TimeUnit.SECONDS));
+                telemetry.update();*/
 
                 // Share the CPU.
                 sleep(20);
@@ -132,7 +159,12 @@ public class tfodTest extends LinearOpMode {
 
             .build();
 
+
         WebcamName cam = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+
+        //Camera webcam = hardwareMap.get(Camera.class, "Webcam 1");
+
 
         //FtcDashboard.getInstance().startCameraStream(,60);
 
@@ -171,6 +203,7 @@ public class tfodTest extends LinearOpMode {
 
         // Set confidence threshold for TFOD recognitions, at any time.
         //tfod.setMinResultConfidence(0.75f);
+        tfod.setMinResultConfidence(0.5f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
