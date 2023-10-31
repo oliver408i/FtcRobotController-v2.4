@@ -35,6 +35,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -61,7 +62,7 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "CanvasLeftTrussRight", group = "Concept")
+@Autonomous(name = "CanvasLeftTrussRight", group = "Concept")
 
 public class canvasRedTeamAuto extends LinearOpMode {
 
@@ -143,12 +144,13 @@ public class canvasRedTeamAuto extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
-                .splineToConstantHeading(new Vector2d(12,36), Math.toRadians(270))
+                .splineToLinearHeading(new Pose2d(28,36, Math.toRadians(90)), Math.toRadians(0))
                 /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
                 .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
                 .build();
-
-
+        Trajectory goBack = drive.trajectoryBuilder(new Pose2d())
+                .splineToLinearHeading(new Pose2d(-28,-30, Math.toRadians(-90)), Math.toRadians(0))
+                .build();
         waitForStart();
 
 
@@ -156,6 +158,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
         if (opModeIsActive()) {
 
             drive.followTrajectory(myTrajectory);
+            //drive.followTrajectory(goBack);
 //            while (opModeIsActive()) {
 //
 //            }
