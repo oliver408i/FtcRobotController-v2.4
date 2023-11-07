@@ -27,11 +27,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import android.util.Size;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -43,6 +47,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -57,9 +62,9 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
+@Autonomous(name = "CanvasLeftTrussRight", group = "Concept")
 
-public class tfodTest extends LinearOpMode {
+public class canvasRedTeamAuto extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -77,54 +82,86 @@ public class tfodTest extends LinearOpMode {
     public void runOpMode() {
 
         initTfod();
+        sleep(1500);
 
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
+        ExposureControl exposureControl;
+        GainControl gainControl;
+        String cubePosition;
+
+        while(!opModeIsActive()){
+            telemetryTfod();
+
+            // Push telemetry to the Driver Station.
+            telemetry.update();
+
+            // Save CPU resources; can resume streaming when needed.
+            if (gamepad1.dpad_down) {
+                visionPortal.stopStreaming();
+            } else if (gamepad1.dpad_up) {
+                visionPortal.resumeStreaming();
+            }
+            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+
+            gainControl = visionPortal.getCameraControl(GainControl.class);
+            gainControl.setGain(255);
+
+            exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
 
 
-
-        waitForStart();
-
-        if (opModeIsActive()) {
-            ExposureControl exposureControl;
-            GainControl gainControl;
-
-
-            while (opModeIsActive()) {
-
-
-
-                telemetryTfod();
-
-                // Push telemetry to the Driver Station.
-                telemetry.update();
-
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
-                }
-                exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-                exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-
-                gainControl = visionPortal.getCameraControl(GainControl.class);
-                gainControl.setGain(255);
-
-                exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
-
-                
                 /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
                 telemetry.addData("exposure max: ", exposureControl.getMaxExposure(TimeUnit.SECONDS));
                 telemetry.addData("exposiure :", exposureControl.getExposure(TimeUnit.SECONDS));
                 telemetry.update();*/
 
-                // Share the CPU.
-                sleep(20);
+            // Share the CPU.
+            sleep(20);
+
+            List<Recognition> currentRecognitions = tfod.getRecognitions();
+
+            // Step through the list of recognitions and display info for each one.
+            for (Recognition recognition : currentRecognitions) {
+                double x = (recognition.getLeft() + recognition.getRight()) / 2;
+                double y = (recognition.getTop() + recognition.getBottom()) / 2;
+
+                if (100 < x && x < 400) {
+                    cubePosition = "left";
+                } else if (500 < x && x < 900) {
+                    cubePosition = "center";
+                } else if (1000 < x && x < 1280) {
+                    cubePosition = "right";
+                }
             }
+
+        }
+
+
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
+                .splineToLinearHeading(new Pose2d(28,36, Math.toRadians(90)), Math.toRadians(0))
+                /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
+                .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
+                .build();
+        Trajectory goBack = drive.trajectoryBuilder(new Pose2d())
+                .splineToLinearHeading(new Pose2d(-28,-30, Math.toRadians(-90)), Math.toRadians(0))
+                .build();
+        waitForStart();
+
+
+
+        if (opModeIsActive()) {
+
+            drive.followTrajectory(myTrajectory);
+            //drive.followTrajectory(goBack);
+//            while (opModeIsActive()) {
+//
+//            }
         }
 
         // Save more CPU resources when camera is no longer needed.
@@ -140,26 +177,26 @@ public class tfodTest extends LinearOpMode {
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
-            // Use setModelAssetName() if the TF Model is built in as an asset.
+                // Use setModelAssetName() if the TF Model is built in as an asset.
 
                 //.setModelFileName("object_test1.tflite")
 
                 .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
 
-            // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-            //.setModelAssetName(TFOD_MODEL_ASSET)
-            //.setModelFileName(TFOD_MODEL_FILE)
+                // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
+                //.setModelAssetName(TFOD_MODEL_ASSET)
+                //.setModelFileName(TFOD_MODEL_FILE)
 
 
-            //.setModelLabels(LABELS)
+                //.setModelLabels(LABELS)
 
-            //.setIsModelTensorFlow2(true)
-            //.setIsModelQuantized(true)
-            //.setModelInputSize(300)
-            //.setModelAspectRatio(16.0 / 9.0)
+                //.setIsModelTensorFlow2(true)
+                //.setIsModelQuantized(true)
+                //.setModelInputSize(300)
+                //.setModelAspectRatio(16.0 / 9.0)
 
 
-            .build();
+                .build();
 
 
         WebcamName cam = hardwareMap.get(WebcamName.class, "Webcam 1");
