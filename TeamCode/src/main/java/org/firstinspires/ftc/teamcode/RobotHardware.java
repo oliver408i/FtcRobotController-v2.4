@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -78,7 +79,7 @@ public class RobotHardware {
     //RobotHardware.leftFront.setPower(0);
     //RobotHardware.servo1.setposition(RobotHardware.MID_SERVO);
 
-    public Servo servo1 = null;
+    public CRServo servo1 = null;
     public Servo servo2 = null;
 
     // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
@@ -142,7 +143,7 @@ public class RobotHardware {
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
-        ViperSlide.setDirection(DcMotor.Direction.REVERSE);
+        ViperSlide.setDirection(DcMotor.Direction.FORWARD);
         linearActuator.setDirection(DcMotor.Direction.REVERSE);
 
         //EncoderTest.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -166,9 +167,9 @@ public class RobotHardware {
         // rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-        servo1 = ahwMap.get(Servo.class, "Servo1");
-        servo2 = ahwMap.get(Servo.class, "Servo2");
-        servo1.setPosition(0);
+        servo1 = ahwMap.get(CRServo.class, "servo1");
+        servo2 = ahwMap.get(Servo.class, "servo2");
+        servo1.setPower(0);
         servo2.setPosition(0);
 
 
@@ -539,15 +540,15 @@ public class RobotHardware {
             rightFront.setPower(rightStick * speedScaling);
             rightBack.setPower(rightStick * speedScaling);
         }
-        double servoPos = servo1.getPosition();
+        double servoPos = servo2.getPosition();
 
         if(gamepad2.a) {
-            servo1.setPosition(servo100pos);
+            servo2.setPosition(servo100pos);
             //retracted
         }
 
         else if (gamepad2.b) {
-            servo1.setPosition(servo0pos);
+            servo2.setPosition(servo0pos);
             //extended
         }
 

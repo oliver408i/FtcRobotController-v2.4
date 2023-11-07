@@ -19,6 +19,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
     double additionalYaw = 0;
     double leftYawCoolDown = runtime.seconds();
     double rightYawCoolDown = runtime.seconds();
+    double servoPos = 0;
 
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
@@ -86,7 +87,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             }
 /*
             if(gamepad2.dpad_up){
-                robot.singleMotorEncoderMovements(telemetry,2,0.05,robot.EncoderTest);
+                robot.singleMotorEncoderMovements(telemetry,2,0.05,robot.EncoderTest)\
             }
 
  */
@@ -95,11 +96,12 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             robot.linearActuator.setPower(gamepad2.right_stick_y);
 
             if(gamepad2.x){
-                robot.servo1.setPosition(0);
+                robot.servo1.setPower(-1);
+
             }
 
             if (gamepad2.y){
-                robot.servo1.setPosition(90);
+                robot.servo1.setPower(1);
             }
 
             if(gamepad1.right_trigger > 0){
@@ -150,6 +152,8 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             telemetry.addData("Axial: ", axial);
             telemetry.addData("Lateral: ", lateral);
             telemetry.addData("Yaw: ",yaw);
+            telemetry.addData("Servo Pos: ", servoPos);
+            telemetry.addData("Servo Reported Power: ", robot.servo1.getPower());
             telemetry.update();
         }
     }
