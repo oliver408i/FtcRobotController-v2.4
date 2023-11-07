@@ -70,6 +70,7 @@ public class RobotHardware {
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
     public DcMotor ViperSlide = null;
+    public DcMotor linearActuator = null;
 
     //public DcMotor EncoderTest = null;
     //TODO: delete this after we're done testing the rev through bore encoders
@@ -130,6 +131,8 @@ public class RobotHardware {
         leftBack = ahwMap.get(DcMotor.class, "leftBack");
         rightBack = ahwMap.get(DcMotor.class, "rightBack");
         ViperSlide = ahwMap.get(DcMotor.class, "ViperSlide");
+        linearActuator = ahwMap.get(DcMotor.class, "linearActuator");
+
         //EncoderTest = ahwMap.get(DcMotor.class, "EncoderTest");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -140,6 +143,8 @@ public class RobotHardware {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
         ViperSlide.setDirection(DcMotor.Direction.REVERSE);
+        linearActuator.setDirection(DcMotor.Direction.REVERSE);
+
         //EncoderTest.setDirection(DcMotorSimple.Direction.FORWARD);
 /*
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -154,6 +159,7 @@ public class RobotHardware {
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linearActuator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
