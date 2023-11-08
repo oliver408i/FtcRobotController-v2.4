@@ -98,16 +98,23 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             robot.ViperSlide.setPower(gamepad2.left_stick_y);
             robot.linearActuator.setPower(gamepad2.right_stick_y);
 
-            if(gamepad2.x){
+
+            // intake code
+            if(gamepad2.a){
                 spinny.setPower(-0.6);
             }
 
-            else if (gamepad2.y){
+            else if (gamepad2.b){
                 spinny.setPower(0.6);
             }
 
             else{
                 spinny.setPower(0);
+            }
+
+            // plane code
+            if(gamepad2.dpad_up){
+                robot.servo2.setPosition(0.25);
             }
 
             if(gamepad1.right_trigger > 0){
