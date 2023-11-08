@@ -169,6 +169,7 @@ public class RobotHardware {
         // Define and initialize ALL installed servos.
         servo1 = ahwMap.get(CRServo.class, "servo1");
         servo2 = ahwMap.get(Servo.class, "servo2");
+        servo1.setDirection(DcMotorSimple.Direction.FORWARD);
         servo1.setPower(0);
         servo2.setPosition(0);
 

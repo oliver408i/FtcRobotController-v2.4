@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -20,6 +21,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
     double leftYawCoolDown = runtime.seconds();
     double rightYawCoolDown = runtime.seconds();
     double servoPos = 0;
+    private CRServo spinny;
 
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
@@ -36,6 +38,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
         runtime.reset();
         //starts after initialization (press start)
 
+        spinny = hardwareMap.crservo.get("servo1");
         // run until stop is pressed
         while (opModeIsActive()) {
             double max; // get top wheel speed
@@ -96,12 +99,15 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             robot.linearActuator.setPower(gamepad2.right_stick_y);
 
             if(gamepad2.x){
-                robot.servo1.setPower(-1);
-
+                spinny.setPower(-0.6);
             }
 
-            if (gamepad2.y){
-                robot.servo1.setPower(1);
+            else if (gamepad2.y){
+                spinny.setPower(0.6);
+            }
+
+            else{
+                spinny.setPower(0);
             }
 
             if(gamepad1.right_trigger > 0){
@@ -152,7 +158,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             telemetry.addData("Axial: ", axial);
             telemetry.addData("Lateral: ", lateral);
             telemetry.addData("Yaw: ",yaw);
-            telemetry.addData("Servo Pos: ", servoPos);
+            telemetry.addData("Servo Pos: ", robot.servo1.getController().getServoPosition(robot.servo1.getPortNumber()));
             telemetry.addData("Servo Reported Power: ", robot.servo1.getPower());
             telemetry.update();
         }
