@@ -181,7 +181,9 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
                 //.setModelFileName("object_test1.tflite")
 
-                .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+                //.setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+                .setModelFileName("object_test2.tflite")
+
 
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 //.setModelAssetName(TFOD_MODEL_ASSET)

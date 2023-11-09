@@ -115,7 +115,9 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         tfod = new TfodProcessor.Builder()
 
                 // Use setModelAssetName() if the TF Model is built in as an asset.
-                .setModelFileName("object_test2.tflite")
+                //.setModelFileName("object_test2.tflite")
+                .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 //.setModelAssetName(TFOD_MODEL_ASSET)
                 //.setModelFileName(TFOD_MODEL_FILE)
