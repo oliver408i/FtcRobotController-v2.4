@@ -31,18 +31,12 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import android.util.Size;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
@@ -51,7 +45,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
-import java.sql.Time;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +55,7 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "CanvasLeftTrussRight", group = "Concept")
+@Autonomous(name = "CanvasRightTrussLeft", group = "Concept")
 
 public class canvasRedTeamAuto extends LinearOpMode {
 
@@ -181,8 +174,8 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
                 //.setModelFileName("object_test1.tflite")
 
-                //.setModelFileName("red_cube_v1_model_20231026_113436.tflite")
-                .setModelFileName("object_test2.tflite")
+                .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+                //setModelFileName("object_test2.tflite")
 
 
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
