@@ -142,7 +142,7 @@ public class canvasBlueTeamAuto extends LinearOpMode {
                 .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
                 .build();
         Trajectory goBack = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(-28,-30, Math.toRadians(-90)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-28,-36, Math.toRadians(-90)), Math.toRadians(0))
                 .build();
         waitForStart();
 
