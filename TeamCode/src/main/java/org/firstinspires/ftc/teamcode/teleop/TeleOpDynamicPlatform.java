@@ -127,7 +127,9 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                 robot.servo3.setPosition(0);
             }
 
-            totalGamepad2TriggerInput = -gamepad2.left_trigger+gamepad2.right_trigger;
+
+            totalGamepad2TriggerInput = -gamepad2.left_trigger+gamepad2.right_trigger+0.5;
+
             if(totalGamepad2TriggerInput != 0){
                 robot.servo3.setPosition(totalGamepad2TriggerInput);
 
