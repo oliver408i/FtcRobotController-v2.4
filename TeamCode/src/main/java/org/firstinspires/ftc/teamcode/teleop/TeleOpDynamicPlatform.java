@@ -22,6 +22,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
     double rightYawCoolDown = runtime.seconds();
     double servoPos = 0;
     private CRServo spinny;
+    double totalGamepad2TriggerInput = 0;
 
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
@@ -124,6 +125,12 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
             if(gamepad2.y){
                 robot.servo3.setPosition(0);
+            }
+
+            totalGamepad2TriggerInput = -gamepad2.left_trigger+gamepad2.right_trigger;
+            if(totalGamepad2TriggerInput != 0){
+                robot.servo3.setPosition(totalGamepad2TriggerInput);
+
             }
 
             if(gamepad1.right_trigger > 0){
