@@ -117,6 +117,15 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                 robot.servo2.setPosition(0.25);
             }
 
+            // intake lifter code
+            if(gamepad2.x){
+                robot.servo3.setPosition(0.25);
+            }
+
+            if(gamepad2.y){
+                robot.servo3.setPosition(0);
+            }
+
             if(gamepad1.right_trigger > 0){
                 leftFrontPower = right_trig;
                 leftBackPower = -right_trig;
