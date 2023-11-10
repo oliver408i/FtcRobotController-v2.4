@@ -136,7 +136,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
+        Trajectory headTowards = drive.trajectoryBuilder(new Pose2d())
                 .splineToLinearHeading(new Pose2d(28,-36, Math.toRadians(90)), Math.toRadians(0))
                 /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
                 .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
@@ -150,7 +150,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            drive.followTrajectory(myTrajectory);
+            drive.followTrajectory(headTowards);
             //drive.followTrajectory(goBack);
 //            while (opModeIsActive()) {
 //

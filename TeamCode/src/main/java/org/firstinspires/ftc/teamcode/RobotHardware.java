@@ -82,7 +82,7 @@ public class RobotHardware {
     public CRServo servo1 = null;
     public Servo servo2 = null;
 
-    public Servo servo3 = null;
+    public CRServo servo3 = null;
 
     // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
     /*
@@ -171,11 +171,11 @@ public class RobotHardware {
         // Define and initialize ALL installed servos.
         servo1 = ahwMap.get(CRServo.class, "servo1");
         servo2 = ahwMap.get(Servo.class, "servo2");
-        servo3 = ahwMap.get(Servo.class, "servo3");
+        servo3 = ahwMap.get(CRServo.class, "servo3");
         servo1.setDirection(DcMotorSimple.Direction.FORWARD);
         servo1.setPower(0);
         servo2.setPosition(0);
-        servo3.setPosition(0);
+        servo3.setPower(0);
 
 
 //        myOpMode.telemetry.addData(">", "Hardware Initialized");
