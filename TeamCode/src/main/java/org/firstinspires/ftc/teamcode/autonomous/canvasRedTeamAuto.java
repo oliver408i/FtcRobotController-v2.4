@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "CanvasRightTrussLeft", group = "Concept")
+@Autonomous(name = "canvasRedTeamAuto", group = "Concept")
 
 public class canvasRedTeamAuto extends LinearOpMode {
 
@@ -99,7 +99,10 @@ public class canvasRedTeamAuto extends LinearOpMode {
                 visionPortal.resumeStreaming();
             }
             exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            exposureControl.setExposure((long) 655, TimeUnit.MILLISECONDS);
+
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(255);
