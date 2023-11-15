@@ -101,7 +101,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
             exposureControl = visionPortal.getCameraControl(ExposureControl.class);
             //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
             exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 655, TimeUnit.MILLISECONDS);
+            exposureControl.setExposure((long) 4, TimeUnit.MILLISECONDS);
 
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
