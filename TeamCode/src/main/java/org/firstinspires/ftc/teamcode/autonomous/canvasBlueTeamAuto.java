@@ -142,10 +142,14 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory approachCube = null;
+        Trajectory goToCanvas = null;
 
         if(cubePosition.equals("right")){
             approachCube = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
+                    .build();
+            goToCanvas = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(0,25,Math.toRadians(180)), Math.toRadians(180))
                     .build();
             // armature should move down after this
         }
@@ -162,6 +166,8 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         if (opModeIsActive()) {
 
             drive.followTrajectory(approachCube);
+            sleep(1000);
+            drive.followTrajectory(goToCanvas);
 
             //drive.followTrajectory(headTowards);
 
