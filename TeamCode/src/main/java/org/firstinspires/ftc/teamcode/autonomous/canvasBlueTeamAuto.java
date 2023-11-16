@@ -84,7 +84,7 @@ public class canvasBlueTeamAuto extends LinearOpMode {
 
         ExposureControl exposureControl;
         GainControl gainControl;
-        String cubePosition;
+        String cubePosition = "";
 
         while(!opModeIsActive()){
             telemetryTfod();
@@ -124,6 +124,7 @@ public class canvasBlueTeamAuto extends LinearOpMode {
                 double x = (recognition.getLeft() + recognition.getRight()) / 2;
                 double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
+
                 if (100 < x && x < 400) {
                     cubePosition = "left";
                 } else if (500 < x && x < 900) {
@@ -131,28 +132,39 @@ public class canvasBlueTeamAuto extends LinearOpMode {
                 } else if (1000 < x && x < 1280) {
                     cubePosition = "right";
                 }
+
             }
+
+
 
         }
 
-
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        Trajectory approachCube = null;
+
+        if(cubePosition.equals("right")){
+            approachCube = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
+                    .build();
+            // armature should move down after this
+        }
 
         Trajectory headTowards = drive.trajectoryBuilder(new Pose2d())
                 .splineToLinearHeading(new Pose2d(28,36, Math.toRadians(90)), Math.toRadians(0))
                 /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
                 .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
                 .build();
-        Trajectory goBack = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(-28,-36, Math.toRadians(-90)), Math.toRadians(0))
-                .build();
-        waitForStart();
+
 
 
 
         if (opModeIsActive()) {
 
-            drive.followTrajectory(headTowards);
+            drive.followTrajectory(approachCube);
+
+            //drive.followTrajectory(headTowards);
+
             //drive.followTrajectory(goBack);
 //            while (opModeIsActive()) {
 //
