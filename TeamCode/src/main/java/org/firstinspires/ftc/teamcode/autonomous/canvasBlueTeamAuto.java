@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import android.util.Size;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -45,6 +46,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -141,18 +143,55 @@ public class canvasBlueTeamAuto extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory approachCube = null;
-        Trajectory goToCanvas = null;
+        Trajectory temp = null;
+
+        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
 
         if(cubePosition.equals("right")){
-            approachCube = drive.trajectoryBuilder(new Pose2d())
+            temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
                     .build();
-            goToCanvas = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(0,25,Math.toRadians(180)), Math.toRadians(180))
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(20,5, Math.toRadians(-55)))
+                    //TODO: Increase dist towards the canvas
+                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
                     .build();
             // armature should move down after this
+            lotsOfMovement.add(temp);
         }
+
+        if (cubePosition.equals("center")) {
+
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
+                    .lineTo(new Vector2d(15,0))
+                    .build();
+            // armature should move down after this
+            lotsOfMovement.add(temp);
+
+            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
+                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
+                    .build();
+            lotsOfMovement.add(temp);
+        }
+
+        if (cubePosition.equals("left")) {
+
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(20,-5, Math.toRadians(55)), Math.toRadians(45))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)), Math.toRadians(45))
+                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
+                    .build();
+            lotsOfMovement.add(temp);
+            // armature should move down after this
+        }
+
+
 
         Trajectory headTowards = drive.trajectoryBuilder(new Pose2d())
                 .splineToLinearHeading(new Pose2d(28,36, Math.toRadians(90)), Math.toRadians(0))
@@ -165,9 +204,10 @@ public class canvasBlueTeamAuto extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            drive.followTrajectory(approachCube);
-            sleep(1000);
-            drive.followTrajectory(goToCanvas);
+            for(Trajectory trajectory:lotsOfMovement){
+                drive.followTrajectory(trajectory);
+                sleep(1000);
+            }
 
             //drive.followTrajectory(headTowards);
 
@@ -257,7 +297,7 @@ public class canvasBlueTeamAuto extends LinearOpMode {
 
         // Set confidence threshold for TFOD recognitions, at any time.
         //tfod.setMinResultConfidence(0.75f);
-        tfod.setMinResultConfidence(0.5f);
+        tfod.setMinResultConfidence(0.3f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);

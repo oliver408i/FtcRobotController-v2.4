@@ -240,7 +240,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         // Set confidence threshold for TFOD recognitions, at any time.
         //tfod.setMinResultConfidence(0.75f);
-        tfod.setMinResultConfidence(0.5f);
+        tfod.setMinResultConfidence(0.3f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
