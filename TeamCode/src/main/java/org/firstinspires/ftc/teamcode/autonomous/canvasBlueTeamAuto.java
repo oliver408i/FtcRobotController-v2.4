@@ -184,7 +184,7 @@ public class canvasBlueTeamAuto extends LinearOpMode {
                     .splineToLinearHeading(new Pose2d(20,0, Math.toRadians(20)), Math.toRadians(20))
                     .build();
             lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(20,0, Math.toRadians(0)), Math.toRadians(0))
+            temp = drive.trajectoryBuilder(new Pose2d(20,0, Math.toRadians(20)))
                     .splineToLinearHeading(new Pose2d(15,0,Math.toRadians(-1)), Math.toRadians(-1))
                     .build();
             lotsOfMovement.add(temp);
@@ -196,30 +196,18 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         }
 
 
+        for(Trajectory trajectory:lotsOfMovement){
+            drive.followTrajectory(trajectory);
+            sleep(1000);
+        }
 
-        Trajectory headTowards = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(28,36, Math.toRadians(90)), Math.toRadians(0))
-                /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
-                .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
-                .build();
+        //drive.followTrajectory(headTowards);
 
-
-
-
-        if (opModeIsActive()) {
-
-            for(Trajectory trajectory:lotsOfMovement){
-                drive.followTrajectory(trajectory);
-                sleep(1000);
-            }
-
-            //drive.followTrajectory(headTowards);
-
-            //drive.followTrajectory(goBack);
+        //drive.followTrajectory(goBack);
 //            while (opModeIsActive()) {
 //
 //            }
-        }
+
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
