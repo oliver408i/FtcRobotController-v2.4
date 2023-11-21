@@ -181,11 +181,15 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         if (cubePosition.equals("left")) {
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,-5, Math.toRadians(55)), Math.toRadians(45))
+                    .splineToLinearHeading(new Pose2d(20,0, Math.toRadians(20)), Math.toRadians(20))
                     .build();
             lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)), Math.toRadians(45))
-                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
+            temp = drive.trajectoryBuilder(new Pose2d(20,0, Math.toRadians(0)), Math.toRadians(0))
+                    .splineToLinearHeading(new Pose2d(15,0,Math.toRadians(-1)), Math.toRadians(-1))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(15,0, Math.toRadians(55)), Math.toRadians(45))
+                    .splineToLinearHeading(new Pose2d(20,30,Math.toRadians(90)), Math.toRadians(90))
                     .build();
             lotsOfMovement.add(temp);
             // armature should move down after this
