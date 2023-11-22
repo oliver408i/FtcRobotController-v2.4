@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import android.util.Size;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -55,9 +56,9 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "canvasRedTeamAuto", group = "Concept")
+@Autonomous(name = "BottomRightUnderTruss", group = "Concept")
 
-public class canvasRedTeamAuto extends LinearOpMode {
+public class bRightUnderTruss extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -76,7 +77,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         initTfod();
         sleep(1500);
-w
+
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
@@ -99,10 +100,7 @@ w
                 visionPortal.resumeStreaming();
             }
             exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-            exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 4, TimeUnit.MILLISECONDS);
-
+            exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(255);
@@ -139,13 +137,15 @@ w
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory headTowards = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(28,-36, Math.toRadians(90)), Math.toRadians(0))
-                /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
-                .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
+        Trajectory approachTruss = drive.trajectoryBuilder(new Pose2d())
+                .splineToLinearHeading(new Pose2d(48,0, Math.toRadians(90)), Math.toRadians(0))
                 .build();
-        Trajectory goBack = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(-28,36, Math.toRadians(-90)), Math.toRadians(0))
+        Trajectory goUnderTruss = drive.trajectoryBuilder(new Pose2d())
+                .splineToLinearHeading(new Pose2d(0,5, Math.toRadians(-90)), Math.toRadians(0))
+                .build();
+        waitForStart();
+        Trajectory leaveTruss = drive.trajectoryBuilder(new Pose2d())
+                .splineToLinearHeading(new Pose2d(50,1, Math.toRadians(-90)), Math.toRadians(0))
                 .build();
         waitForStart();
 
@@ -153,8 +153,8 @@ w
 
         if (opModeIsActive()) {
 
-            drive.followTrajectory(headTowards);
-            //drive.followTrajectory(goBack);
+            drive.followTrajectory(approachTruss);
+            drive.followTrajectory(goUnderTruss);
 //            while (opModeIsActive()) {
 //
 //            }
@@ -178,8 +178,6 @@ w
                 //.setModelFileName("object_test1.tflite")
 
                 .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
-                //setModelFileName("object_test2.tflite")
-
 
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 //.setModelAssetName(TFOD_MODEL_ASSET)
@@ -240,7 +238,7 @@ w
 
         // Set confidence threshold for TFOD recognitions, at any time.
         //tfod.setMinResultConfidence(0.75f);
-        tfod.setMinResultConfidence(0.3f);
+        tfod.setMinResultConfidence(0.5f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
