@@ -78,7 +78,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         initTfod();
         sleep(1500);
-w
+
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
@@ -151,12 +151,12 @@ w
 
         if(cubePosition.equals("left")){ // old right side code
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,-5, Math.toRadians(55)), Math.toRadians(45))
+                    .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
                     .build();
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
                     //TODO: Increase dist towards the canvas
-                    .splineToLinearHeading(new Pose2d(20,-34,Math.toRadians(-90)), Math.toRadians(-90))
+                    .splineToLinearHeading(new Pose2d(21,-36,Math.toRadians(-45)), Math.toRadians(-45))
                     .build();
             // armature should move down after this
             lotsOfMovement.add(temp);
@@ -306,23 +306,25 @@ w
         }
 
         // Step through the list of recognitions and display info for each one.
-        if(recognition != null) {
-            double x = (recognition.getLeft() + recognition.getRight()) / 2;
-            double y = (recognition.getTop() + recognition.getBottom()) / 2;
+        if(recognition != null){
+            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
 
-            if (0 < x && x < 400) {
+            if(0 < x && x < 400){
                 telemetry.addData("Cube Pos: ", "left");
-            } else if (500 < x && x < 900) {
+            }
+            else if(500 < x && x < 900){
                 telemetry.addData("Cube Pos: ", "center");
-            } else if (1000 < x && x < 1280) {
+            }
+            else if(1000 < x && x < 1280){
                 telemetry.addData("Cube Pos: ", "right");
             }
 
-            telemetry.addData("", " ");
+            telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-        }
+            }
 
 
     }   // end method telemetryTfod()

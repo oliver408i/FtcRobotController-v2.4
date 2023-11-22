@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
  * exercise is to ascertain whether the localizer has been configured properly (note: the pure
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
-@TeleOp(group = "drive")
+@TeleOp(name = "Pose2dGenerator",group = "drive")
 public class LocalizationCoder extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,7 +43,7 @@ public class LocalizationCoder extends LinearOpMode {
             if(gamepad1.a){
                 lastX = poseEstimate.getX()-lastX;
                 lastY = poseEstimate.getY()-lastY;
-                headingChange = poseEstimate.getHeading()-headingChange;
+                headingChange = poseEstimate.getHeading()*360-headingChange;
             }
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
