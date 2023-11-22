@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import android.util.Size;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -45,6 +46,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -84,9 +86,12 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         ExposureControl exposureControl;
         GainControl gainControl;
-        String cubePosition;
+        String cubePosition = "";
 
         while(!opModeIsActive()){
+            if(isStopRequested()){
+                visionPortal.close();
+            }
             telemetryTfod();
 
             // Push telemetry to the Driver Station.
@@ -125,7 +130,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
                 double x = (recognition.getLeft() + recognition.getRight()) / 2;
                 double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-                if (100 < x && x < 400) {
+                if (0 < x && x < 400) {
                     cubePosition = "left";
                 } else if (500 < x && x < 900) {
                     cubePosition = "center";
@@ -136,28 +141,66 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         }
 
+        //important: code copied from canvasBlueTeamAuto
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory headTowards = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(28,-36, Math.toRadians(90)), Math.toRadians(0))
-                /*.splineToConstantHeading(new Vector2d(-10,20), Math.toRadians(0))
-                .splineToConsetantHeading(new Vector2d(10,-40), Math.toRadians(0))*/
-                .build();
-        Trajectory goBack = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(-28,36, Math.toRadians(-90)), Math.toRadians(0))
-                .build();
-        waitForStart();
+        Trajectory temp = null;
+
+        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+
+        if(cubePosition.equals("left")){ // old right side code
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(20,-5, Math.toRadians(55)), Math.toRadians(45))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
+                    //TODO: Increase dist towards the canvas
+                    .splineToLinearHeading(new Pose2d(20,-34,Math.toRadians(-90)), Math.toRadians(-90))
+                    .build();
+            // armature should move down after this
+            lotsOfMovement.add(temp);
+        }
+
+        if (cubePosition.equals("center")) {
+
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
+                    .lineTo(new Vector2d(-15,0))
+                    .build();
+            // armature should move down after this
+            lotsOfMovement.add(temp);
+
+            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
+                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(-90)), Math.toRadians(-90))
+                    .build();
+            lotsOfMovement.add(temp);
+        }
+
+        if (cubePosition.equals("right")) { // old left side code
+
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(20,0, Math.toRadians(-20)), Math.toRadians(-20))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(20,0, Math.toRadians(-20)))
+                    .splineToLinearHeading(new Pose2d(15,0,Math.toRadians(1)), Math.toRadians(1))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(15,0, Math.toRadians(-55)), Math.toRadians(-45))
+                    .splineToLinearHeading(new Pose2d(20,-30,Math.toRadians(-90)), Math.toRadians(-90))
+                    .build();
+            lotsOfMovement.add(temp);
+            // armature should move down after this
+        }
 
 
-
-        if (opModeIsActive()) {
-
-            drive.followTrajectory(headTowards);
-            //drive.followTrajectory(goBack);
-//            while (opModeIsActive()) {
-//
-//            }
+        for(Trajectory trajectory:lotsOfMovement){
+            drive.followTrajectory(trajectory);
+            sleep(1000);
         }
 
         // Save more CPU resources when camera is no longer needed.
@@ -251,31 +294,39 @@ public class canvasRedTeamAuto extends LinearOpMode {
      * Function to add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     private void telemetryTfod() {
-
+        double highestConf = 0;
         List<Recognition> currentRecognitions = tfod.getRecognitions();
+        Recognition recognition = null;
         telemetry.addData("# Objects Detected", currentRecognitions.size());
 
-        // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions) {
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+        for(int i = 0; i<currentRecognitions.size(); i++){
+            if(currentRecognitions.get(i).getConfidence() > highestConf){
+                recognition = currentRecognitions.get(i);
+            }
+        }
 
-            if(100 < x && x < 400){
+        // Step through the list of recognitions and display info for each one.
+        if(recognition != null) {
+            double x = (recognition.getLeft() + recognition.getRight()) / 2;
+            double y = (recognition.getTop() + recognition.getBottom()) / 2;
+
+            if (0 < x && x < 400) {
                 telemetry.addData("Cube Pos: ", "left");
-            }
-            else if(500 < x && x < 900){
+            } else if (500 < x && x < 900) {
                 telemetry.addData("Cube Pos: ", "center");
-            }
-            else if(1000 < x && x < 1280){
+            } else if (1000 < x && x < 1280) {
                 telemetry.addData("Cube Pos: ", "right");
             }
 
-            telemetry.addData(""," ");
+            telemetry.addData("", " ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-        }   // end for() loop
+        }
+
 
     }   // end method telemetryTfod()
+
+
 
 }   // end class

@@ -89,7 +89,13 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         String cubePosition = "";
 
         while(!opModeIsActive()){
+
+            if(isStopRequested()){
+                visionPortal.close();
+            }
             telemetryTfod();
+
+
 
             // Push telemetry to the Driver Station.
             telemetry.update();
@@ -127,7 +133,7 @@ public class canvasBlueTeamAuto extends LinearOpMode {
                 double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
 
-                if (100 < x && x < 400) {
+                if (0 < x && x < 400) {
                     cubePosition = "left";
                 } else if (500 < x && x < 900) {
                     cubePosition = "center";
