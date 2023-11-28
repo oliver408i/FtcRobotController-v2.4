@@ -97,6 +97,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
  */
 
             robot.ViperSlide.setPower(gamepad2.left_stick_y);
+            robot.ViperSlide2.setPower(gamepad2.left_stick_y);
             robot.linearActuator.setPower(gamepad2.right_stick_y);
 
 

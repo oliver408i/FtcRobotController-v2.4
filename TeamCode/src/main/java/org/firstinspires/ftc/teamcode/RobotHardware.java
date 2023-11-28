@@ -71,6 +71,7 @@ public class RobotHardware {
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
     public DcMotor ViperSlide = null;
+    public DcMotor ViperSlide2 = null;
     public DcMotor linearActuator = null;
 
     //public DcMotor EncoderTest = null;
@@ -96,7 +97,7 @@ public class RobotHardware {
 
      */
     public static final double TICK_COUNT = 537.7; // strafer chassis kit v5, same motor as the viper slide
-    public static final double TB_TICK_COUNT = 2048;
+    public static final double TB_TICK_COUNT = 2048; // through bore encoder tick count
     public static final double CIRCUMFERENCE = 3.14 * 3.78; // this is in inches
     public static final double VS_DIA = 4.41; // sku: 5203-2402-0019
     public static final double VS_CIRCUMFERENCE = VS_DIA * 3.14;
@@ -134,6 +135,7 @@ public class RobotHardware {
         leftBack = ahwMap.get(DcMotor.class, "leftBack");
         rightBack = ahwMap.get(DcMotor.class, "rightBack");
         ViperSlide = ahwMap.get(DcMotor.class, "ViperSlide");
+        ViperSlide2 = ahwMap.get(DcMotor.class, "ViperSlide2");
         linearActuator = ahwMap.get(DcMotor.class, "linearActuator");
 
         //EncoderTest = ahwMap.get(DcMotor.class, "EncoderTest");
@@ -146,6 +148,7 @@ public class RobotHardware {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
         ViperSlide.setDirection(DcMotor.Direction.FORWARD);
+        ViperSlide2.setDirection(DcMotor.Direction.REVERSE);
         linearActuator.setDirection(DcMotor.Direction.REVERSE);
 
         //EncoderTest.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -157,6 +160,7 @@ public class RobotHardware {
 
  */
         ViperSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ViperSlide2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -255,7 +259,9 @@ public class RobotHardware {
     }
 
     public void singleMotorEncoderMovements(Telemetry telemetry, double rotations, double power, DcMotor motor){
-        int encoderDrivingTarget = (int) (rotations*TB_TICK_COUNT);
+        //int encoderDrivingTarget = (int) (rotations*TB_TICK_COUNT);
+        int encoderDrivingTarget = (int) (rotations*TICK_COUNT); // uncomment other line to use
+        // rev through bore encoder as tick count indicator.
 
         telemetry.addData("Status: ","Initialized");telemetry.update();
 
@@ -445,17 +451,17 @@ public class RobotHardware {
      * @param power
      * @param direction
      */
-    public int viperSlideEncoderMovements(Telemetry telemetry, double distance, double power, String direction) {
+    public int viperSlideEncoderMovements(Telemetry telemetry, double distance, double power, String direction, DcMotor slideMotor) {
         // distance in inches
         // direction can be forward or backward
         double rotationsNeeded = distance / VS_CIRCUMFERENCE*3;
         int encoderDrivingTarget = (int) (rotationsNeeded * TICK_COUNT);
 
-        ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         power = Math.abs(power);
         int viperSlideTarget = encoderDrivingTarget;
-        ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         direction = direction.toLowerCase();
 
         // no forward if statement cause it's already that
