@@ -449,9 +449,10 @@ public class RobotHardware {
      * @param telemetry
      * @param distance
      * @param power
-     * @param direction
+     * @param isDrivingForward
+     * @param slideMotor
      */
-    public int viperSlideEncoderMovements(Telemetry telemetry, double distance, double power, String direction, DcMotor slideMotor) {
+    public int viperSlideEncoderMovements(Telemetry telemetry, double distance, double power, boolean isDrivingForward, DcMotor slideMotor) {
         // distance in inches
         // direction can be forward or backward
         double rotationsNeeded = distance / VS_CIRCUMFERENCE*3;
@@ -462,10 +463,9 @@ public class RobotHardware {
         power = Math.abs(power);
         int viperSlideTarget = encoderDrivingTarget;
         slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        direction = direction.toLowerCase();
 
         // no forward if statement cause it's already that
-        if (direction.equals("backward")) {
+        if (!isDrivingForward) {
             telemetry.addData("Moving ", "Backwards"); telemetry.update();
             viperSlideTarget *= -1;
             //power *= -1;

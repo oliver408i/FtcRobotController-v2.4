@@ -1,8 +1,15 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -24,12 +31,30 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
     private CRServo spinny;
     double totalGamepad2TriggerInput = 0;
 
+    private PIDController controller;
+    public static double p=0,i=0,d=0;
+    public static double f=0;
+
+    public static int target = 0;
+    private final double ticks_in_degree = RobotHardware.TICK_COUNT/360;
+    private DcMotorEx slideMotor1;
+    private DcMotorEx slideMotor2;
+
+    double pid;
+    double pid2;
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
 
 
     @Override
     public void runOpMode() {
+
+        controller = new PIDController(p,i,d);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        slideMotor1 = hardwareMap.get(DcMotorEx.class, "ViperSlide");
+        slideMotor2 = hardwareMap.get(DcMotorEx.class, "ViperSlide2");
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         // initalizes
@@ -42,6 +67,12 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
         spinny = hardwareMap.crservo.get("servo1");
         // run until stop is pressed
         while (opModeIsActive()) {
+            controller.setPID(p,i,d);
+
+            pid = controller.calculate(slideMotor1.getCurrentPosition(), target);
+            pid2 = controller.calculate(slideMotor2.getCurrentPosition(), target);
+
+
             double max; // get top wheel speed
 
             double regularSpeed = 0.5;
@@ -95,6 +126,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             }
 
  */
+
 
             robot.ViperSlide.setPower(gamepad2.left_stick_y);
             robot.ViperSlide2.setPower(gamepad2.left_stick_y);
