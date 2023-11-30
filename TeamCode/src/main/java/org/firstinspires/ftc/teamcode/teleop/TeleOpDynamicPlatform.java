@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.RobotHardware;
  * modular program.
  */
 
+@Config
 @TeleOp(name = "Omni Op Test Platform", group= "Linear Opmode")
 public class TeleOpDynamicPlatform extends LinearOpMode {
     RobotHardware robot = new RobotHardware();
@@ -31,17 +33,27 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
     private CRServo spinny;
     double totalGamepad2TriggerInput = 0;
 
-    private PIDController controller;
-    public static double p=0,i=0,d=0;
-    public static double f=0;
 
-    public static int target = 0;
-    private final double ticks_in_degree = RobotHardware.TICK_COUNT/360;
-    private DcMotorEx slideMotor1;
-    private DcMotorEx slideMotor2;
 
-    double pid;
-    double pid2;
+//    private PIDController controller;
+//    public static double p=0,i=0,d=0;
+//    public static double f=0;
+//
+//    public static int target1 = 0;
+//    public static int target2 = 0;
+//    private final double ticks_in_degree = RobotHardware.TICK_COUNT/360;
+//    private DcMotorEx slideMotor1;
+//    private DcMotorEx slideMotor2;
+//
+//    double pid;
+//    double pid2;
+//    double ff1;
+//    double ff2;
+//    double slidePower1;
+//    double slidePower2;
+
+    double viperSlideTarget = 0;
+
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
 
@@ -49,14 +61,14 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        controller = new PIDController(p,i,d);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-        slideMotor1 = hardwareMap.get(DcMotorEx.class, "ViperSlide");
-        slideMotor2 = hardwareMap.get(DcMotorEx.class, "ViperSlide2");
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+//        controller = new PIDController(p,i,d);
+//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+//
+//        slideMotor1 = hardwareMap.get(DcMotorEx.class, "ViperSlide");
+//        slideMotor2 = hardwareMap.get(DcMotorEx.class, "ViperSlide2");
+//
+//        telemetry.addData("Status", "Initialized");
+//        telemetry.update();
         // initalizes
 
         waitForStart();
@@ -65,13 +77,25 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
         //starts after initialization (press start)
 
         spinny = hardwareMap.crservo.get("servo1");
+
+        robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         // run until stop is pressed
         while (opModeIsActive()) {
-            controller.setPID(p,i,d);
-
-            pid = controller.calculate(slideMotor1.getCurrentPosition(), target);
-            pid2 = controller.calculate(slideMotor2.getCurrentPosition(), target);
-
+//            controller.setPID(p,i,d);
+//
+//            pid = controller.calculate(slideMotor1.getCurrentPosition(), target1);
+//            pid2 = controller.calculate(slideMotor2.getCurrentPosition(), target2);
+//
+//            ff1 = Math.cos(Math.toRadians(target1/ticks_in_degree))*f;
+//            ff2 = Math.sin(Math.toRadians(target2/ticks_in_degree))*f;
+//
+//            slidePower1 = pid + ff1;
+//            slidePower2 = pid2 + ff2;
+//
+//            slideMotor1.setPower(slidePower1);
+//            slideMotor2.setPower(slidePower2);
 
             double max; // get top wheel speed
 
@@ -127,9 +151,10 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
  */
 
+            viperSlideTarget += gamepad2.left_stick_y;
 
-            robot.ViperSlide.setPower(gamepad2.left_stick_y);
-            robot.ViperSlide2.setPower(gamepad2.left_stick_y);
+//            robot.ViperSlide.setPower(gamepad2.left_stick_y);
+//            robot.ViperSlide2.setPower(gamepad2.left_stick_y);
             robot.linearActuator.setPower(gamepad2.right_stick_y);
 
 
