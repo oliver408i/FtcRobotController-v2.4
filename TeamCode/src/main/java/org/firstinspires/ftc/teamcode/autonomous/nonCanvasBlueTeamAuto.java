@@ -46,6 +46,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -56,9 +57,9 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "BottomRightUnderTruss", group = "Concept")
+@Autonomous(name = "nonCanvasBlueTeamAuto", group = "Concept")
 
-public class bRightUnderTruss extends LinearOpMode {
+public class nonCanvasBlueTeamAuto extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -85,9 +86,12 @@ public class bRightUnderTruss extends LinearOpMode {
 
         ExposureControl exposureControl;
         GainControl gainControl;
-        String cubePosition;
+        String cubePosition = "";
 
         while(!opModeIsActive()){
+            if(isStopRequested()){
+                visionPortal.close();
+            }
             telemetryTfod();
 
             // Push telemetry to the Driver Station.
@@ -100,7 +104,10 @@ public class bRightUnderTruss extends LinearOpMode {
                 visionPortal.resumeStreaming();
             }
             exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            exposureControl.setExposure((long) 4, TimeUnit.MILLISECONDS);
+
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(255);
@@ -123,7 +130,7 @@ public class bRightUnderTruss extends LinearOpMode {
                 double x = (recognition.getLeft() + recognition.getRight()) / 2;
                 double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-                if (100 < x && x < 400) {
+                if (0 < x && x < 400) {
                     cubePosition = "left";
                 } else if (500 < x && x < 900) {
                     cubePosition = "center";
@@ -134,30 +141,66 @@ public class bRightUnderTruss extends LinearOpMode {
 
         }
 
+        //important: code copied from canvasBlueTeamAuto
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory approachTruss = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(48,0, Math.toRadians(90)), Math.toRadians(0))
-                .build();
-        Trajectory goUnderTruss = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(0,5, Math.toRadians(-90)), Math.toRadians(0))
-                .build();
-        waitForStart();
-        Trajectory leaveTruss = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(50,1, Math.toRadians(-90)), Math.toRadians(0))
-                .build();
-        waitForStart();
+        Trajectory temp = null;
+
+        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+
+        if(cubePosition.equals("left")){ // old right side code
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
+                    //TODO: Increase dist towards the canvas
+                    .splineToLinearHeading(new Pose2d(21,-36,Math.toRadians(-45)), Math.toRadians(-45))
+                    .build();
+            // armature should move down after this
+            lotsOfMovement.add(temp);
+        }
+
+        if (cubePosition.equals("center")) {
+
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
+                    .lineTo(new Vector2d(-15,0))
+                    .build();
+            // armature should move down after this
+            lotsOfMovement.add(temp);
+
+            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
+                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(-90)), Math.toRadians(-90))
+                    .build();
+            lotsOfMovement.add(temp);
+        }
+
+        if (cubePosition.equals("right")) { // old left side code
+
+            temp = drive.trajectoryBuilder(new Pose2d())
+                    .splineToLinearHeading(new Pose2d(20,0, Math.toRadians(-20)), Math.toRadians(-20))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(20,0, Math.toRadians(-20)))
+                    .splineToLinearHeading(new Pose2d(15,0,Math.toRadians(1)), Math.toRadians(1))
+                    .build();
+            lotsOfMovement.add(temp);
+            temp = drive.trajectoryBuilder(new Pose2d(15,0, Math.toRadians(-55)), Math.toRadians(-45))
+                    .splineToLinearHeading(new Pose2d(20,-30,Math.toRadians(-90)), Math.toRadians(-90))
+                    .build();
+            lotsOfMovement.add(temp);
+            // armature should move down after this
+        }
 
 
-
-        if (opModeIsActive()) {
-
-            drive.followTrajectory(approachTruss);
-            drive.followTrajectory(goUnderTruss);
-//            while (opModeIsActive()) {
-//
-//            }
+        for(Trajectory trajectory:lotsOfMovement){
+            drive.followTrajectory(trajectory);
+            sleep(1000);
         }
 
         // Save more CPU resources when camera is no longer needed.
@@ -178,6 +221,8 @@ public class bRightUnderTruss extends LinearOpMode {
                 //.setModelFileName("object_test1.tflite")
 
                 .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+                //setModelFileName("object_test2.tflite")
+
 
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 //.setModelAssetName(TFOD_MODEL_ASSET)
@@ -238,7 +283,7 @@ public class bRightUnderTruss extends LinearOpMode {
 
         // Set confidence threshold for TFOD recognitions, at any time.
         //tfod.setMinResultConfidence(0.75f);
-        tfod.setMinResultConfidence(0.5f);
+        tfod.setMinResultConfidence(0.3f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
@@ -249,16 +294,23 @@ public class bRightUnderTruss extends LinearOpMode {
      * Function to add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     private void telemetryTfod() {
-
+        double highestConf = 0;
         List<Recognition> currentRecognitions = tfod.getRecognitions();
+        Recognition recognition = null;
         telemetry.addData("# Objects Detected", currentRecognitions.size());
 
+        for(int i = 0; i<currentRecognitions.size(); i++){
+            if(currentRecognitions.get(i).getConfidence() > highestConf){
+                recognition = currentRecognitions.get(i);
+            }
+        }
+
         // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions) {
+        if(recognition != null){
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
 
-            if(100 < x && x < 400){
+            if(0 < x && x < 400){
                 telemetry.addData("Cube Pos: ", "left");
             }
             else if(500 < x && x < 900){
@@ -272,8 +324,11 @@ public class bRightUnderTruss extends LinearOpMode {
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-        }   // end for() loop
+            }
+
 
     }   // end method telemetryTfod()
+
+
 
 }   // end class
