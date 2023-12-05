@@ -106,7 +106,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
             exposureControl = visionPortal.getCameraControl(ExposureControl.class);
             //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
             exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 4, TimeUnit.MILLISECONDS);
+            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
 
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
@@ -156,7 +156,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
                     //TODO: Increase dist towards the canvas
-                    .splineToLinearHeading(new Pose2d(21,-36,Math.toRadians(-45)), Math.toRadians(-45))
+                    .splineToLinearHeading(new Pose2d(17,-36,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
             // armature should move down after this
             lotsOfMovement.add(temp);
@@ -169,13 +169,13 @@ public class canvasRedTeamAuto extends LinearOpMode {
                     .build();
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
-                    .lineTo(new Vector2d(-15,0))
+                    .lineTo(new Vector2d(15,0))
                     .build();
             // armature should move down after this
             lotsOfMovement.add(temp);
 
             temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
-                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(-90)), Math.toRadians(-90))
+                    .splineToLinearHeading(new Pose2d(25,-34,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
             lotsOfMovement.add(temp);
         }
@@ -183,15 +183,15 @@ public class canvasRedTeamAuto extends LinearOpMode {
         if (cubePosition.equals("right")) { // old left side code
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,0, Math.toRadians(-20)), Math.toRadians(-20))
+                    .splineToLinearHeading(new Pose2d(15,-7, Math.toRadians(-10)), Math.toRadians(-10))
                     .build();
             lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(20,0, Math.toRadians(-20)))
-                    .splineToLinearHeading(new Pose2d(15,0,Math.toRadians(1)), Math.toRadians(1))
+            temp = drive.trajectoryBuilder(new Pose2d(15,-7, Math.toRadians(-10)))
+                    .splineToLinearHeading(new Pose2d(5,-7,Math.toRadians(1)), Math.toRadians(1))
                     .build();
             lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(15,0, Math.toRadians(-55)), Math.toRadians(-45))
-                    .splineToLinearHeading(new Pose2d(20,-30,Math.toRadians(-90)), Math.toRadians(-90))
+            temp = drive.trajectoryBuilder(new Pose2d(5,-7, Math.toRadians(1)), Math.toRadians(1))
+                    .splineToLinearHeading(new Pose2d(30,-30,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
             lotsOfMovement.add(temp);
             // armature should move down after this
