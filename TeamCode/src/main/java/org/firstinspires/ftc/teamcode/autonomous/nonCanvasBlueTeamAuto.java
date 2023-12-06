@@ -48,6 +48,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -151,49 +152,29 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
 
         if(cubePosition.equals("left")){ // old right side code
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
+                    .splineToLinearHeading(new Pose2d(20,-2, Math.toRadians(45)), Math.toRadians(45))
                     .build();
             lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
-                    //TODO: Increase dist towards the canvas
-                    .splineToLinearHeading(new Pose2d(21,-36,Math.toRadians(-45)), Math.toRadians(-45))
-                    .build();
-            // armature should move down after this
-            lotsOfMovement.add(temp);
+
         }
 
         if (cubePosition.equals("center")) {
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
+                    .lineToConstantHeading(new Vector2d(28,0))
                     .build();
-            lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
-                    .lineTo(new Vector2d(-15,0))
-                    .build();
-            // armature should move down after this
             lotsOfMovement.add(temp);
 
-            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
-                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(-90)), Math.toRadians(-90))
-                    .build();
-            lotsOfMovement.add(temp);
+
         }
 
         if (cubePosition.equals("right")) { // old left side code
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,0, Math.toRadians(-20)), Math.toRadians(-20))
+                    .splineToLinearHeading(new Pose2d(20,20, Math.toRadians(-10)), Math.toRadians(-10))
                     .build();
             lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(20,0, Math.toRadians(-20)))
-                    .splineToLinearHeading(new Pose2d(15,0,Math.toRadians(1)), Math.toRadians(1))
-                    .build();
-            lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(15,0, Math.toRadians(-55)), Math.toRadians(-45))
-                    .splineToLinearHeading(new Pose2d(20,-30,Math.toRadians(-90)), Math.toRadians(-90))
-                    .build();
-            lotsOfMovement.add(temp);
+
             // armature should move down after this
         }
 
@@ -220,7 +201,9 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
 
                 //.setModelFileName("object_test1.tflite")
 
-                .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+                //.setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+                .setModelFileName("object_test2.tflite")
+
                 //setModelFileName("object_test2.tflite")
 
 

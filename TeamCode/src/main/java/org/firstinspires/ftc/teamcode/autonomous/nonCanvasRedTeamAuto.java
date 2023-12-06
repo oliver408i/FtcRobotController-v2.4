@@ -108,7 +108,7 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
             exposureControl = visionPortal.getCameraControl(ExposureControl.class);
             //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
             exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 4, TimeUnit.MILLISECONDS);
+            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(255);
@@ -164,7 +164,7 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
         if (cubePosition.equals("center")) {
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
+                    .splineToLinearHeading(new Pose2d(24,0, Math.toRadians(0)), Math.toRadians(0))
                     .build();
             lotsOfMovement.add(temp);
         }
@@ -172,7 +172,7 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
         if (cubePosition.equals("left")) {
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,0, Math.toRadians(20)), Math.toRadians(20))
+                    .splineToLinearHeading(new Pose2d(20,10, Math.toRadians(20)), Math.toRadians(20))
                     .build();
             lotsOfMovement.add(temp);
         }
@@ -209,7 +209,9 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
                 //.setModelFileName("object_test1.tflite")
 
                 //.setModelFileName("red_cube_v1_model_20231026_113436.tflite")
-                .setModelFileName("object_test2.tflite")
+                //.setModelFileName("object_test2.tflite")
+                .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+
 
 
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
