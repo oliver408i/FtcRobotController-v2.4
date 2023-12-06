@@ -149,6 +149,7 @@ public class canvasRedTeamAuto extends LinearOpMode {
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
 
+
         if(cubePosition.equals("left")){ // old right side code
             temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
