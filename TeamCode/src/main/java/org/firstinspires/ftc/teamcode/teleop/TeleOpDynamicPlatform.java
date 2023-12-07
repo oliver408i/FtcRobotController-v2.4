@@ -55,6 +55,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
     double viperSlideTarget = 0;
     double rotationsNeeded = 0;
     double encoderDrivingTarget = 0;
+    double encoderDrivingTarget2 = 0;
 
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
@@ -159,18 +160,32 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
  */
 
-            viperSlideTarget += gamepad2.left_stick_y;
+            viperSlideTarget += -gamepad2.left_stick_y*0.5;
             rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
+
             encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
 
-            robot.ViperSlide.setPower(1);
-            robot.ViperSlide2.setPower(1);
+            if(encoderDrivingTarget < 0){
+                encoderDrivingTarget = 0;
+            }
+
+            if(encoderDrivingTarget > 4500){
+                encoderDrivingTarget = 4500;
+            }
+
+            encoderDrivingTarget2 = encoderDrivingTarget*-1;
+
+            robot.ViperSlide.setPower(0.5);
+            robot.ViperSlide2.setPower(0.5);
 
             robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
-            robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget*-1);
+            robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
 
             robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            //viperslide1 is positive when extended
+            //viperslide2 is negative when extended
 
 //            robot.ViperSlide.setPower(gamepad2.left_stick_y);
 //            robot.ViperSlide2.setPower(gamepad2.left_stick_y);

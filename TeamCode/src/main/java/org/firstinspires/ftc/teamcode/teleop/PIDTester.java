@@ -54,6 +54,7 @@ public class PIDTester extends LinearOpMode {
     double viperSlideTarget = 0;
     double rotationsNeeded = 0;
     double encoderDrivingTarget = 0;
+    double encoderDrivingTarget2 = 0;
 
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
@@ -107,12 +108,22 @@ public class PIDTester extends LinearOpMode {
 
 
 
-            viperSlideTarget += gamepad2.left_stick_y;
+            viperSlideTarget += -gamepad2.left_stick_y*0.5;
             rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
             encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
 
-            ViperSlide.setPower(1);
-            ViperSlide2.setPower(1);
+            if(encoderDrivingTarget < 0){
+                encoderDrivingTarget = 0;
+            }
+
+            if(encoderDrivingTarget > 4500){
+                encoderDrivingTarget = 4500;
+            }
+
+            encoderDrivingTarget2 = encoderDrivingTarget*-1;
+
+            ViperSlide.setPower(0.5);
+            ViperSlide2.setPower(0.5);
 
             ViperSlide.setTargetPosition((int) encoderDrivingTarget);
             ViperSlide2.setTargetPosition((int) encoderDrivingTarget*-1);
