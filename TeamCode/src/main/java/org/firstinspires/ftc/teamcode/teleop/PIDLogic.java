@@ -1,11 +1,32 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
+//import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
-public class PIDLogic extends LinearOpMode {
+
+import org.firstinspires.ftc.teamcode.RobotHardware;
+
+@Disabled
+@TeleOp(name = "PID Tester 2", group= "Concept")
+public class PIDLogic  extends LinearOpMode {
     RobotHardware robot = new RobotHardware();
     private ElapsedTime runtime = new ElapsedTime();
     double leftYawCoolDown = runtime.seconds();
@@ -19,6 +40,20 @@ public class PIDLogic extends LinearOpMode {
     double kP, kI, kD = 0;
     double integralSum = 0;
     private double lastError = 0;
+    public static double f=0;
+
+    public static int target1 = 0;
+    public static int target2 = 0;
+    private final double ticks_in_degree = RobotHardware.TICK_COUNT/360;
+    private DcMotorEx slideMotor1;
+    private DcMotorEx slideMotor2;
+
+    double pid;
+    double pid2;
+    double slidePower1;
+    double slidePower2;
+    double ff1;
+    double ff2;
 
 
     @Override
@@ -26,6 +61,18 @@ public class PIDLogic extends LinearOpMode {
 
 
         while (opModeIsActive()) {
+
+            ff1 = Math.cos(Math.toRadians(target1/ticks_in_degree))*f;
+            ff2 = Math.sin(Math.toRadians(target2/ticks_in_degree))*f;
+
+            slidePower1 = PIDControl(target1, ff1);
+            slidePower2 = PIDControl(target2, ff2);
+
+            slideMotor1.setPower(slidePower1);
+            slideMotor2.setPower(slidePower2);
+
+
+
             double max; // get top wheel speed
 
             double regularSpeed = 0.5;
@@ -39,7 +86,7 @@ public class PIDLogic extends LinearOpMode {
             double yaw = gamepad1.right_stick_x * regularSpeed;
 
             if (gamepad1.left_bumper) {
-                axial *= superSpeed / regularSpeed; //recalculating all values, least year's method was less elegant
+                axial *= superSpeed / regularSpeed; //recalculating all values, least year's method wasQ less elegant
                 lateral *= superSpeed / regularSpeed;
                 yaw *= superSpeed / regularSpeed;
             }
@@ -137,15 +184,15 @@ public class PIDLogic extends LinearOpMode {
                 rightBackPower /= max;
             }
 
-            leftBackPower += additionalYaw * avgMotorPower;
-            leftFrontPower += additionalYaw * avgMotorPower;
-            rightBackPower -= additionalYaw * avgMotorPower;
-            rightFrontPower -= additionalYaw * avgMotorPower;
+            //leftBackPower += additionalYaw * avgMotorPower;
+            //leftFrontPower += additionalYaw * avgMotorPower;
+            //rightBackPower -= additionalYaw * avgMotorPower;
+            //rightFrontPower -= additionalYaw * avgMotorPower;
 
-            robot.leftFront.setPower(leftFrontPower * superSpeed);
-            robot.rightFront.setPower(rightFrontPower * superSpeed);
-            robot.leftBack.setPower(leftBackPower * superSpeed);
-            robot.rightBack.setPower(rightBackPower * superSpeed);
+            //robot.leftFront.setPower(leftFrontPower * superSpeed);
+            //robot.rightFront.setPower(rightFrontPower * superSpeed);
+            //robot.leftBack.setPower(leftBackPower * superSpeed);
+            //robot.rightBack.setPower(rightBackPower * superSpeed);
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
@@ -172,7 +219,6 @@ public class PIDLogic extends LinearOpMode {
         integralSum += error*runtime.seconds();
 
         double derivative = (error-lastError) / runtime.seconds();
-
 
         runtime.reset();
 
