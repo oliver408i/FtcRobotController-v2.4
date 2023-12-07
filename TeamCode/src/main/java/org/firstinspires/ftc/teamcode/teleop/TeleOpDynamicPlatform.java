@@ -215,6 +215,15 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
             // intake lifter code
 
+            if(gamepad2.dpad_left){
+                robot.spaghettiIntake.setPower(1);
+            }
+
+            else if(gamepad2.dpad_right){
+                robot.spaghettiIntake.setPower(-1);
+            }
+            // swap negatives if rotating in unfavorable directions. change power as needed
+
 
 
             totalGamepad2TriggerInput = -gamepad2.left_trigger+gamepad2.right_trigger;

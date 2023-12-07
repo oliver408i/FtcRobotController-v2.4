@@ -73,6 +73,7 @@ public class RobotHardware {
     public DcMotor ViperSlide = null;
     public DcMotor ViperSlide2 = null;
     public DcMotor linearActuator = null;
+    public DcMotor spaghettiIntake = null;
 
     //public DcMotor EncoderTest = null;
     //TODO: delete this after we're done testing the rev through bore encoders
@@ -137,6 +138,7 @@ public class RobotHardware {
         ViperSlide = ahwMap.get(DcMotor.class, "ViperSlide");
         ViperSlide2 = ahwMap.get(DcMotor.class, "ViperSlide2");
         linearActuator = ahwMap.get(DcMotor.class, "linearActuator");
+        spaghettiIntake = ahwMap.get(DcMotor.class, "spaghettiIntake");
 
         //EncoderTest = ahwMap.get(DcMotor.class, "EncoderTest");
 
@@ -150,6 +152,7 @@ public class RobotHardware {
         ViperSlide.setDirection(DcMotor.Direction.FORWARD);
         ViperSlide2.setDirection(DcMotor.Direction.REVERSE);
         linearActuator.setDirection(DcMotor.Direction.REVERSE);
+        spaghettiIntake.setDirection(DcMotor.Direction.FORWARD);
 
         //EncoderTest.setDirection(DcMotorSimple.Direction.FORWARD);
 /*
@@ -167,6 +170,7 @@ public class RobotHardware {
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         linearActuator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        spaghettiIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
