@@ -53,6 +53,8 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 //    double slidePower2;
 
     double viperSlideTarget = 0;
+    double rotationsNeeded = 0;
+    double encoderDrivingTarget = 0;
 
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
@@ -80,6 +82,9 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
         robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // run until stop is pressed
         while (opModeIsActive()) {
@@ -152,6 +157,17 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
  */
 
             viperSlideTarget += gamepad2.left_stick_y;
+            rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
+            encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
+
+            robot.ViperSlide.setPower(1);
+            robot.ViperSlide2.setPower(1);
+
+            robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
+            robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget);
+
+            robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 //            robot.ViperSlide.setPower(gamepad2.left_stick_y);
 //            robot.ViperSlide2.setPower(gamepad2.left_stick_y);
@@ -226,19 +242,22 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.addData("Left Trigger:" , gamepad1.left_trigger);
-            telemetry.addData("Right Trigger", gamepad1.right_trigger);
-            telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
-            telemetry.addData("Left Stick X", gamepad1.left_stick_x);
-            telemetry.addData("Right Stick Y", gamepad1.right_stick_y);
-            telemetry.addData("Right Stick X", gamepad1.right_stick_x);
+//            telemetry.addData("Left Trigger:" , gamepad1.left_trigger);
+//            telemetry.addData("Right Trigger", gamepad1.right_trigger);
+//            telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
+//            telemetry.addData("Left Stick X", gamepad1.left_stick_x);
+//            telemetry.addData("Right Stick Y", gamepad1.right_stick_y);
+//            telemetry.addData("Right Stick X", gamepad1.right_stick_x);
             telemetry.addData("Additional Yaw: ", additionalYaw);
-            telemetry.addData("Average Motor Power: ", avgMotorPower);
-            telemetry.addData("Axial: ", axial);
-            telemetry.addData("Lateral: ", lateral);
-            telemetry.addData("Yaw: ",yaw);
-            telemetry.addData("Servo Pos: ", robot.servo1.getController().getServoPosition(robot.servo1.getPortNumber()));
-            telemetry.addData("Servo Reported Power: ", robot.servo1.getPower());
+//            telemetry.addData("Axial: ", axial);
+//            telemetry.addData("Lateral: ", lateral);
+//            telemetry.addData("Yaw: ",yaw);
+//            telemetry.addData("Servo Pos: ", robot.servo1.getController().getServoPosition(robot.servo1.getPortNumber()));
+//            telemetry.addData("Servo Reported Power: ", robot.servo1.getPower());
+            telemetry.addData("Viper Slide 1 Tgt: ", robot.ViperSlide.getTargetPosition());
+            telemetry.addData("Viper Slide 2 Tgt: ", robot.ViperSlide2.getTargetPosition());
+            telemetry.addData("Viper Slide 1 Curr: ", robot.ViperSlide.getCurrentPosition());
+            telemetry.addData("Viper Slide 2 Curr: ", robot.ViperSlide2.getCurrentPosition());
             telemetry.update();
         }
     }
