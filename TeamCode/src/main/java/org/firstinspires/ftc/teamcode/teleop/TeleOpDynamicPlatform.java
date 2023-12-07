@@ -86,6 +86,9 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
         robot.ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION); // may be redundant
+
         // run until stop is pressed
         while (opModeIsActive()) {
 //            controller.setPID(p,i,d);
@@ -164,7 +167,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             robot.ViperSlide2.setPower(1);
 
             robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
-            robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget);
+            robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget*-1);
 
             robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
