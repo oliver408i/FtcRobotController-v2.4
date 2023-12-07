@@ -152,7 +152,8 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
 
         if(cubePosition.equals("left")){ // old right side code
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,-2, Math.toRadians(45)), Math.toRadians(45))
+                    .splineTo(new Vector2d(20,-5),Math.toRadians(0))
+                    .splineToSplineHeading(new Pose2d(20,2, Math.toRadians(45)), Math.toRadians(90))
                     .build();
             lotsOfMovement.add(temp);
 
@@ -171,7 +172,7 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
         if (cubePosition.equals("right")) { // old left side code
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,20, Math.toRadians(-10)), Math.toRadians(-10))
+                    .splineToLinearHeading(new Pose2d(20,-9, Math.toRadians(0)), Math.toRadians(-0))
                     .build();
             lotsOfMovement.add(temp);
 

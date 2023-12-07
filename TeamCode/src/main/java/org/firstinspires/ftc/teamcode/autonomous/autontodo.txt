@@ -1,4 +1,6 @@
 trajectory sequences
 trajectory builder
+fix spagheti code
+trajectory.end
 
 arm movements based on robot development
