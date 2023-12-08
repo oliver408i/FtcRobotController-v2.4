@@ -150,7 +150,7 @@ public class RobotHardware {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
         ViperSlide.setDirection(DcMotor.Direction.FORWARD);
-        ViperSlide2.setDirection(DcMotor.Direction.REVERSE);
+        ViperSlide2.setDirection(DcMotor.Direction.FORWARD);
         linearActuator.setDirection(DcMotor.Direction.REVERSE);
         spaghettiIntake.setDirection(DcMotor.Direction.FORWARD);
 
