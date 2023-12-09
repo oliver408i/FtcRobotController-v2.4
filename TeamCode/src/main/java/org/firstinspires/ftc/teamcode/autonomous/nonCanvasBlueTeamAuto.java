@@ -170,6 +170,7 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
         Trajectory temp = null;
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+        robot.servo3.setPower(-0.1);
 
         if(cubePosition.equals("left")){ // old right side code
             temp = drive.trajectoryBuilder(new Pose2d())
@@ -205,9 +206,9 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
             drive.followTrajectory(trajectory);
             sleep(1000);
         }
-        robot.spaghettiIntake.setPower(.25);
+        robot.spaghettiIntake.setPower(.5);
         robot.servo1.setPower(-1);
-        robot.servo3.setPower(-0.1);
+        robot.servo3.setPower(-1);
 
         sleep(2000);
 

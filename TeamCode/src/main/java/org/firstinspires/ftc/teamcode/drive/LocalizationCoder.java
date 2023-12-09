@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 /**
@@ -23,12 +24,18 @@ public class LocalizationCoder extends LinearOpMode {
         double lastX = 0;
         double lastY = 0;
         double headingChange = 0;
+        RobotHardware robot = new RobotHardware();
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
+        robot.init(hardwareMap);
+
 
         while (!isStopRequested()) {
+
+            robot.servo3.setPower(-gamepad1.left_trigger+gamepad1.right_trigger);
+
             drive.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y,
