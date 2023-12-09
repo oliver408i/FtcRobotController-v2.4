@@ -151,11 +151,23 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         }
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        RobotHardware robot = new RobotHardware();
+        robot.init(hardwareMap);
 
         Trajectory temp = null;
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
         ArrayList<String> relativeMovement = new ArrayList<>();
+
+        robot.spaghettiIntake.setPower(.25);
+        robot.servo1.setPower(-1);
+        robot.servo3.setPower(-0.1);
+
+        sleep(2000);
+
+        robot.servo3.setPower(0);
+        robot.spaghettiIntake.setPower(0);
+        robot.servo1.setPower(0);
 
         if(cubePosition.equals("right")){
             temp = drive.trajectoryBuilder(new Pose2d())
