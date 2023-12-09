@@ -194,6 +194,9 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
 
             temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(20,10, Math.toRadians(20)), Math.toRadians(20))
+                    .addDisplacementMarker(() -> {
+                        //use intake
+                    })
                     .build();
             lotsOfMovement.add(temp);
         }

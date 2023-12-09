@@ -42,6 +42,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -144,22 +145,36 @@ public class canvasRedTeamAuto extends LinearOpMode {
         //important: code copied from canvasBlueTeamAuto
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        RobotHardware robot = new RobotHardware();
+        robot.init(hardwareMap);
 
         Trajectory temp = null;
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+
+        //intake code coped over from nonCanvasSide
+        robot.spaghettiIntake.setPower(.25);
+        robot.servo1.setPower(-1);
+        robot.servo3.setPower(-0.1);
+
+        sleep(2000);
+
+        robot.servo3.setPower(0);
+        robot.spaghettiIntake.setPower(0);
+        robot.servo1.setPower(0);
 
 
         if(cubePosition.equals("left")){ // old right side code
             temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
                     .build();
+            //TODO: add armature code here
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
                     //TODO: Increase dist towards the canvas
                     .splineToLinearHeading(new Pose2d(17,-36,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
-            // armature should move down after this
+            //TODO: armature should move down after this
             lotsOfMovement.add(temp);
         }
 
@@ -168,11 +183,12 @@ public class canvasRedTeamAuto extends LinearOpMode {
             temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
                     .build();
+            //TODO: add armature code here
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
                     .lineTo(new Vector2d(15,0))
                     .build();
-            // armature should move down after this
+            //TODO: armature should move down after this
             lotsOfMovement.add(temp);
 
             temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
@@ -186,18 +202,20 @@ public class canvasRedTeamAuto extends LinearOpMode {
             temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(15,-7, Math.toRadians(-10)), Math.toRadians(-10))
                     .build();
+            //TODO: add armature code here
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(15,-7, Math.toRadians(-10)))
                     .splineToLinearHeading(new Pose2d(5,-7,Math.toRadians(1)), Math.toRadians(1))
                     .build();
+            //TODO: armature should move down after this
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(5,-7, Math.toRadians(1)), Math.toRadians(1))
                     .splineToLinearHeading(new Pose2d(30,-30,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
+            //TODO: armature should move down after this
             lotsOfMovement.add(temp);
-            // armature should move down after this
+            //TODO: armature should move down after this
         }
-
 
         for(Trajectory trajectory:lotsOfMovement){
             drive.followTrajectory(trajectory);
