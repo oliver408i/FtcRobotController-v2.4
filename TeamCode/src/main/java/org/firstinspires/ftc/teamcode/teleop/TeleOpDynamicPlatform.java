@@ -159,20 +159,20 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
  */
 
-            viperSlideTarget += -gamepad2.left_stick_y*0.5;
+            viperSlideTarget += gamepad2.left_stick_y*0.5;
             rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
 
             encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
 
-            if(encoderDrivingTarget < 0){
+            if(encoderDrivingTarget > 1){
                 encoderDrivingTarget = 0;
             }
 
-            if(encoderDrivingTarget > 4500){
-                encoderDrivingTarget = 4500;
+            if(encoderDrivingTarget < -4501){
+                encoderDrivingTarget = -4500;
             }
 
-            encoderDrivingTarget2 = encoderDrivingTarget*-1;
+            encoderDrivingTarget2 = -encoderDrivingTarget;
 
             robot.ViperSlide.setPower(0.5);
             robot.ViperSlide2.setPower(0.5);
@@ -216,11 +216,15 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             // intake lifter code
 
             if(gamepad2.dpad_left){
-                robot.spaghettiIntake.setPower(1);
+                robot.spaghettiIntake.setPower(0.3);
             }
 
             else if(gamepad2.dpad_right){
-                robot.spaghettiIntake.setPower(-1);
+                robot.spaghettiIntake.setPower(-0.25);
+            }
+
+            else{
+                robot.spaghettiIntake.setPower(0);
             }
             // swap negatives if rotating in unfavorable directions. change power as needed
 
@@ -284,6 +288,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             telemetry.addData("Viper Slide 2 Tgt: ", robot.ViperSlide2.getTargetPosition());
             telemetry.addData("Viper Slide 1 Curr: ", robot.ViperSlide.getCurrentPosition());
             telemetry.addData("Viper Slide 2 Curr: ", robot.ViperSlide2.getCurrentPosition());
+            telemetry.addData("viper slide data dump: ", encoderDrivingTarget);
             telemetry.update();
         }
     }
