@@ -168,8 +168,8 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                 encoderDrivingTarget = 0;
             }
 
-            if(encoderDrivingTarget < -4501){
-                encoderDrivingTarget = -4500;
+            if(encoderDrivingTarget < -3501){
+                encoderDrivingTarget = -3500;
             }
 
             encoderDrivingTarget2 = -encoderDrivingTarget;

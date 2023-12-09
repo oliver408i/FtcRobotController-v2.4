@@ -206,13 +206,15 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
             drive.followTrajectory(trajectory);
             sleep(1000);
         }
-        robot.spaghettiIntake.setPower(.5);
+        robot.spaghettiIntake.setPower(1);
         robot.servo1.setPower(-1);
         robot.servo3.setPower(-1);
 
-        sleep(2000);
+        sleep(1000);
 
-        robot.servo3.setPower(0);
+        robot.servo3.setPower(1);
+
+        sleep(1000);
         robot.spaghettiIntake.setPower(0);
         robot.servo1.setPower(0);
 
