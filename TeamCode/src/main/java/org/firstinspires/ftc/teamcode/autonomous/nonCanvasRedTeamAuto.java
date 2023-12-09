@@ -35,12 +35,14 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -76,6 +78,25 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
     public void runOpMode() {
 
         initTfod();
+        RobotHardware robot = new RobotHardware();
+        robot.init(hardwareMap);
+
+        // ViperSlide ain't used. just extra code
+        DcMotor ViperSlide;
+        DcMotor ViperSlide2;
+
+        ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
+        ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
+
+        ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         sleep(1500);
 
         // Wait for the DS start button to be touched.
@@ -182,14 +203,15 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
             drive.followTrajectory(trajectory);
             sleep(1000);
         }
+        robot.spaghettiIntake.setPower(.25);
+        robot.servo1.setPower(-1);
+        robot.servo3.setPower(-0.1);
 
-        //drive.followTrajectory(headTowards);
+        sleep(2000);
 
-        //drive.followTrajectory(goBack);
-//            while (opModeIsActive()) {
-//
-//            }
-
+        robot.servo3.setPower(0);
+        robot.spaghettiIntake.setPower(0);
+        robot.servo1.setPower(0);
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
