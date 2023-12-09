@@ -216,11 +216,11 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             // intake lifter code
 
             if(gamepad2.dpad_left){
-                robot.spaghettiIntake.setPower(0.3);
+                robot.spaghettiIntake.setPower(0.5); //shoot out
             }
 
             else if(gamepad2.dpad_right){
-                robot.spaghettiIntake.setPower(-0.25);
+                robot.spaghettiIntake.setPower(-0.5); //suck in
             }
 
             else{

@@ -42,6 +42,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -72,11 +73,13 @@ public class canvasRedTeamAuto extends LinearOpMode {
      * {@link #visionPortal} is the variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+    RobotHardware robot = new RobotHardware();
 
     @Override
     public void runOpMode() {
 
         initTfod();
+        robot.init(hardwareMap);
         sleep(1500);
 
         // Wait for the DS start button to be touched.
@@ -148,6 +151,8 @@ public class canvasRedTeamAuto extends LinearOpMode {
         Trajectory temp = null;
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+        ArrayList<String> relativeMovement = new ArrayList<>();
+
 
 
         if(cubePosition.equals("left")){ // old right side code
@@ -155,11 +160,13 @@ public class canvasRedTeamAuto extends LinearOpMode {
                     .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
                     .build();
             lotsOfMovement.add(temp);
+            relativeMovement.add("drop first pixel");
             temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
                     //TODO: Increase dist towards the canvas
                     .splineToLinearHeading(new Pose2d(17,-36,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
             // armature should move down after this
+            relativeMovement.add("drop second pixel");
             lotsOfMovement.add(temp);
         }
 
@@ -168,16 +175,19 @@ public class canvasRedTeamAuto extends LinearOpMode {
             temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
                     .build();
+            relativeMovement.add("drop first pixel");
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
                     .lineTo(new Vector2d(15,0))
                     .build();
             // armature should move down after this
+            relativeMovement.add("");
             lotsOfMovement.add(temp);
 
             temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
                     .splineToLinearHeading(new Pose2d(25,-34,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
+            relativeMovement.add("drop second pixel");
             lotsOfMovement.add(temp);
         }
 
@@ -186,26 +196,46 @@ public class canvasRedTeamAuto extends LinearOpMode {
             temp = drive.trajectoryBuilder(new Pose2d())
                     .splineToLinearHeading(new Pose2d(15,-7, Math.toRadians(-10)), Math.toRadians(-10))
                     .build();
+            relativeMovement.add("drop first pixel");
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(15,-7, Math.toRadians(-10)))
                     .splineToLinearHeading(new Pose2d(5,-7,Math.toRadians(1)), Math.toRadians(1))
                     .build();
+            relativeMovement.add("");
             lotsOfMovement.add(temp);
             temp = drive.trajectoryBuilder(new Pose2d(5,-7, Math.toRadians(1)), Math.toRadians(1))
                     .splineToLinearHeading(new Pose2d(30,-30,Math.toRadians(-70)), Math.toRadians(-70))
                     .build();
+            relativeMovement.add("drop second pixel");
             lotsOfMovement.add(temp);
             // armature should move down after this
         }
 
 
-        for(Trajectory trajectory:lotsOfMovement){
-            drive.followTrajectory(trajectory);
-            sleep(1000);
-        }
+
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
+
+        for(int i = 0;i< lotsOfMovement.size(); i++){
+            drive.followTrajectory(lotsOfMovement.get(i));
+            if(relativeMovement.get(i).equals("drop first pixel")){
+                robot.spaghettiIntake.setPower(.25);
+                robot.servo1.setPower(-1);
+                robot.servo3.setPower(-0.1);
+            }
+            if(relativeMovement.get(i).equals("drop second pixel")){
+                robot.viperSlideEncoderMovements(telemetry,40,0.5,true,robot.ViperSlide);
+                robot.viperSlideEncoderMovements(telemetry,40,0.5,false,robot.ViperSlide2);
+                while(robot.ViperSlide.isBusy() && robot.ViperSlide2.isBusy()){
+                    sleep(10);
+                }
+                robot.servo1.setPower(-1);
+                robot.servo3.setPower(-0.1);
+            }
+
+            sleep(1000);
+        }
 
     }   // end runOpMode()
 
