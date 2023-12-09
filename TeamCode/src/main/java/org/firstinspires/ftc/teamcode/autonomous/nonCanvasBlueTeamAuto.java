@@ -184,7 +184,7 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
         if (cubePosition.equals("center")) {
 
             temp = drive.trajectoryBuilder(new Pose2d())
-                    .lineToConstantHeading(new Vector2d(28,0))
+                    .lineToConstantHeading(new Vector2d(25,0))
                     .build();
             lotsOfMovement.add(temp);
 
@@ -206,7 +206,7 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
             drive.followTrajectory(trajectory);
             sleep(1000);
         }
-        robot.spaghettiIntake.setPower(1);
+        robot.spaghettiIntake.setPower(0.5);
         robot.servo1.setPower(-1);
         robot.servo3.setPower(-1);
 

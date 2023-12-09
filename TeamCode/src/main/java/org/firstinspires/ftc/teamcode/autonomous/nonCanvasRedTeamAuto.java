@@ -170,6 +170,8 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory temp = null;
+        robot.servo3.setPower(-0.1);
+
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
 
@@ -206,13 +208,15 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
             drive.followTrajectory(trajectory);
             sleep(1000);
         }
-        robot.spaghettiIntake.setPower(.25);
+        robot.spaghettiIntake.setPower(1);
         robot.servo1.setPower(-1);
-        robot.servo3.setPower(-0.1);
+        robot.servo3.setPower(-1);
 
-        sleep(2000);
+        sleep(1000);
 
-        robot.servo3.setPower(0);
+        robot.servo3.setPower(1);
+
+        sleep(1000);
         robot.spaghettiIntake.setPower(0);
         robot.servo1.setPower(0);
 
