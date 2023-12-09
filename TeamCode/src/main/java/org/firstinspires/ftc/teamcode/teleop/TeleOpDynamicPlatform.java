@@ -164,11 +164,11 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
             encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
 
-            if(encoderDrivingTarget > 0){
+            if(encoderDrivingTarget > 1){
                 encoderDrivingTarget = 0;
             }
 
-            if(encoderDrivingTarget < -4500){
+            if(encoderDrivingTarget < -4501){
                 encoderDrivingTarget = -4500;
             }
 
@@ -216,11 +216,11 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             // intake lifter code
 
             if(gamepad2.dpad_left){
-                robot.spaghettiIntake.setPower(0.75);
+                robot.spaghettiIntake.setPower(0.3);
             }
 
             else if(gamepad2.dpad_right){
-                robot.spaghettiIntake.setPower(-1);
+                robot.spaghettiIntake.setPower(-0.25);
             }
 
             else{
