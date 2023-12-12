@@ -26,7 +26,7 @@ public class LocalizationTest extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-            hardwareMap.get(CRServo.class,"servo3").setPower(-0.1); // comment out if armature is not blocked purposefully
+            //hardwareMap.get(CRServo.class,"servo3").setPower(-0.1); // comment out if armature is not blocked purposefully
             drive.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y,

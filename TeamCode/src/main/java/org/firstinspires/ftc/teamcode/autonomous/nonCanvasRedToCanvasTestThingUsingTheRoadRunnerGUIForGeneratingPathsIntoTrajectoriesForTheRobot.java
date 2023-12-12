@@ -36,6 +36,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -60,19 +61,47 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "nonCanvasRedToCanvasTestThingUsingTheRoadRunnerGUIForGeneratingPathsIntoTrajectoriesForTheRobot", group = "Concept")
+@TeleOp(name = "test roadrunner gui", group = "Auto Concept")
 
 public class nonCanvasRedToCanvasTestThingUsingTheRoadRunnerGUIForGeneratingPathsIntoTrajectoriesForTheRobot extends LinearOpMode {
+
+    ArrayList<TrajectorySequence> trajectorySequenceArrayList = new ArrayList<>();
+    ArrayList<String> nameList = new ArrayList<>();
+    int selectedProgram = 0;
+    double selectedProgramCounter = 0;
+
 
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        TrajectorySequence testdrive = drive.trajectorySequenceBuilder(new Pose2d(-36.83, -57.37, Math.toRadians(88.34)))
-                .splineTo(new Vector2d(-36.30, -25.33), Math.toRadians(89.33))
-                .splineTo(new Vector2d(-9.14, -0.61), Math.toRadians(-6.34))
-                .splineTo(new Vector2d(55.98, -35.09), Math.toRadians(0.00))
-                .build();
-        drive.setPoseEstimate(testdrive.start());
+
+        while(!opModeIsActive()) {
+
+
+            TrajectorySequence testdrive = drive.trajectorySequenceBuilder(new Pose2d(-36.83, -57.37, Math.toRadians(88.34)))
+                    .splineTo(new Vector2d(-36.30, -25.33), Math.toRadians(89.33))
+                    .splineTo(new Vector2d(-9.14, -0.61), Math.toRadians(-6.34))
+                    .splineTo(new Vector2d(55.98, -35.09), Math.toRadians(0.00))
+                    .build();
+            drive.setPoseEstimate(testdrive.start());
+
+            trajectorySequenceArrayList.add(testdrive);
+            nameList.add("test1");
+        }
+
+        waitForStart();
+
+        while(opModeIsActive()){
+            telemetry.addData("Selected Program: ", selectedProgram);
+            telemetry.addData("Selected Program Counter", selectedProgramCounter);
+            selectedProgramCounter += ((-gamepad1.left_trigger+gamepad1.right_trigger)/8000);
+            selectedProgram = (int) Math.round(selectedProgramCounter);
+            if(gamepad1.a){
+                drive.followTrajectorySequence(trajectorySequenceArrayList.get(selectedProgram));
+            }
+            telemetry.update();
+        }
+
     }   // end runOpMode()
 
 }   // end class
