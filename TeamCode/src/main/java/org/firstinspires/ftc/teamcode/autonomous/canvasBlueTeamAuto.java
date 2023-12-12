@@ -156,8 +156,8 @@ public class canvasBlueTeamAuto extends LinearOpMode {
 
         Trajectory temp = null;
 
-        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
-        ArrayList<String> relativeMovement = new ArrayList<>();
+        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>(); // TODO: this to be remade into a sequence
+        ArrayList<String> relativeMovement = new ArrayList<>(); // TODO: Correct this to use markers instead
 
         robot.spaghettiIntake.setPower(.25);
         robot.servo1.setPower(-1);
