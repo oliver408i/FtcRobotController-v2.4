@@ -27,32 +27,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.autonomous;
-
-import android.util.Size;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This 2023-2024 OpMode illustrates the basics of TensorFlow Object Detection,
@@ -63,7 +48,7 @@ import java.util.concurrent.TimeUnit;
  */
 @TeleOp(name = "test roadrunner gui", group = "Auto Concept")
 
-public class nonCanvasRedToCanvasTestThingUsingTheRoadRunnerGUIForGeneratingPathsIntoTrajectoriesForTheRobot extends LinearOpMode {
+public class rrGuiTester extends LinearOpMode {
 
     ArrayList<TrajectorySequence> trajectorySequenceArrayList = new ArrayList<>();
     ArrayList<String> nameList = new ArrayList<>();
@@ -107,11 +92,12 @@ public class nonCanvasRedToCanvasTestThingUsingTheRoadRunnerGUIForGeneratingPath
             trajectorySequenceArrayList.add(testdrive3);
             nameList.add("rufan test under door 1");
 
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.74, -65.23, Math.toRadians(90.00)))
-                    .splineTo(new Vector2d(-34.48, -20.10), Math.toRadians(90.00))
-                    .splineTo(new Vector2d(9.24, -5.99), Math.toRadians(21.58))
-                    .splineTo(new Vector2d(47.32, -39.42), Math.toRadians(0.00))
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.32, -62.41, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-23.62, -11.49, Math.toRadians(-0.95)), Math.toRadians(-0.95))
+                    .splineToSplineHeading(new Pose2d(21.23, -15.02, Math.toRadians(-19.16)), Math.toRadians(-19.16))
+                    .splineToSplineHeading(new Pose2d(44.00, -17.84, Math.toRadians(22.00)), Math.toRadians(31.39))
                     .build();
+
             drive.setPoseEstimate(untitled0.start());
 
             trajectorySequenceArrayList.add(untitled0);
@@ -134,6 +120,7 @@ public class nonCanvasRedToCanvasTestThingUsingTheRoadRunnerGUIForGeneratingPath
             selectedProgram = (int) Math.round(selectedProgramCounter);
             if(gamepad1.a){
                 drive.followTrajectorySequence(trajectorySequenceArrayList.get(selectedProgram));
+
             }
             telemetry.update();
         }
