@@ -68,6 +68,7 @@ public class rrGuiTester extends LinearOpMode {
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        robot.init(hardwareMap);
 
         ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
         ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
