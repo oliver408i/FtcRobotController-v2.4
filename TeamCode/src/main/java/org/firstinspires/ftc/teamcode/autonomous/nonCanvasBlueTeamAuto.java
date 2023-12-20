@@ -45,6 +45,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -170,53 +171,89 @@ public class nonCanvasBlueTeamAuto extends LinearOpMode {
         Trajectory temp = null;
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
-        robot.servo3.setPower(-0.1);
+//        robot.servo3.setPower(-0.1);
+//
+//        if(cubePosition.equals("left")){ // old right side code
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineTo(new Vector2d(20,-5),Math.toRadians(0))
+//                    .splineToSplineHeading(new Pose2d(20,2, Math.toRadians(45)), Math.toRadians(90))
+//                    .build();
+//            lotsOfMovement.add(temp);
+//
+//        }
+//
+//        if (cubePosition.equals("center")) {
+//
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .lineToConstantHeading(new Vector2d(25,0))
+//                    .build();
+//            lotsOfMovement.add(temp);
+//
+//
+//        }
+//
+//        if (cubePosition.equals("right")) { // old left side code
+//
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineToLinearHeading(new Pose2d(20,-9, Math.toRadians(0)), Math.toRadians(-0))
+//                    .build();
+//            lotsOfMovement.add(temp);
+//
+//            // armature should move down after this
+//        }
+//
+//
+//        for(Trajectory trajectory:lotsOfMovement){
+//            drive.followTrajectory(trajectory);
+//            sleep(1000);
+//        }
+//        robot.spaghettiIntake.setPower(0.5);
+//        robot.servo1.setPower(-1);
+//        robot.servo3.setPower(-1);
+//
+//        sleep(1000);
+//
+//        robot.servo3.setPower(1);
+//
+//        sleep(1000);
+//        robot.spaghettiIntake.setPower(0);
+//        robot.servo1.setPower(0);
 
-        if(cubePosition.equals("left")){ // old right side code
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineTo(new Vector2d(20,-5),Math.toRadians(0))
-                    .splineToSplineHeading(new Pose2d(20,2, Math.toRadians(45)), Math.toRadians(90))
+
+        if(cubePosition.equals("left")){
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.60, 65.37, Math.toRadians(-90.00)))
+                    .splineToSplineHeading(new Pose2d(-30.25, 40.83, Math.toRadians(-47.73)), Math.toRadians(-47.73))
+                    .splineToSplineHeading(new Pose2d(-27.86, 13.19, Math.toRadians(-1.27)), Math.toRadians(-1.27))
+                    .splineToSplineHeading(new Pose2d(45.63, 30.53, Math.toRadians(82.96)), Math.toRadians(82.96))
+                    .splineToSplineHeading(new Pose2d(49.57, 37.16, Math.toRadians(-12.09)), Math.toRadians(-12.09))
                     .build();
-            lotsOfMovement.add(temp);
-
+            drive.setPoseEstimate(untitled0.start());
+            drive.followTrajectorySequence(untitled0);
         }
 
-        if (cubePosition.equals("center")) {
-
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .lineToConstantHeading(new Vector2d(25,0))
+        if(cubePosition.equals("center")){
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.60, 65.37, Math.toRadians(-90.00)))
+                    .splineToSplineHeading(new Pose2d(-35.61, 29.69, Math.toRadians(-90.00)), Math.toRadians(-90.00))
+                    .lineToSplineHeading(new Pose2d(-50.70, 27.43, Math.toRadians(-1.27)))
+                    .splineTo(new Vector2d(-37.73, 13.05), Math.toRadians(18.38))
+                    .splineToSplineHeading(new Pose2d(45.63, 30.53, Math.toRadians(82.96)), Math.toRadians(82.96))
+                    .splineToSplineHeading(new Pose2d(49.57, 37.16, Math.toRadians(-12.09)), Math.toRadians(-12.09))
                     .build();
-            lotsOfMovement.add(temp);
-
-
+            drive.setPoseEstimate(untitled0.start());
+            drive.followTrajectorySequence(untitled0);
         }
 
-        if (cubePosition.equals("right")) { // old left side code
-
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,-9, Math.toRadians(0)), Math.toRadians(-0))
+        if(cubePosition.equals("right")){
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.60, 65.37, Math.toRadians(-90.00)))
+                    .splineToSplineHeading(new Pose2d(-47.04, 39.28, Math.toRadians(-90.00)), Math.toRadians(-90.00))
+                    .lineToSplineHeading(new Pose2d(-57.76, 30.53, Math.toRadians(-1.27)))
+                    .splineTo(new Vector2d(-37.73, 13.05), Math.toRadians(18.38))
+                    .splineToSplineHeading(new Pose2d(45.63, 30.53, Math.toRadians(82.96)), Math.toRadians(82.96))
+                    .splineToSplineHeading(new Pose2d(49.57, 37.16, Math.toRadians(-12.09)), Math.toRadians(-12.09))
                     .build();
-            lotsOfMovement.add(temp);
-
-            // armature should move down after this
+            drive.setPoseEstimate(untitled0.start());
+            drive.followTrajectorySequence(untitled0);
         }
-
-
-        for(Trajectory trajectory:lotsOfMovement){
-            drive.followTrajectory(trajectory);
-            sleep(1000);
-        }
-        robot.spaghettiIntake.setPower(0.5);
-        robot.servo1.setPower(-1);
-        robot.servo3.setPower(-1);
-
-        sleep(1000);
-
-        robot.servo3.setPower(1);
-
-        sleep(1000);
-        robot.spaghettiIntake.setPower(0);
-        robot.servo1.setPower(0);
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();

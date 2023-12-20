@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import android.util.Size;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -44,6 +45,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -170,55 +172,92 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory temp = null;
-        robot.servo3.setPower(-0.1);
+        //robot.servo3.setPower(-0.1);
 
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
 
+//        if(cubePosition.equals("right")){
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
+//                    .build();
+//            // armature should move down after this
+//            lotsOfMovement.add(temp);
+//
+//        }
+//
+//        if (cubePosition.equals("center")) {
+//
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineToLinearHeading(new Pose2d(24,0, Math.toRadians(0)), Math.toRadians(0))
+//                    .build();
+//            lotsOfMovement.add(temp);
+//        }
+//
+//        if (cubePosition.equals("left")) {
+//
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineToLinearHeading(new Pose2d(20,10, Math.toRadians(20)), Math.toRadians(20))
+//                    .addDisplacementMarker(() -> {
+//                        //use intake
+//                    })
+//                    .build();
+//            lotsOfMovement.add(temp);
+//        }
+//
+//
+//        for(Trajectory trajectory:lotsOfMovement){
+//            drive.followTrajectory(trajectory);
+//            sleep(1000);
+//        }
+//        robot.spaghettiIntake.setPower(1);
+//        robot.servo1.setPower(-1);
+//        robot.servo3.setPower(-1);
+//
+//        sleep(1000);
+//
+//        robot.servo3.setPower(1);
+//
+//        sleep(1000);
+//        robot.spaghettiIntake.setPower(0);
+//        robot.servo1.setPower(0);
+
+        if(cubePosition.equals("left")){
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-37.02, -65.51, Math.toRadians(87.14)))
+                    .splineToSplineHeading(new Pose2d(-47.74, -40.13, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .lineToSplineHeading(new Pose2d(-33.64, -30.96, Math.toRadians(91.55)))
+                    .splineToSplineHeading(new Pose2d(-23.76, -12.62, Math.toRadians(2.34)), Math.toRadians(2.34))
+                    .splineToSplineHeading(new Pose2d(46.61, -24.61, Math.toRadians(266.42)), Math.toRadians(266.42))
+                    .splineTo(new Vector2d(53.38, -28.84), Math.toRadians(3.01))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            drive.followTrajectorySequence(untitled0);
+        }
+
+        if(cubePosition.equals("center")){
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-37.02, -65.51, Math.toRadians(87.14)))
+                    .splineToSplineHeading(new Pose2d(-37.45, -27.57, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .lineToSplineHeading(new Pose2d(-52.25, -27.43, Math.toRadians(91.55)))
+                    .splineToSplineHeading(new Pose2d(-23.76, -12.62, Math.toRadians(2.34)), Math.toRadians(2.34))
+                    .splineToSplineHeading(new Pose2d(46.61, -24.61, Math.toRadians(266.42)), Math.toRadians(266.42))
+                    .splineTo(new Vector2d(53.81, -35.47), Math.toRadians(3.01))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            drive.followTrajectorySequence(untitled0);
+        }
+
         if(cubePosition.equals("right")){
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-37.02, -65.51, Math.toRadians(87.14)))
+                    .splineToSplineHeading(new Pose2d(-28.00, -37.16, Math.toRadians(45.00)), Math.toRadians(45.00))
+                    .lineToSplineHeading(new Pose2d(-36.32, -17.56, Math.toRadians(91.55)))
+                    .splineToSplineHeading(new Pose2d(-23.76, -12.62, Math.toRadians(2.34)), Math.toRadians(2.34))
+                    .splineToSplineHeading(new Pose2d(46.61, -24.61, Math.toRadians(266.42)), Math.toRadians(266.42))
+                    .splineTo(new Vector2d(53.67, -42.10), Math.toRadians(3.01))
                     .build();
-            // armature should move down after this
-            lotsOfMovement.add(temp);
-
+            drive.setPoseEstimate(untitled0.start());
+            drive.followTrajectorySequence(untitled0);
         }
 
-        if (cubePosition.equals("center")) {
-
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(24,0, Math.toRadians(0)), Math.toRadians(0))
-                    .build();
-            lotsOfMovement.add(temp);
-        }
-
-        if (cubePosition.equals("left")) {
-
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,10, Math.toRadians(20)), Math.toRadians(20))
-                    .addDisplacementMarker(() -> {
-                        //use intake
-                    })
-                    .build();
-            lotsOfMovement.add(temp);
-        }
-
-
-        for(Trajectory trajectory:lotsOfMovement){
-            drive.followTrajectory(trajectory);
-            sleep(1000);
-        }
-        robot.spaghettiIntake.setPower(1);
-        robot.servo1.setPower(-1);
-        robot.servo3.setPower(-1);
-
-        sleep(1000);
-
-        robot.servo3.setPower(1);
-
-        sleep(1000);
-        robot.spaghettiIntake.setPower(0);
-        robot.servo1.setPower(0);
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();

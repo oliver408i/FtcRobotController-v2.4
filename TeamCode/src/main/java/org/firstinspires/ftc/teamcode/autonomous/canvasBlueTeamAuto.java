@@ -44,6 +44,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -169,62 +170,62 @@ public class canvasBlueTeamAuto extends LinearOpMode {
         robot.spaghettiIntake.setPower(0);
         robot.servo1.setPower(0);
 
-        if(cubePosition.equals("right")){
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
-                    .build();
-            relativeMovement.add("drop first pixel");
-            lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(20,5, Math.toRadians(-55)))
-                    //TODO: Increase dist towards the canvas
-                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
-                    .build();
-            // armature should move down after this
-            relativeMovement.add(("drop second pixel"));
-            lotsOfMovement.add(temp);
-        }
-
-        if (cubePosition.equals("center")) {
-
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
-                    .build();
-            relativeMovement.add("drop first pixel");
-            lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
-                    .lineTo(new Vector2d(15,0))
-                    .build();
-            // armature should move down after this
-            relativeMovement.add("");
-            lotsOfMovement.add(temp);
-
-            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
-                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
-                    .build();
-            relativeMovement.add("drop second pixel");
-            lotsOfMovement.add(temp);
-        }
-
-        if (cubePosition.equals("left")) {
-
-            temp = drive.trajectoryBuilder(new Pose2d())
-                    .splineToLinearHeading(new Pose2d(20,11, Math.toRadians(5)), Math.toRadians(5))
-                    .build();
-            relativeMovement.add("drop first pixel");
-            lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(20,11, Math.toRadians(5)))
-                    .splineToLinearHeading(new Pose2d(15,11,Math.toRadians(-1)), Math.toRadians(-1))
-                    .build();
-
-            relativeMovement.add("");
-            lotsOfMovement.add(temp);
-            temp = drive.trajectoryBuilder(new Pose2d(15,11, Math.toRadians(55)), Math.toRadians(45))
-                    .splineToLinearHeading(new Pose2d(20,35,Math.toRadians(110)), Math.toRadians(110))
-                    .build();
-            relativeMovement.add("drop second pixel");
-            lotsOfMovement.add(temp);
-            // armature should move down after this
-        }
+//        if(cubePosition.equals("right")){
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
+//                    .build();
+//            relativeMovement.add("drop first pixel");
+//            lotsOfMovement.add(temp);
+//            temp = drive.trajectoryBuilder(new Pose2d(20,5, Math.toRadians(-55)))
+//                    //TODO: Increase dist towards the canvas
+//                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
+//                    .build();
+//            // armature should move down after this
+//            relativeMovement.add(("drop second pixel"));
+//            lotsOfMovement.add(temp);
+//        }
+//
+//        if (cubePosition.equals("center")) {
+//
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
+//                    .build();
+//            relativeMovement.add("drop first pixel");
+//            lotsOfMovement.add(temp);
+//            temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
+//                    .lineTo(new Vector2d(15,0))
+//                    .build();
+//            // armature should move down after this
+//            relativeMovement.add("");
+//            lotsOfMovement.add(temp);
+//
+//            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
+//                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
+//                    .build();
+//            relativeMovement.add("drop second pixel");
+//            lotsOfMovement.add(temp);
+//        }
+//
+//        if (cubePosition.equals("left")) {
+//
+//            temp = drive.trajectoryBuilder(new Pose2d())
+//                    .splineToLinearHeading(new Pose2d(20,11, Math.toRadians(5)), Math.toRadians(5))
+//                    .build();
+//            relativeMovement.add("drop first pixel");
+//            lotsOfMovement.add(temp);
+//            temp = drive.trajectoryBuilder(new Pose2d(20,11, Math.toRadians(5)))
+//                    .splineToLinearHeading(new Pose2d(15,11,Math.toRadians(-1)), Math.toRadians(-1))
+//                    .build();
+//
+//            relativeMovement.add("");
+//            lotsOfMovement.add(temp);
+//            temp = drive.trajectoryBuilder(new Pose2d(15,11, Math.toRadians(55)), Math.toRadians(45))
+//                    .splineToLinearHeading(new Pose2d(20,35,Math.toRadians(110)), Math.toRadians(110))
+//                    .build();
+//            relativeMovement.add("drop second pixel");
+//            lotsOfMovement.add(temp);
+//            // armature should move down after this
+//        }
 
 
 
@@ -235,6 +236,40 @@ public class canvasBlueTeamAuto extends LinearOpMode {
 //            while (opModeIsActive()) {
 //
 //            }
+
+
+        if(cubePosition.equals("left")){
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(12.34, 67.20, Math.toRadians(-90.00)))
+                    .splineToSplineHeading(new Pose2d(23.06, 41.54, Math.toRadians(-88.49)), Math.toRadians(-88.49))
+                    .splineToSplineHeading(new Pose2d(39.14, 42.52, Math.toRadians(10.09)), Math.toRadians(10.09))
+                    .splineToSplineHeading(new Pose2d(50.84, 36.46, Math.toRadians(0.00)), Math.toRadians(18.43))
+                    .build();
+
+            drive.setPoseEstimate(untitled0.start());
+
+            drive.followTrajectorySequence(untitled0);
+        }
+
+        if(cubePosition.equals("center")) {
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(12.34, 67.20, Math.toRadians(-90.00)))
+                    .splineToSplineHeading(new Pose2d(11.92, 27.43, Math.toRadians(-88.49)), Math.toRadians(-88.49))
+                    .lineToSplineHeading(new Pose2d(39.14, 42.52, Math.toRadians(10.09)))
+                    .splineToSplineHeading(new Pose2d(50.84, 36.46, Math.toRadians(0.00)), Math.toRadians(18.43))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+
+            drive.followTrajectorySequence(untitled0);
+        }
+
+        if(cubePosition.equals("right")){
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(12.34, 67.20, Math.toRadians(-90.00)))
+                    .splineToSplineHeading(new Pose2d(2.61, 39.98, Math.toRadians(-88.49)), Math.toRadians(-88.49))
+                    .splineToSplineHeading(new Pose2d(50.84, 36.46, Math.toRadians(0.00)), Math.toRadians(18.43))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+
+            drive.followTrajectorySequence(untitled0);
+        }
 
 
         // Save more CPU resources when camera is no longer needed.
