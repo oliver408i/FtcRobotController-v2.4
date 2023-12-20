@@ -223,36 +223,39 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
 //        robot.servo1.setPower(0);
 
         if(cubePosition.equals("left")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-37.02, -65.51, Math.toRadians(87.14)))
-                    .splineToSplineHeading(new Pose2d(-47.74, -40.13, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .lineToSplineHeading(new Pose2d(-33.64, -30.96, Math.toRadians(91.55)))
-                    .splineToSplineHeading(new Pose2d(-23.76, -12.62, Math.toRadians(2.34)), Math.toRadians(2.34))
-                    .splineToSplineHeading(new Pose2d(46.61, -24.61, Math.toRadians(266.42)), Math.toRadians(266.42))
-                    .splineTo(new Vector2d(53.38, -28.84), Math.toRadians(3.01))
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-48.31, -39.00, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .lineToSplineHeading(new Pose2d(-59.02, -37.16, Math.toRadians(34.43)))
+                    .splineTo(new Vector2d(-51.41, -15.30), Math.toRadians(6.19))
+                    .splineToSplineHeading(new Pose2d(2.05, -13.89, Math.toRadians(0.00)), Math.toRadians(0.00))
+                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
+                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
         }
 
         if(cubePosition.equals("center")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-37.02, -65.51, Math.toRadians(87.14)))
-                    .splineToSplineHeading(new Pose2d(-37.45, -27.57, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .lineToSplineHeading(new Pose2d(-52.25, -27.43, Math.toRadians(91.55)))
-                    .splineToSplineHeading(new Pose2d(-23.76, -12.62, Math.toRadians(2.34)), Math.toRadians(2.34))
-                    .splineToSplineHeading(new Pose2d(46.61, -24.61, Math.toRadians(266.42)), Math.toRadians(266.42))
-                    .splineTo(new Vector2d(53.81, -35.47), Math.toRadians(3.01))
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-39.84, -33.36, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .splineToSplineHeading(new Pose2d(-54.51, -20.80, Math.toRadians(34.43)), Math.toRadians(34.43))
+                    .splineToSplineHeading(new Pose2d(0.63, -13.61, Math.toRadians(0.00)), Math.toRadians(0.00))
+                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
+                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
         }
 
         if(cubePosition.equals("right")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-37.02, -65.51, Math.toRadians(87.14)))
-                    .splineToSplineHeading(new Pose2d(-28.00, -37.16, Math.toRadians(45.00)), Math.toRadians(45.00))
-                    .lineToSplineHeading(new Pose2d(-36.32, -17.56, Math.toRadians(91.55)))
-                    .splineToSplineHeading(new Pose2d(-23.76, -12.62, Math.toRadians(2.34)), Math.toRadians(2.34))
-                    .splineToSplineHeading(new Pose2d(46.61, -24.61, Math.toRadians(266.42)), Math.toRadians(266.42))
-                    .splineTo(new Vector2d(53.67, -42.10), Math.toRadians(3.01))
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
+                    .lineToSplineHeading(new Pose2d(-36.04, -47.74, Math.toRadians(68.40)))
+                    .splineToSplineHeading(new Pose2d(-25.32, -38.57, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .lineToSplineHeading(new Pose2d(-59.02, -37.16, Math.toRadians(34.43)))
+                    .splineTo(new Vector2d(-51.41, -15.30), Math.toRadians(6.19))
+                    .splineToSplineHeading(new Pose2d(2.05, -13.89, Math.toRadians(0.00)), Math.toRadians(0.00))
+                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
+                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
