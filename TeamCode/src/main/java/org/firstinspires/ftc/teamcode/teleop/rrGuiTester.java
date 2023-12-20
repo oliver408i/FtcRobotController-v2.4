@@ -130,9 +130,14 @@ public class rrGuiTester extends LinearOpMode {
                     .splineToSplineHeading(new Pose2d(30.73, 15.98, Math.toRadians(43.69)), Math.toRadians(43.69))
                     .splineToSplineHeading(new Pose2d(51.45, 34.95, Math.toRadians(0.00)), Math.toRadians(0.00))
                     .addTemporalMarker(() -> {
-                        robot.viperSlideEncoderMovements(telemetry,40,0.5,true,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,40,0.5,false,robot.ViperSlide2);
                         // Run your action in here!
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
+                    })
+                    .addTemporalMarker(() -> {
+                        // Run your action in here!
+                        robot.viperSlideEncoderMovements(telemetry,-20,0.5,true,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,-20,0.5,false,robot.ViperSlide2);
                     })
                     .build();
 
