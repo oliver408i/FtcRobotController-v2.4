@@ -103,6 +103,16 @@ public class rrGuiTester extends LinearOpMode {
             trajectorySequenceArrayList.add(untitled0);
             nameList.add("rian test under truss 2");
 
+            TrajectorySequence untitled1 = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-36.88, -11.06, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .splineToSplineHeading(new Pose2d(30.73, 15.98, Math.toRadians(43.69)), Math.toRadians(43.69))
+                    .splineToSplineHeading(new Pose2d(51.45, 34.95, Math.toRadians(0.00)), Math.toRadians(0.00))
+                    .build();
+            drive.setPoseEstimate(untitled1.start());
+
+            trajectorySequenceArrayList.add(untitled1);
+            nameList.add("markers test");
+
         }
 
         waitForStart();
