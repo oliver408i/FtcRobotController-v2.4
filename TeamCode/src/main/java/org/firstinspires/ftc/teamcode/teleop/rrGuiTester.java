@@ -34,6 +34,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -54,6 +55,8 @@ public class rrGuiTester extends LinearOpMode {
     ArrayList<String> nameList = new ArrayList<>();
     int selectedProgram = 0;
     double selectedProgramCounter = 0;
+
+    RobotHardware robot = new RobotHardware();
 
 
     @Override
@@ -107,12 +110,18 @@ public class rrGuiTester extends LinearOpMode {
                     .splineToSplineHeading(new Pose2d(-36.88, -11.06, Math.toRadians(90.00)), Math.toRadians(90.00))
                     .splineToSplineHeading(new Pose2d(30.73, 15.98, Math.toRadians(43.69)), Math.toRadians(43.69))
                     .splineToSplineHeading(new Pose2d(51.45, 34.95, Math.toRadians(0.00)), Math.toRadians(0.00))
+                    .addDisplacementMarker(() -> {
+                        // This marker runs after the first splineTo()
+                        robot.viperSlideEncoderMovements(telemetry,40,0.5,true,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,40,0.5,false,robot.ViperSlide2);
+                        // Run your action in here!
+                    })
                     .build();
+
             drive.setPoseEstimate(untitled1.start());
 
             trajectorySequenceArrayList.add(untitled1);
-            nameList.add("markers test");
-
+            nameList.add("iyer markers test");
         }
 
         waitForStart();
