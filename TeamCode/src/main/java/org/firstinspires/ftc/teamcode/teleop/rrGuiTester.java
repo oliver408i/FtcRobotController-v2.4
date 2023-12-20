@@ -33,6 +33,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -55,6 +57,10 @@ public class rrGuiTester extends LinearOpMode {
     ArrayList<String> nameList = new ArrayList<>();
     int selectedProgram = 0;
     double selectedProgramCounter = 0;
+    DcMotor ViperSlide;
+    DcMotor ViperSlide2;
+    private ElapsedTime runtime = new ElapsedTime();
+
 
     RobotHardware robot = new RobotHardware();
 
@@ -63,6 +69,18 @@ public class rrGuiTester extends LinearOpMode {
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+        ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
+        ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
+        runtime.reset();
+
+        ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while(!opModeIsActive()) {
 
 
