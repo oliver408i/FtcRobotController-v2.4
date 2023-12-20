@@ -33,7 +33,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -54,12 +57,31 @@ public class rrGuiTester extends LinearOpMode {
     ArrayList<String> nameList = new ArrayList<>();
     int selectedProgram = 0;
     double selectedProgramCounter = 0;
+    DcMotor ViperSlide;
+    DcMotor ViperSlide2;
+    private ElapsedTime runtime = new ElapsedTime();
+
+
+    RobotHardware robot = new RobotHardware();
 
 
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        robot.init(hardwareMap);
 
+        ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
+        ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
+        runtime.reset();
+
+        ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while(!opModeIsActive()) {
 
 
@@ -107,12 +129,17 @@ public class rrGuiTester extends LinearOpMode {
                     .splineToSplineHeading(new Pose2d(-36.88, -11.06, Math.toRadians(90.00)), Math.toRadians(90.00))
                     .splineToSplineHeading(new Pose2d(30.73, 15.98, Math.toRadians(43.69)), Math.toRadians(43.69))
                     .splineToSplineHeading(new Pose2d(51.45, 34.95, Math.toRadians(0.00)), Math.toRadians(0.00))
+                    .addTemporalMarker(() -> {
+                        robot.viperSlideEncoderMovements(telemetry,40,0.5,true,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,40,0.5,false,robot.ViperSlide2);
+                        // Run your action in here!
+                    })
                     .build();
+
             drive.setPoseEstimate(untitled1.start());
 
             trajectorySequenceArrayList.add(untitled1);
-            nameList.add("markers test");
-
+            nameList.add("iyer markers test");
         }
 
         waitForStart();
