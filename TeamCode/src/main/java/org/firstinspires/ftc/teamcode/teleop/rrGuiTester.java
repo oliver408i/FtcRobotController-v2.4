@@ -132,12 +132,12 @@ public class rrGuiTester extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         // Run your action in here!
                         robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide2);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
                     })
                     .addTemporalMarker(() -> {
                         // Run your action in here!
                         robot.viperSlideEncoderMovements(telemetry,-20,0.5,false,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,-20,0.5,true,robot.ViperSlide2);
+                        robot.viperSlideEncoderMovements(telemetry,-20,0.5,false,robot.ViperSlide2);
                     })
                     .build();
 
