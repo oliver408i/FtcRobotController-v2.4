@@ -145,30 +145,6 @@ public class rrGuiTester extends LinearOpMode {
 
             trajectorySequenceArrayList.add(untitled1);
             nameList.add("iyer blue markers test");
-
-            TrajectorySequence redTrajectoryTester = drive.trajectorySequenceBuilder(new Pose2d(-62.73, 63.67, Math.toRadians(-47.29)))
-                    .splineTo(new Vector2d(-50.62, 19.77), Math.toRadians(-83.66))
-                    .splineTo(new Vector2d(-40.02, -6.34), Math.toRadians(6.71))
-                    .splineTo(new Vector2d(8.04, 3.31), Math.toRadians(-19.98))
-                    .splineTo(new Vector2d(14.66, -28.67), Math.toRadians(-88.75))
-                    .splineTo(new Vector2d(19.58, -51.94), Math.toRadians(4.01))
-                    .splineTo(new Vector2d(42.67, -40.97), Math.toRadians(11.31))
-                    .splineTo(new Vector2d(46.45, -40.21), Math.toRadians(-3.37))
-                    .addTemporalMarker(() -> {
-                        // Run your action in here!
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
-                    })
-                    .addTemporalMarker(() -> {
-                        // Run your action in here!
-                        robot.viperSlideEncoderMovements(telemetry,-20,0.5,true,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,-20,0.5,false,robot.ViperSlide2);
-                    })
-                    .build();
-            drive.setPoseEstimate(redTrajectoryTester.start());
-
-            trajectorySequenceArrayList.add(redTrajectoryTester);
-            nameList.add("iyer red markers test");
         }
 
         waitForStart();
