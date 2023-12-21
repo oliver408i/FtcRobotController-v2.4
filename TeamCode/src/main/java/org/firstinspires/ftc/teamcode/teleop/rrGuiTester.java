@@ -160,7 +160,7 @@ public class rrGuiTester extends LinearOpMode {
             }
             selectedProgramCounter += ((-gamepad1.left_trigger+gamepad1.right_trigger)/8000);
             selectedProgram = (int) Math.round(selectedProgramCounter);
-            if(gamepad1.a){
+            if(gamepad1.a) {
                 drive.followTrajectorySequence(trajectorySequenceArrayList.get(selectedProgram));
 
             }
