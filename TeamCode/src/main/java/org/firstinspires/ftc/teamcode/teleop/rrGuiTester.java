@@ -82,6 +82,7 @@ public class rrGuiTester extends LinearOpMode {
 
         ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         while(!opModeIsActive()) {
 
 
@@ -134,17 +135,38 @@ public class rrGuiTester extends LinearOpMode {
                         robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide);
                         robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide2);
                     })
+                    .waitSeconds(4)
                     .addTemporalMarker(() -> {
+
                         // Run your action in here!
                         robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
                         robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
-                    })
+                    })  
                     .build();
 
             drive.setPoseEstimate(untitled1.start());
 
             trajectorySequenceArrayList.add(untitled1);
-            nameList.add("iyer markers test");
+            nameList.add("iyer markers te77st");
+
+            TrajectorySequence viperSliding = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
+                    .addTemporalMarker(() -> {
+                        // Run your action in here!
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide2);
+                    })
+                    .waitSeconds(4)
+                    .addTemporalMarker(() -> {
+
+                        // Run your action in here!
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
+                    })
+                    .build();
+            trajectorySequenceArrayList.add(viperSliding);
+            nameList.add("viper slide only test");
+
+
         }
 
         waitForStart();
