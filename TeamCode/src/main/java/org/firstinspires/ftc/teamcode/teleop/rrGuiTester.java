@@ -61,12 +61,49 @@ public class rrGuiTester extends LinearOpMode {
     DcMotor ViperSlide2;
     private ElapsedTime runtime = new ElapsedTime();
 
+    boolean isTriggered = false;
+
+    Thread watchdog = new Thread() {
+        @Override
+        public void run() {
+            while (!isInterrupted()) {
+                isTriggered = false;
+                // Check for the most stupid going below 0 thing
+                if (ViperSlide.getTargetPosition() > 1) {
+                    ViperSlide.setTargetPosition(0);
+                    isTriggered = true;
+                }
+                 if (ViperSlide.getTargetPosition() < -3501) {
+                    ViperSlide.setTargetPosition(-3500);
+                    isTriggered = true;
+                }
+
+                if (isTriggered) telemetry.addData("VS Killswitch","[\uD83D\uDEDF⚠️\uD83D\uDED1\uD83D\uDEDF] TRIGGERED");
+                else telemetry.addData("VS Killswitch", "[✅] OK");
+            }
+        }
+    };
+
+
+
 
     RobotHardware robot = new RobotHardware();
 
 
     @Override
     public void runOpMode() {
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                watchdog.interrupt();
+                try {
+                    watchdog.join();
+                } catch (InterruptedException e) {
+
+                }
+            }
+        });
+
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         robot.init(hardwareMap);
 
@@ -152,15 +189,15 @@ public class rrGuiTester extends LinearOpMode {
             TrajectorySequence viperSliding = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
                     .addTemporalMarker(() -> {
                         // Run your action in here!
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide2);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
                     })
                     .waitSeconds(4)
                     .addTemporalMarker(() -> {
 
                         // Run your action in here!
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide);
+                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide2);
                     })
                     .build();
             trajectorySequenceArrayList.add(viperSliding);
@@ -186,6 +223,7 @@ public class rrGuiTester extends LinearOpMode {
                 drive.followTrajectorySequence(trajectorySequenceArrayList.get(selectedProgram));
 
             }
+
             telemetry.update();
         }
 

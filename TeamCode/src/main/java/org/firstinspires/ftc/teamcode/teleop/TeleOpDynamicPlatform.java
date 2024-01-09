@@ -160,11 +160,14 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                 additionalYaw+=0.01;
                 rightYawCoolDown = runtime.seconds();
             }
+
+            if (gamepad1.dpad_down) {
+
+            }
 /*
             if(gamepad2.dpad_up){
                 robot.singleMotorEncoderMovements(telemetry,2,0.05,robot.EncoderTest)\
             }
-
  */
 
             viperSlideTarget += gamepad2.left_stick_y*0.5;
