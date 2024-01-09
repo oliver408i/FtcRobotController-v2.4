@@ -167,6 +167,110 @@ public class rrGuiTester extends LinearOpMode {
             nameList.add("viper slide only test");
 
 
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(11.49, -66.08, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(3.88, -38.29, Math.toRadians(128.66)), Math.toRadians(128.66))
+                    .lineToSplineHeading(new Pose2d(55.50, -29.69, Math.toRadians(0.00)))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("red canvas left");
+
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(10.79, -66.92, Math.toRadians(90.00)))
+                    .splineTo(new Vector2d(11.64, -28.56), Math.toRadians(90.00))
+                    .lineToSplineHeading(new Pose2d(57.05, -35.61, Math.toRadians(1.33)))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("red canvas center");
+
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(10.79, -66.92, Math.toRadians(90.00)))
+                    .splineTo(new Vector2d(18.55, -36.60), Math.toRadians(60.00))
+                    .lineToSplineHeading(new Pose2d(57.61, -42.24, Math.toRadians(1.33)))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("red canvas right");
+
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(10.79, 66.92, Math.toRadians(270.00)))
+                    .splineTo(new Vector2d(18.55, 36.60), Math.toRadians(300.00))
+                    .lineToSplineHeading(new Pose2d(56.91, 42.24, Math.toRadians(1.33)))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue canvas left");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(10.79, 66.92, Math.toRadians(270.00)))
+                    .splineTo(new Vector2d(12.48, 27.15), Math.toRadians(270.00))
+                    .lineToSplineHeading(new Pose2d(57.47, 35.05, Math.toRadians(1.33)))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue canvas center");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(10.79, 66.92, Math.toRadians(270.00)))
+                    .splineTo(new Vector2d(4.30, 37.30), Math.toRadians(240.00))
+                    .lineToSplineHeading(new Pose2d(56.91, 29.55, Math.toRadians(1.33)))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue canvas right");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.32, 67.20, Math.toRadians(270.00)))
+                    .splineTo(new Vector2d(-44.50, 37.59), Math.toRadians(240.00))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue noncanvas nontruss right");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.88, 65.65, Math.toRadians(266.55)))
+                    .splineTo(new Vector2d(-36.60, 26.87), Math.toRadians(270.00))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue noncanvas nontruss center");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.88, 65.65, Math.toRadians(266.55)))
+                    .splineTo(new Vector2d(-27.86, 38.71), Math.toRadians(310.00))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue noncanvas nontruss left");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.88, 65.65, Math.toRadians(266.55)))
+                    .splineToSplineHeading(new Pose2d(-27.86, 38.71, Math.toRadians(310.00)), Math.toRadians(310.00))
+                    .splineToSplineHeading(new Pose2d(-20.94, 17.28, Math.toRadians(-1.13)), Math.toRadians(-1.13))
+                    .splineToSplineHeading(new Pose2d(54.79, 29.41, Math.toRadians(0.00)), Math.toRadians(29.74))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue noncanvas truss left");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.88, 65.65, Math.toRadians(266.55)))
+                    .splineToSplineHeading(new Pose2d(-34.62, 27.01, Math.toRadians(270.00)), Math.toRadians(270.00))
+                    .splineToSplineHeading(new Pose2d(-20.94, 17.28, Math.toRadians(-1.13)), Math.toRadians(-1.13))
+                    .splineToSplineHeading(new Pose2d(54.79, 29.41, Math.toRadians(0.00)), Math.toRadians(29.74))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue noncanvas truss center");
+
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.88, 65.65, Math.toRadians(266.55)))
+                    .splineToSplineHeading(new Pose2d(-43.93, 38.86, Math.toRadians(240.00)), Math.toRadians(240.00))
+                    .lineToSplineHeading(new Pose2d(-20.94, 17.28, Math.toRadians(-1.13)))
+                    .splineToSplineHeading(new Pose2d(54.79, 29.41, Math.toRadians(0.00)), Math.toRadians(29.74))
+                    .build();
+            drive.setPoseEstimate(untitled0.start());
+            trajectorySequenceArrayList.add(untitled0);
+            nameList.add("blue noncanvas truss right");
+
+
+            //TODO: add blue side with full range of motion for parking and other drop spots. also do red.
+
+
+
         }
 
         waitForStart();
