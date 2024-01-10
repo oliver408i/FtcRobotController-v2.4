@@ -63,46 +63,42 @@ public class rrGuiTester extends LinearOpMode {
 
     boolean isTriggered = false;
 
-    Thread watchdog = new Thread() {
-        @Override
-        public void run() {
-            while (!isInterrupted()) {
-                isTriggered = false;
-                // Check for the most stupid going below 0 thing
-                if (ViperSlide.getTargetPosition() > 1) {
-                    ViperSlide.setTargetPosition(0);
-                    isTriggered = true;
-                }
-                 if (ViperSlide.getTargetPosition() < -3501) {
-                    ViperSlide.setTargetPosition(-3500);
-                    isTriggered = true;
-                }
 
-                if (isTriggered) telemetry.addData("VS Killswitch","[\uD83D\uDEDF⚠️\uD83D\uDED1\uD83D\uDEDF] TRIGGERED");
-                else telemetry.addData("VS Killswitch", "[✅] OK");
-            }
-        }
-    };
 
 
 
 
     RobotHardware robot = new RobotHardware();
 
+    double viperSlideTarget = 0;
+    double rotationsNeeded = 0;
+    double encoderDrivingTarget = 0;
+    double encoderDrivingTarget2 = 0;
+    private void runViperSlide(int moveBy) {
+        viperSlideTarget += moveBy;
+        rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
+
+        encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
+
+        encoderDrivingTarget2 = -encoderDrivingTarget;
+
+        robot.ViperSlide.setPower(0.5);
+        robot.ViperSlide2.setPower(0.5);
+
+        robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
+        robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
+
+        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+    }
 
     @Override
     public void runOpMode() {
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                watchdog.interrupt();
-                try {
-                    watchdog.join();
-                } catch (InterruptedException e) {
 
-                }
-            }
-        });
+
+
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         robot.init(hardwareMap);
@@ -117,10 +113,78 @@ public class rrGuiTester extends LinearOpMode {
         ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        ViperSlide.setTargetPosition(0);
+        ViperSlide2.setTargetPosition(0);
+
         ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
+        Thread viperslidewatcher = new Thread() {
+            @Override
+            public void run() {
+                while (!isInterrupted()) {
+                    if (opModeIsActive()) {
+                        isTriggered = false;
+                        // Check for the most stupid going below 0 thing
+                        if (ViperSlide.getTargetPosition() > 1) {
+                            ViperSlide.setTargetPosition(0);
+                            ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                            isTriggered = true;
+                        }
+                        if (ViperSlide2.getTargetPosition() > 1) {
+                            ViperSlide2.setTargetPosition(0);
+                            ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                            isTriggered = true;
+                        }
+                        if (ViperSlide.getTargetPosition() < -3501) {
+                            ViperSlide.setTargetPosition(-3500);
+                            ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                            isTriggered = true;
+                        }
+                        if (ViperSlide2.getTargetPosition() < -3501) {
+                            ViperSlide2.setTargetPosition(-3500);
+                            ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                            isTriggered = true;
+                        }
+                        if (Math.abs(ViperSlide.getCurrentPosition() - ViperSlide2.getCurrentPosition()) > 20) {
+                            ViperSlide.setPower(0);
+                            ViperSlide2.setPower(0);
+                            isTriggered = true;
+                        }
+                    } else {
+                        break;
+                    }
+                    telemetry.addData("Selected Program: ", selectedProgram);
+                    telemetry.addData("Selected Program Counter", selectedProgramCounter);
+                    if(selectedProgram < nameList.size()){
+                        telemetry.addData("Selected Program Name: ", nameList.get(selectedProgram));
+                    }
+                    else{
+                        telemetry.addData("Selected Program Name: ", "none + namelist len: ", +nameList.size());
+                    }
+
+                    if (isTriggered) telemetry.addData("VS Killswitch","[⚠️\uD83D\uDED1] TRIGGERED");
+                    else telemetry.addData("VS Killswitch", "[✅] OK");
+                    telemetry.update();
+                }
+            }
+        };
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                viperslidewatcher.interrupt();
+                try {
+                    viperslidewatcher.join();
+                } catch (InterruptedException e) {
+
+                }
+            }
+        });
+
         while(!opModeIsActive()) {
+
+
 
 
             TrajectorySequence testdrive = drive.trajectorySequenceBuilder(new Pose2d(-36.83, -57.37, Math.toRadians(88.34)))
@@ -189,15 +253,26 @@ public class rrGuiTester extends LinearOpMode {
             TrajectorySequence viperSliding = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
                     .addTemporalMarker(() -> {
                         // Run your action in here!
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
+                        viperSlideTarget += 2000;
+                        rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
+
+                        encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
+
+                        encoderDrivingTarget2 = -encoderDrivingTarget;
+
+                        robot.ViperSlide.setPower(0.5);
+                        robot.ViperSlide2.setPower(0.5);
+
+                        robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
+                        robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
+
+                        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     })
                     .waitSeconds(4)
                     .addTemporalMarker(() -> {
 
                         // Run your action in here!
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide);
-                        robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide2);
                     })
                     .build();
             trajectorySequenceArrayList.add(viperSliding);
@@ -207,16 +282,9 @@ public class rrGuiTester extends LinearOpMode {
         }
 
         waitForStart();
-
+        viperslidewatcher.start(); // Start the watchdog thread
         while(opModeIsActive()){
-            telemetry.addData("Selected Program: ", selectedProgram);
-            telemetry.addData("Selected Program Counter", selectedProgramCounter);
-            if(selectedProgram < nameList.size()){
-                telemetry.addData("Selected Program Name: ", nameList.get(selectedProgram));
-            }
-            else{
-                telemetry.addData("Selected Program Name: ", "none + namelist len: ", +nameList.size());
-            }
+
             selectedProgramCounter += ((-gamepad1.left_trigger+gamepad1.right_trigger)/8000);
             selectedProgram = (int) Math.round(selectedProgramCounter);
             if(gamepad1.a){
@@ -224,7 +292,16 @@ public class rrGuiTester extends LinearOpMode {
 
             }
 
-            telemetry.update();
+            if (isStopRequested()) {
+                viperslidewatcher.interrupt();
+                try {
+                    viperslidewatcher.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
         }
 
     }   // end runOpMode()
