@@ -252,7 +252,7 @@ public class rrGuiTester extends LinearOpMode {
 
             TrajectorySequence viperSliding = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
                     .addTemporalMarker(() -> {
-                        // Run your action in here!
+                        // TODO: not working make it run both motors
                         viperSlideTarget += 2000;
                         rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
 
@@ -272,7 +272,7 @@ public class rrGuiTester extends LinearOpMode {
                     .waitSeconds(4)
                     .addTemporalMarker(() -> {
 
-                        // Run your action in here!
+                        // empty
                     })
                     .build();
             trajectorySequenceArrayList.add(viperSliding);
