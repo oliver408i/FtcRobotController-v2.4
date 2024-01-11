@@ -285,8 +285,8 @@ public class parkingBlueSide extends LinearOpMode {
                 //.setModelFileName("object_test1.tflite")
 
                 //.setModelFileName("red_cube_v1_model_20231026_113436.tflite")
-                //.setModelFileName("object_test2.tflite")
-                .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
+                .setModelFileName("object_test2.tflite")
+                //.setModelFileName("red_cube_v1_model_20231026_113436.tflite")
 
 
 
