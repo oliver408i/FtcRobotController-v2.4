@@ -231,7 +231,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             }
 
             else if(gamepad2.dpad_right){
-                robot.spaghettiIntake.setPower(-0.5); //suck in
+                robot.spaghettiIntake.setPower(-1); //suck in
             }
 
             else{
