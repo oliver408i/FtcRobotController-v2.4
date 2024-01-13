@@ -63,7 +63,7 @@ public class rrGuiTester extends LinearOpMode {
 
     boolean isTriggered = false;
 
-
+    boolean isOverride = false;
 
 
 
@@ -123,8 +123,9 @@ public class rrGuiTester extends LinearOpMode {
         Thread viperslidewatcher = new Thread() {
             @Override
             public void run() {
+                boolean canPress = true;
                 while (!isInterrupted()) {
-                    if (opModeIsActive()) {
+                    if (opModeIsActive() && !isOverride) {
                         isTriggered = false;
                         // Check for the most stupid going below 0 thing
                         if (ViperSlide.getTargetPosition() > 1) {
@@ -147,14 +148,25 @@ public class rrGuiTester extends LinearOpMode {
                             ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                             isTriggered = true;
                         }
-                        if (Math.abs(ViperSlide.getCurrentPosition() - ViperSlide2.getCurrentPosition()) > 20) {
+                        if (Math.abs(Math.abs(ViperSlide.getCurrentPosition()) - Math.abs(ViperSlide2.getCurrentPosition())) > 30) {
                             ViperSlide.setPower(0);
                             ViperSlide2.setPower(0);
                             isTriggered = true;
                         }
-                    } else {
+                    } else if (!opModeIsActive()){
                         break;
                     }
+                    if (gamepad1.b && canPress) {
+                        if (isOverride) {
+                            isOverride = false;
+                        } else {
+                            isOverride = true;
+                        }
+                        isTriggered = false;
+                        canPress = false;
+                    } else if (!gamepad1.b) {
+                        canPress = true;
+                    };
                     telemetry.addData("Selected Program: ", selectedProgram);
                     telemetry.addData("Selected Program Counter", selectedProgramCounter);
                     if(selectedProgram < nameList.size()){
@@ -165,6 +177,7 @@ public class rrGuiTester extends LinearOpMode {
                     }
 
                     if (isTriggered) telemetry.addData("VS Killswitch","[⚠️\uD83D\uDED1] TRIGGERED");
+                    else if (isOverride) telemetry.addData("VS Killswitch", "[⭕️] OVERRIDE");
                     else telemetry.addData("VS Killswitch", "[✅] OK");
                     telemetry.update();
                 }
@@ -253,21 +266,7 @@ public class rrGuiTester extends LinearOpMode {
             TrajectorySequence viperSliding = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
                     .addTemporalMarker(() -> {
                         // TODO: not working make it run both motors
-                        viperSlideTarget += 2000;
-                        rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
-
-                        encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
-
-                        encoderDrivingTarget2 = -encoderDrivingTarget;
-
-                        robot.ViperSlide.setPower(0.5);
-                        robot.ViperSlide2.setPower(0.5);
-
-                        robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
-                        robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
-
-                        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        runViperSlide(2000);
                     })
                     .waitSeconds(4)
                     .addTemporalMarker(() -> {
