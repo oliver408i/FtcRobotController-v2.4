@@ -111,6 +111,8 @@ public class parkingRedSide extends LinearOpMode {
         String cubePosition = "";
 
 //        while(!opModeIsActive()){
+//            sleep(100);
+//        }
 //
 //            if(isStopRequested()){
 //                visionPortal.close();
@@ -180,6 +182,11 @@ public class parkingRedSide extends LinearOpMode {
         temp = drive.trajectorySequenceBuilder(new Pose2d(11.07, -64.24, Math.toRadians(90.00)))
                 .lineToSplineHeading(new Pose2d(60.58, -62.97, Math.toRadians(89.44)))
                 .build();
+
+        while(!opModeIsActive()){
+            sleep(100);
+        }
+
         drive.setPoseEstimate(temp.start());
         drive.followTrajectorySequence(temp);
 
