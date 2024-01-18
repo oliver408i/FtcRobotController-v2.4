@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.RobotHardware;
 /**
  * Basic program that does teleop. This is supposed to be a function-based,
  * modular program.
+ * Ok it was SUPPOSED TO BE but not is just a hot mess of crappy AF code from Rian
  */
 
 @Config
@@ -51,14 +52,85 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 //    double slidePower1;
 //    double slidePower2;
 
-    double viperSlideTarget = 0;
-    double rotationsNeeded = 0;
-    double encoderDrivingTarget = 0;
-    double encoderDrivingTarget2 = 0;
+
 
     boolean isHandedOff = false;
     //TODO: handoff if plate wants it
 
+    boolean viperSlideAlternativeControl = false;
+
+    Thread vsController = new Thread() {
+        public void run() {
+            // Init vars
+            double viperSlideTarget = 0;
+            double rotationsNeeded = 0;
+            double encoderDrivingTarget = 0;
+            double encoderDrivingTarget2 = 0;
+
+            // Init viperslides
+            robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            robot.ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            robot.ViperSlide.setTargetPosition(0);
+            robot.ViperSlide2.setTargetPosition(0);
+
+
+            robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            robot.ViperSlide.setPower(0.5);
+            robot.ViperSlide2.setPower(0.5);
+
+            while (opModeIsActive()) {
+
+                if (!viperSlideAlternativeControl && gamepad2.x) {
+                    robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.ViperSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    robot.ViperSlide.setPower(0);
+                    robot.ViperSlide2.setPower(0);
+                    viperSlideAlternativeControl = true;
+                }
+
+                if (!viperSlideAlternativeControl) {
+                    viperSlideTarget += gamepad2.left_stick_y * 0.5;
+                    rotationsNeeded = viperSlideTarget / RobotHardware.VS_CIRCUMFERENCE;
+
+                    encoderDrivingTarget = rotationsNeeded * RobotHardware.TICK_COUNT;
+
+                    if (encoderDrivingTarget > 1) {
+                        encoderDrivingTarget = 0;
+                    }
+
+                    if (encoderDrivingTarget < -3501) {
+                        encoderDrivingTarget = -3500;
+                    }
+
+                    encoderDrivingTarget2 = -encoderDrivingTarget;
+
+                    robot.ViperSlide.setPower(0.5);
+                    robot.ViperSlide2.setPower(0.5);
+
+                    robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
+                    robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
+
+                    robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    //viperslide1 is positive when extended
+                    //viperslide2 is negative when extended
+
+                } else {
+                    robot.ViperSlide.setPower(gamepad2.left_stick_y*0.5);
+                    robot.ViperSlide2.setPower(gamepad2.left_stick_y*0.5);
+                }
+            }
+        }
+    };
 
     @Override
     public void runOpMode() {
@@ -80,23 +152,9 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
         spinny = hardwareMap.crservo.get("servo1");
 
-        robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        robot.ViperSlide.setTargetPosition(0);
-        robot.ViperSlide2.setTargetPosition(0);
 
 
-        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        robot.ViperSlide.setPower(0.5);
-        robot.ViperSlide2.setPower(0.5);
-
-
+        vsController.start();
         // run until stop is pressed
         while (opModeIsActive()) {
 //            controller.setPID(p,i,d);
@@ -170,32 +228,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             }
  */
 
-            viperSlideTarget += gamepad2.left_stick_y*0.5;
-            rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
 
-            encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
-
-            if(encoderDrivingTarget > 1){
-                encoderDrivingTarget = 0;
-            }
-
-            if(encoderDrivingTarget < -3501){
-                encoderDrivingTarget = -3500;
-            }
-
-            encoderDrivingTarget2 = -encoderDrivingTarget;
-
-            robot.ViperSlide.setPower(0.5);
-            robot.ViperSlide2.setPower(0.5);
-
-            robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
-            robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
-
-            robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            //viperslide1 is positive when extended
-            //viperslide2 is negative when extended
 
 //            robot.ViperSlide.setPower(gamepad2.left_stick_y);
 //            robot.ViperSlide2.setPower(gamepad2.left_stick_y);
@@ -299,7 +332,13 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             telemetry.addData("Viper Slide 2 Tgt: ", robot.ViperSlide2.getTargetPosition());
             telemetry.addData("Viper Slide 1 Curr: ", robot.ViperSlide.getCurrentPosition());
             telemetry.addData("Viper Slide 2 Curr: ", robot.ViperSlide2.getCurrentPosition());
-            telemetry.addData("viper slide data dump: ", encoderDrivingTarget);
+
+            if (viperSlideAlternativeControl) {
+                telemetry.addData("Viper Slide Control Mode","🆘VS ALT EXTEND MODE");
+            } else {
+                telemetry.addData("Viper Slide Control Mode","✳️Normal Target Mode");
+            }
+
             telemetry.update();
         }
     }
