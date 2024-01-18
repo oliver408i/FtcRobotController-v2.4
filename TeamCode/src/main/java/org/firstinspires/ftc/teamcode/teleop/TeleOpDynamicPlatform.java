@@ -86,6 +86,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
             while (opModeIsActive()) {
 
+                // Gamepad 2 x to activate alt control
                 if (!viperSlideAlternativeControl && gamepad2.x) {
                     robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
