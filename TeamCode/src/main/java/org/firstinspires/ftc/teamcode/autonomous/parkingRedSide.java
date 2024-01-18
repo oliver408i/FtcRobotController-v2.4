@@ -110,64 +110,66 @@ public class parkingRedSide extends LinearOpMode {
         GainControl gainControl;
         String cubePosition = "";
 
-        while(!opModeIsActive()){
-
-            if(isStopRequested()){
-                visionPortal.close();
-            }
-            telemetryTfod();
-
-
-
-            // Push telemetry to the Driver Station.
-            telemetry.update();
-
-            // Save CPU resources; can resume streaming when needed.
-            if (gamepad1.dpad_down) {
-                visionPortal.stopStreaming();
-            } else if (gamepad1.dpad_up) {
-                visionPortal.resumeStreaming();
-            }
-            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-            exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
-
-            gainControl = visionPortal.getCameraControl(GainControl.class);
-            gainControl.setGain(255);
-
-            exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
-
-
-                /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
-                telemetry.addData("exposure max: ", exposureControl.getMaxExposure(TimeUnit.SECONDS));
-                telemetry.addData("exposiure :", exposureControl.getExposure(TimeUnit.SECONDS));
-                telemetry.update();*/
-
-            // Share the CPU.
-            sleep(20);
-
-            List<Recognition> currentRecognitions = tfod.getRecognitions();
-
-            // Step through the list of recognitions and display info for each one.
-            for (Recognition recognition : currentRecognitions) {
-                double x = (recognition.getLeft() + recognition.getRight()) / 2;
-                double y = (recognition.getTop() + recognition.getBottom()) / 2;
-
-
-                if (0 < x && x < 400) {
-                    cubePosition = "left";
-                } else if (500 < x && x < 900) {
-                    cubePosition = "center";
-                } else if (1000 < x && x < 1280) {
-                    cubePosition = "right";
-                }
-
-            }
-
-
-
-        }
+//        while(!opModeIsActive()){
+//            sleep(100);
+//        }
+//
+//            if(isStopRequested()){
+//                visionPortal.close();
+//            }
+//            telemetryTfod();
+//
+//
+//
+//            // Push telemetry to the Driver Station.
+//            telemetry.update();
+//
+//            // Save CPU resources; can resume streaming when needed.
+//            if (gamepad1.dpad_down) {
+//                visionPortal.stopStreaming();
+//            } else if (gamepad1.dpad_up) {
+//                visionPortal.resumeStreaming();
+//            }
+//            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+//            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+//            exposureControl.setMode(ExposureControl.Mode.Manual);
+//            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
+//
+//            gainControl = visionPortal.getCameraControl(GainControl.class);
+//            gainControl.setGain(255);
+//
+//            exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
+//
+//
+//                /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
+//                telemetry.addData("exposure max: ", exposureControl.getMaxExposure(TimeUnit.SECONDS));
+//                telemetry.addData("exposiure :", exposureControl.getExposure(TimeUnit.SECONDS));
+//                telemetry.update();*/
+//
+//            // Share the CPU.
+//            sleep(20);
+//
+//            List<Recognition> currentRecognitions = tfod.getRecognitions();
+//
+//            // Step through the list of recognitions and display info for each one.
+//            for (Recognition recognition : currentRecognitions) {
+//                double x = (recognition.getLeft() + recognition.getRight()) / 2;
+//                double y = (recognition.getTop() + recognition.getBottom()) / 2;
+//
+//
+//                if (0 < x && x < 400) {
+//                    cubePosition = "left";
+//                } else if (500 < x && x < 900) {
+//                    cubePosition = "center";
+//                } else if (1000 < x && x < 1280) {
+//                    cubePosition = "right";
+//                }
+//
+//            }
+//
+//
+//
+//        }
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
@@ -180,6 +182,11 @@ public class parkingRedSide extends LinearOpMode {
         temp = drive.trajectorySequenceBuilder(new Pose2d(11.07, -64.24, Math.toRadians(90.00)))
                 .lineToSplineHeading(new Pose2d(60.58, -62.97, Math.toRadians(89.44)))
                 .build();
+
+        while(!opModeIsActive()){
+            sleep(100);
+        }
+
         drive.setPoseEstimate(temp.start());
         drive.followTrajectorySequence(temp);
 
@@ -228,48 +235,48 @@ public class parkingRedSide extends LinearOpMode {
 //        robot.spaghettiIntake.setPower(0);
 //        robot.servo1.setPower(0);
 
-        if(cubePosition.equals("left")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-48.31, -39.00, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .lineToSplineHeading(new Pose2d(-59.02, -37.16, Math.toRadians(34.43)))
-                    .splineTo(new Vector2d(-51.41, -15.30), Math.toRadians(6.19))
-                    .splineToSplineHeading(new Pose2d(2.05, -13.89, Math.toRadians(0.00)), Math.toRadians(0.00))
-                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
-                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
-                    .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
-        }
-
-        if(cubePosition.equals("center")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-39.84, -33.36, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .splineToSplineHeading(new Pose2d(-54.51, -20.80, Math.toRadians(34.43)), Math.toRadians(34.43))
-                    .splineToSplineHeading(new Pose2d(0.63, -13.61, Math.toRadians(0.00)), Math.toRadians(0.00))
-                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
-                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
-                    .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
-        }
-
-        if(cubePosition.equals("right")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
-                    .lineToSplineHeading(new Pose2d(-36.04, -47.74, Math.toRadians(68.40)))
-                    .splineToSplineHeading(new Pose2d(-25.32, -38.57, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .lineToSplineHeading(new Pose2d(-59.02, -37.16, Math.toRadians(34.43)))
-                    .splineTo(new Vector2d(-51.41, -15.30), Math.toRadians(6.19))
-                    .splineToSplineHeading(new Pose2d(2.05, -13.89, Math.toRadians(0.00)), Math.toRadians(0.00))
-                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
-                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
-                    .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
-        }
+//        if(cubePosition.equals("left")){
+//            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
+//                    .splineToSplineHeading(new Pose2d(-48.31, -39.00, Math.toRadians(90.00)), Math.toRadians(90.00))
+//                    .lineToSplineHeading(new Pose2d(-59.02, -37.16, Math.toRadians(34.43)))
+//                    .splineTo(new Vector2d(-51.41, -15.30), Math.toRadians(6.19))
+//                    .splineToSplineHeading(new Pose2d(2.05, -13.89, Math.toRadians(0.00)), Math.toRadians(0.00))
+//                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
+//                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
+//                    .build();
+//            drive.setPoseEstimate(untitled0.start());
+//            drive.followTrajectorySequence(untitled0);
+//        }
+//
+//        if(cubePosition.equals("center")){
+//            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
+//                    .splineToSplineHeading(new Pose2d(-39.84, -33.36, Math.toRadians(90.00)), Math.toRadians(90.00))
+//                    .splineToSplineHeading(new Pose2d(-54.51, -20.80, Math.toRadians(34.43)), Math.toRadians(34.43))
+//                    .splineToSplineHeading(new Pose2d(0.63, -13.61, Math.toRadians(0.00)), Math.toRadians(0.00))
+//                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
+//                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
+//                    .build();
+//            drive.setPoseEstimate(untitled0.start());
+//            drive.followTrajectorySequence(untitled0);
+//        }
+//
+//        if(cubePosition.equals("right")){
+//            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
+//                    .lineToSplineHeading(new Pose2d(-36.04, -47.74, Math.toRadians(68.40)))
+//                    .splineToSplineHeading(new Pose2d(-25.32, -38.57, Math.toRadians(90.00)), Math.toRadians(90.00))
+//                    .lineToSplineHeading(new Pose2d(-59.02, -37.16, Math.toRadians(34.43)))
+//                    .splineTo(new Vector2d(-51.41, -15.30), Math.toRadians(6.19))
+//                    .splineToSplineHeading(new Pose2d(2.05, -13.89, Math.toRadians(0.00)), Math.toRadians(0.00))
+//                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
+//                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
+//                    .build();
+//            drive.setPoseEstimate(untitled0.start());
+//            drive.followTrajectorySequence(untitled0);
+//        }
 
 
         // Save more CPU resources when camera is no longer needed.
-        visionPortal.close();
+//        visionPortal.close();
 
     }   // end runOpMode()
 
