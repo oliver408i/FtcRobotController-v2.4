@@ -76,7 +76,7 @@ public class rrGuiTester extends LinearOpMode {
     double encoderDrivingTarget2 = 0;
     private void runViperSlide(int moveBy) {
         viperSlideTarget += moveBy;
-        encoderDrivingTarget = viperSlideTarget
+        encoderDrivingTarget = viperSlideTarget;
 
         encoderDrivingTarget2 = -encoderDrivingTarget;
 
