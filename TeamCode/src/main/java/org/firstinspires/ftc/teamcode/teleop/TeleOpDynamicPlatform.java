@@ -97,6 +97,24 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                     viperSlideAlternativeControl = true;
                 }
 
+                if (viperSlideAlternativeControl && gamepad2.y) {
+                    // This ensures the slide is in 0 position
+                    robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                    robot.ViperSlide.setTargetPosition(0);
+                    robot.ViperSlide2.setTargetPosition(0);
+
+
+                    robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    robot.ViperSlide.setPower(0.5);
+                    robot.ViperSlide2.setPower(0.5);
+                }
+
                 if (!viperSlideAlternativeControl) {
                     viperSlideTarget += gamepad2.left_stick_y * 0.5;
                     rotationsNeeded = viperSlideTarget / RobotHardware.VS_CIRCUMFERENCE;
@@ -127,7 +145,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
                 } else {
                     robot.ViperSlide.setPower(gamepad2.left_stick_y*0.5);
-                    robot.ViperSlide2.setPower(gamepad2.left_stick_y*0.5);
+                    robot.ViperSlide2.setPower(gamepad2.left_stick_y*-0.5);
                 }
             }
         }
@@ -335,9 +353,9 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             telemetry.addData("Viper Slide 2 Curr: ", robot.ViperSlide2.getCurrentPosition());
 
             if (viperSlideAlternativeControl) {
-                telemetry.addData("Viper Slide Control Mode","🆘VS ALT EXTEND MODE");
+                telemetry.addData("Viper Slide Control Mode","🆘 ALT EXTEND MODE");
             } else {
-                telemetry.addData("Viper Slide Control Mode","✳️Normal Target Mode");
+                telemetry.addData("Viper Slide Control Mode","✳️ Normal Target Mode");
             }
 
             telemetry.update();

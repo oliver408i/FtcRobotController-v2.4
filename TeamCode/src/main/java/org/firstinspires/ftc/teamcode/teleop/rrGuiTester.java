@@ -76,9 +76,7 @@ public class rrGuiTester extends LinearOpMode {
     double encoderDrivingTarget2 = 0;
     private void runViperSlide(int moveBy) {
         viperSlideTarget += moveBy;
-        rotationsNeeded = viperSlideTarget/RobotHardware.VS_CIRCUMFERENCE;
-
-        encoderDrivingTarget = rotationsNeeded*RobotHardware.TICK_COUNT;
+        encoderDrivingTarget = viperSlideTarget
 
         encoderDrivingTarget2 = -encoderDrivingTarget;
 
@@ -270,7 +268,6 @@ public class rrGuiTester extends LinearOpMode {
                     })
                     .waitSeconds(4)
                     .addTemporalMarker(() -> {
-
                         // empty
                     })
                     .build();
