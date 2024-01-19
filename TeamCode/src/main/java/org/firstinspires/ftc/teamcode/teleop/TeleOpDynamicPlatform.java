@@ -113,6 +113,7 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
                     robot.ViperSlide.setPower(0.5);
                     robot.ViperSlide2.setPower(0.5);
+                    viperSlideAlternativeControl = false;
                 }
 
                 if (!viperSlideAlternativeControl) {
