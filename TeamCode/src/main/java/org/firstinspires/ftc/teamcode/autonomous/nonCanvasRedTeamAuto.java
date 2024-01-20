@@ -265,6 +265,9 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
+
+            //TODO: bot went very much right, even when put in a "fake" test position designed to support the right trajectory.
+            //TODO: make the bot travel less and turn less. haven't tested its travel to the backdrop yet
         }
 
 

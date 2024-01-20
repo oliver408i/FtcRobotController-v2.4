@@ -287,6 +287,10 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                 robot.spaghettiIntake.setPower(0.75); //shoot out
             }
 
+            else if(gamepad2.dpad_right && Math.abs(spinny.getPower())>0.5){ // if pixel is in second stage (aka ramp)
+                robot.spaghettiIntake.setPower(-0.4); //not suck in, but prevent pixel from being lost
+            }
+
             else if(gamepad2.dpad_right){
                 robot.spaghettiIntake.setPower(-0.75); //suck in
             }
