@@ -233,6 +233,9 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
+
+            //TODO: bot went left of the line. next time assume bot starts almost in parallel with the line because of camera positioning
+            //TODO: bot also smashed into wall and misses backdrop
         }
 
         if(cubePosition.equals("center")){
@@ -245,6 +248,9 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
+
+            //TODO: Bot follows path. when going to the first pixel drop spot, make it stop earlier. it carried the cube the whole way.
+            //TODO: viper slide good number is 2200
         }
 
         if(cubePosition.equals("right")){
