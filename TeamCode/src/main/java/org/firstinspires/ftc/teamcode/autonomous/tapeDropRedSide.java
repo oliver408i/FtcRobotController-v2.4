@@ -218,6 +218,13 @@ public class tapeDropRedSide extends LinearOpMode {
         if(cubePosition.equals("left")){ // old right side code
             TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
                     .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(180.00)), Math.toRadians(90.00))
+                    .addDisplacementMarker(() -> {
+                        robot.startSpittingOutPixels();
+                    })
+                    .waitSeconds(3.0)
+                    .addDisplacementMarker(() -> {
+                        robot.endSpittingOutPixels();
+                    })
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
@@ -226,6 +233,13 @@ public class tapeDropRedSide extends LinearOpMode {
         if(cubePosition.equals("center")){
             TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
                     .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .addDisplacementMarker(() -> {
+                        robot.startSpittingOutPixels();
+                    })
+                    .waitSeconds(3.0)
+                    .addDisplacementMarker(() -> {
+                        robot.endSpittingOutPixels();
+                    })
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
@@ -234,6 +248,13 @@ public class tapeDropRedSide extends LinearOpMode {
         if(cubePosition.equals("right")){
             TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
                     .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(0.00)), Math.toRadians(90.00))
+                    .addDisplacementMarker(() -> {
+                        robot.startSpittingOutPixels();
+                    })
+                    .waitSeconds(3.0)
+                    .addDisplacementMarker(() -> {
+                        robot.endSpittingOutPixels();
+                    })
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
