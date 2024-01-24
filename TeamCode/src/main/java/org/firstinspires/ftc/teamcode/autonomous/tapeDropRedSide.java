@@ -36,7 +36,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -60,9 +59,9 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "nonCanvasRedTeamAuto", group = "Concept")
+@Autonomous(name = "redside tape drop", group = "auton")
 
-public class nonCanvasRedTeamAuto extends LinearOpMode {
+public class tapeDropRedSide extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -75,30 +74,13 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
      * {@link #visionPortal} is the variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+    RobotHardware robot = new RobotHardware();
 
     @Override
     public void runOpMode() {
 
         initTfod();
-        RobotHardware robot = new RobotHardware();
         robot.init(hardwareMap);
-
-        // ViperSlide ain't used. just extra code
-        DcMotor ViperSlide;
-        DcMotor ViperSlide2;
-
-        ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
-        ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
-
-        ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         sleep(2500);
 
         // Wait for the DS start button to be touched.
@@ -111,13 +93,10 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
         String cubePosition = "";
 
         while(!opModeIsActive()){
-
             if(isStopRequested()){
                 visionPortal.close();
             }
             telemetryTfod();
-
-
 
             // Push telemetry to the Driver Station.
             telemetry.update();
@@ -132,6 +111,7 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
             //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
             exposureControl.setMode(ExposureControl.Mode.Manual);
             exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
+
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(255);
@@ -154,7 +134,6 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
                 double x = (recognition.getLeft() + recognition.getRight()) / 2;
                 double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-
                 if (0 < x && x < 400) {
                     cubePosition = "left";
                 } else if (500 < x && x < 900) {
@@ -162,116 +141,109 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
                 } else if (1000 < x && x < 1280) {
                     cubePosition = "right";
                 }
-
             }
 
-
-
         }
+
+        visionPortal.close();
+
+
+        //important: code copied from canvasBlueTeamAuto
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory temp = null;
-        //robot.servo3.setPower(-0.1);
-
 
         ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+        ArrayList<String> relativeMovement = new ArrayList<>();
 
-//        if(cubePosition.equals("right")){
+
+
+//        if(cubePosition.equals("left")){ // old right side code
 //            temp = drive.trajectoryBuilder(new Pose2d())
-//                    .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
+//                    .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
+//                    .build();
+//            lotsOfMovement.add(temp);
+//            relativeMovement.add("drop first pixel");
+//            temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
+//                    //TODO: Increase dist towards the canvas
+//                    .splineToLinearHeading(new Pose2d(17,-36,Math.toRadians(-70)), Math.toRadians(-70))
 //                    .build();
 //            // armature should move down after this
+//            relativeMovement.add("drop second pixel");
 //            lotsOfMovement.add(temp);
-//
 //        }
 //
 //        if (cubePosition.equals("center")) {
 //
 //            temp = drive.trajectoryBuilder(new Pose2d())
-//                    .splineToLinearHeading(new Pose2d(24,0, Math.toRadians(0)), Math.toRadians(0))
+//                    .splineToLinearHeading(new Pose2d(22,0, Math.toRadians(0)), Math.toRadians(0))
 //                    .build();
+//            relativeMovement.add("drop first pixel");
+//            lotsOfMovement.add(temp);
+//            temp = drive.trajectoryBuilder(new Pose2d(22,0, Math.toRadians(0)))
+//                    .lineTo(new Vector2d(15,0))
+//                    .build();
+//            // armature should move down after this
+//            relativeMovement.add("");
+//            lotsOfMovement.add(temp);
+//
+//            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
+//                    .splineToLinearHeading(new Pose2d(25,-34,Math.toRadians(-70)), Math.toRadians(-70))
+//                    .build();
+//            relativeMovement.add("drop second pixel");
 //            lotsOfMovement.add(temp);
 //        }
 //
-//        if (cubePosition.equals("left")) {
+//        if (cubePosition.equals("right")) { // old left side code
 //
 //            temp = drive.trajectoryBuilder(new Pose2d())
-//                    .splineToLinearHeading(new Pose2d(20,10, Math.toRadians(20)), Math.toRadians(20))
-//                    .addDisplacementMarker(() -> {
-//                        //use intake
-//                    })
+//                    .splineToLinearHeading(new Pose2d(15,-7, Math.toRadians(-10)), Math.toRadians(-10))
 //                    .build();
+//            relativeMovement.add("drop first pixel");
 //            lotsOfMovement.add(temp);
+//            temp = drive.trajectoryBuilder(new Pose2d(15,-7, Math.toRadians(-10)))
+//                    .splineToLinearHeading(new Pose2d(5,-7,Math.toRadians(1)), Math.toRadians(1))
+//                    .build();
+//            relativeMovement.add("");
+//            lotsOfMovement.add(temp);
+//            temp = drive.trajectoryBuilder(new Pose2d(5,-7, Math.toRadians(1)), Math.toRadians(1))
+//                    .splineToLinearHeading(new Pose2d(30,-30,Math.toRadians(-70)), Math.toRadians(-70))
+//                    .build();
+//            relativeMovement.add("drop second pixel");
+//            lotsOfMovement.add(temp);
+//            // armature should move down after this
 //        }
-//
-//
-//        for(Trajectory trajectory:lotsOfMovement){
-//            drive.followTrajectory(trajectory);
-//            sleep(1000);
-//        }
-//        robot.spaghettiIntake.setPower(1);
-//        robot.servo1.setPower(-1);
-//        robot.servo3.setPower(-1);
-//
-//        sleep(1000);
-//
-//        robot.servo3.setPower(1);
-//
-//        sleep(1000);
-//        robot.spaghettiIntake.setPower(0);
-//        robot.servo1.setPower(0);
 
-        if(cubePosition.equals("left")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-40.83, -65.09, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-47.46, -42.81, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .splineToSplineHeading(new Pose2d(-54.37, -30.96, Math.toRadians(39.99)), Math.toRadians(39.99))
-                    .splineToSplineHeading(new Pose2d(-50.00, -14.60, Math.toRadians(-1.45)), Math.toRadians(-1.45))
-                    .splineToSplineHeading(new Pose2d(40.13, -19.82, Math.toRadians(-6.42)), Math.toRadians(-6.42))
-                    .splineToSplineHeading(new Pose2d(50.14, -29.69, Math.toRadians(0.00)), Math.toRadians(0.00))
+        if(cubePosition.equals("left")){ // old right side code
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(180.00)), Math.toRadians(90.00))
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
-
-            //TODO: bot went left of the line. next time assume bot starts almost in parallel with the line because of camera positioning
-            //TODO: bot also smashed into wall and misses backdrop
         }
 
         if(cubePosition.equals("center")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-39.84, -33.36, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .splineToSplineHeading(new Pose2d(-54.51, -20.80, Math.toRadians(34.43)), Math.toRadians(34.43))
-                    .splineToSplineHeading(new Pose2d(0.63, -13.61, Math.toRadians(0.00)), Math.toRadians(0.00))
-                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
-                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(90.00)), Math.toRadians(90.00))
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
-
-            //TODO: Bot follows path. when going to the first pixel drop spot, make it stop earlier. it carried the cube the whole way.
-            //TODO: viper slide good number is 2200
         }
 
         if(cubePosition.equals("right")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-36.46, -64.10, Math.toRadians(90.00)))
-                    .lineToSplineHeading(new Pose2d(-36.04, -47.74, Math.toRadians(68.40)))
-                    .splineToSplineHeading(new Pose2d(-25.32, -38.57, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .lineToSplineHeading(new Pose2d(-59.02, -37.16, Math.toRadians(34.43)))
-                    .splineTo(new Vector2d(-51.41, -15.30), Math.toRadians(6.19))
-                    .splineToSplineHeading(new Pose2d(2.05, -13.89, Math.toRadians(0.00)), Math.toRadians(0.00))
-                    .splineToSplineHeading(new Pose2d(40.55, -26.59, Math.toRadians(-30.07)), Math.toRadians(-30.07))
-                    .splineToSplineHeading(new Pose2d(50.00, -30.68, Math.toRadians(5.71)), Math.toRadians(5.71))
+            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(0.00)), Math.toRadians(90.00))
                     .build();
             drive.setPoseEstimate(untitled0.start());
             drive.followTrajectorySequence(untitled0);
-
-            //TODO: bot went very much right, even when put in a "fake" test position designed to support the right trajectory.
-            //TODO: make the bot travel less and turn less. haven't tested its travel to the backdrop yet
         }
 
 
+
+
         // Save more CPU resources when camera is no longer needed.
-        visionPortal.close();
+
 
     }   // end runOpMode()
 
@@ -287,10 +259,8 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
 
                 //.setModelFileName("object_test1.tflite")
 
-                //.setModelFileName("red_cube_v1_model_20231026_113436.tflite")
-                //.setModelFileName("object_test2.tflite")
                 .setModelFileName("red_cube_v1_model_20231026_113436.tflite")
-
+                //setModelFileName("object_test2.tflite")
 
 
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
@@ -363,16 +333,23 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
      * Function to add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     private void telemetryTfod() {
-
+        double highestConf = 0;
         List<Recognition> currentRecognitions = tfod.getRecognitions();
+        Recognition recognition = null;
         telemetry.addData("# Objects Detected", currentRecognitions.size());
 
+        for(int i = 0; i<currentRecognitions.size(); i++){
+            if(currentRecognitions.get(i).getConfidence() > highestConf){
+                recognition = currentRecognitions.get(i);
+            }
+        }
+
         // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions) {
+        if(recognition != null){
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
 
-            if(100 < x && x < 400){
+            if(0 < x && x < 400){
                 telemetry.addData("Cube Pos: ", "left");
             }
             else if(500 < x && x < 900){
@@ -386,8 +363,11 @@ public class nonCanvasRedTeamAuto extends LinearOpMode {
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-        }   // end for() loop
+        }
+
 
     }   // end method telemetryTfod()
+
+
 
 }   // end class
