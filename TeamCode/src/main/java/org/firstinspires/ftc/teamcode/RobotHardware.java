@@ -755,7 +755,7 @@ public class RobotHardware {
      * rian still sint' helohng
      */
     public void splitOutPixles_btwPleaseReadTheJavaDocOfThisFunction() {
-        spinny = hardwareMap.crservo.get("servo1");
+        CRServo spinny = servo1;
         spaghettiIntake.setPower(0.75);
         spinny.setPower(0.6);
     }
