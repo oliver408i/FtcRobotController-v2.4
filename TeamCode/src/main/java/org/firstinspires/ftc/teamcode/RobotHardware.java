@@ -751,6 +751,8 @@ public class RobotHardware {
      * ██   ██ ██ ██   ██ ██   ████     ██ ███████ ██   ████    ██        ██   ██ ███████ ███████ ██      ██ ██   ████  ██████
      *
      * rian
+     *
+     * rian still sint' helohng
      */
     public void splitOutPixles_btwPleaseReadTheJavaDocOfThisFunction() {
         spinny = hardwareMap.crservo.get("servo1");
