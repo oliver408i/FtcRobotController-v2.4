@@ -641,6 +641,125 @@ public class RobotHardware {
         encoderMovementsIndividual(telemetry, distance, new double[]{power,power,power,power},new double[]{leftFrontPower, leftBackPower, rightFrontPower, rightBackPower});
     }
 
+    /**
+     * Split out the pixel. Only eixist because rian think thi sis a genius idea for some
+     * whatevyer reason that I cannot explain.
+     * I think rian is getting distracted right npw and honeslty i am too because I
+     * yet to have tstart writing the funcito nand I am still writing the
+     * weridl jdoc that rian siaad he never wrote
+     * because he think it is useless, nvm but he is lazy and he doesn't want
+     * to make them lol ok i shouod start writing the acutal function now
+     * bye
+     *
+     * ah damn the spinny isntead defined and rian is too busy laughting at ethan
+     * i think they are doing andriod stuff
+     * that rian has already wasted like more than 69 hours on doing
+     * in total during robotics club
+     * i think he likes andirod coding better than he
+     * likes robotics and coding the robot
+     * ok I have wrote this entire rank on him and yet he is still
+     * STILL doing the code and whatnot
+     * I swear i have been typing at like 200 wpm for like 30 minutes
+     * and yet he is STILl talking to Ethan
+     * I want to see how much of this rant/jdoc
+     * I can write before he finished up
+     * Oh he just did the weee-nneee thing that he always does
+     * now he says "stick out gyatT"
+     * i don't know what the hell is going on
+     * but ryan just came over and told rian to stic out his gy
+     * apollo thinks rian has brain rot
+     * rian thinks that he is a monkey
+     * rian is still
+     * helping ehtan and not
+     * me
+     * because
+     * spinny is still goddamn undefinied
+     * I think i might use some of my own brainscells to go solve this myself
+     * i think i should copy over the code in teleop that inits the spinnyt
+     * a few seconds later
+     * i have just finsihd the thing
+     * but
+     * uhhh the copied code isn't goddamnw orking
+     * it says hardwarempa is not deifned and I think i have no idea how to define it either
+     * ok so
+     * uhh rian is still busy helping ethan and
+     * UI think he is having a lot of fun
+     * which I guess means that he lieks andirdo better than doing robotics
+     * additionally i think this javadoc is probably the longest javadoc
+     * that i have written yet and probalby the longest on in this entire repo
+     * and yet rian is STILL GODDMAN TALKING aND nOT hELPING MEADFASDFASDFSDFASDFsd
+     *
+     * ok so uhh hardwaremap isn't even definined in teleop
+     * i'm stuck now so I needd some rian help
+     * but he is still busy
+     * he is talking abotu unoreverse and stuff
+     * i think rian is getting sus
+     * ah well that's
+     * interseting
+     *
+     * rian
+     * please
+     * get your ass
+     * over here
+     * and he;p me
+     * before
+     * i blow up
+     * in fornt of your goddamn gyat
+     *
+     * and detach ur
+     *
+     * ok hold on
+     * i don't think this stuff should be writting into a javadoc of a
+     * vERyt very professional git repo
+     * of very very important code
+     * goddamn i have done now work in the past like
+     * idk 10 minutes
+     * and
+     * uhh
+     * ah well fuck it
+     *
+     * i don't htink any work is going to get done today
+     * he is laughtibn like a cow
+     *
+     * rian is dying
+     * no work is going to be done today
+     * i SWEAR
+     *
+     * ah well
+     * he's having more conversation now
+     * i think this is going to tak elike 15 more mintues and I will not get any more work done
+     * other than you consider witing this jdoc rant as doing working
+     * the jdoc like probably 10 times logner than the acutla code
+     *
+     * ah now he just tried to delete the entire work of art
+     * ok but yet he stil lavhing't helped me even a little bit
+     * sooooooooo
+     * idk man
+     *
+     *
+     * ██   ██  █████  ██████  ██████  ██     ██  █████  ██████  ███████ ███    ███  █████  ██████      ██ ███████ ███    ██ ████████     ██     ██  ██████  ██████  ██   ██ ██ ███    ██  ██████
+     * ██   ██ ██   ██ ██   ██ ██   ██ ██     ██ ██   ██ ██   ██ ██      ████  ████ ██   ██ ██   ██     ██ ██      ████   ██    ██        ██     ██ ██    ██ ██   ██ ██  ██  ██ ████   ██ ██
+     * ███████ ███████ ██████  ██   ██ ██  █  ██ ███████ ██████  █████   ██ ████ ██ ███████ ██████      ██ ███████ ██ ██  ██    ██        ██  █  ██ ██    ██ ██████  █████   ██ ██ ██  ██ ██   ███
+     * ██   ██ ██   ██ ██   ██ ██   ██ ██ ███ ██ ██   ██ ██   ██ ██      ██  ██  ██ ██   ██ ██          ██      ██ ██  ██ ██    ██        ██ ███ ██ ██    ██ ██   ██ ██  ██  ██ ██  ██ ██ ██    ██
+     * ██   ██ ██   ██ ██   ██ ██████   ███ ███  ██   ██ ██   ██ ███████ ██      ██ ██   ██ ██          ██ ███████ ██   ████    ██         ███ ███   ██████  ██   ██ ██   ██ ██ ██   ████  ██████
+     *
+     *
+     * ██████  ██  █████  ███    ██     ██ ███████ ███    ██ ████████     ██   ██ ███████ ██      ██████  ██ ███    ██  ██████
+     * ██   ██ ██ ██   ██ ████   ██     ██ ██      ████   ██    ██        ██   ██ ██      ██      ██   ██ ██ ████   ██ ██
+     * ██████  ██ ███████ ██ ██  ██     ██ ███████ ██ ██  ██    ██        ███████ █████   ██      ██████  ██ ██ ██  ██ ██   ███
+     * ██   ██ ██ ██   ██ ██  ██ ██     ██      ██ ██  ██ ██    ██        ██   ██ ██      ██      ██      ██ ██  ██ ██ ██    ██
+     * ██   ██ ██ ██   ██ ██   ████     ██ ███████ ██   ████    ██        ██   ██ ███████ ███████ ██      ██ ██   ████  ██████
+     *
+     * rian
+     *
+     * rian still sint' helohng
+     */
+    public void splitOutPixles_btwPleaseReadTheJavaDocOfThisFunction() {
+        spinny = hardwareMap.crservo.get("servo1");
+        spaghettiIntake.setPower(0.75);
+        spinny.setPower(0.6);
+    }
+
     public double vectorToDegrees(double axial, double lateral){
         double degrees = 0;
         degrees = Math.atan2(lateral,axial);
