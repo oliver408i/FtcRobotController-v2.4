@@ -215,51 +215,55 @@ public class tapeDropRedSide extends LinearOpMode {
 //            // armature should move down after this
 //        }
 
+        TrajectorySequence untitled0 = null;
+
         if(cubePosition.equals("left")){ // old right side code
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
                     .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(180.00)), Math.toRadians(90.00))
-                    .addDisplacementMarker(() -> {
+                    .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(3.0)
-                    .addDisplacementMarker(() -> {
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(() -> {
                         robot.endSpittingOutPixels();
                     })
                     .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
         }
 
         if(cubePosition.equals("center")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(90.00)), Math.toRadians(90.00))
-                    .addDisplacementMarker(() -> {
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-36.88, -37.07, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(3.0)
-                    .addDisplacementMarker(() -> {
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(() -> {
                         robot.endSpittingOutPixels();
                     })
                     .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
+
         }
 
         if(cubePosition.equals("right")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(0.00)), Math.toRadians(90.00))
-                    .addDisplacementMarker(() -> {
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+                    .UNSTABLE_addTemporalMarkerOffset(1.70,() -> {})
+                    .lineTo(new Vector2d(-36.74, -35.47))
+                    .splineToSplineHeading(new Pose2d(-36.32, -31.66, Math.toRadians(0.00)), Math.toRadians(0.00))
+                    .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(3.0)
-                    .addDisplacementMarker(() -> {
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(() -> {
                         robot.endSpittingOutPixels();
                     })
                     .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
+
         }
 
+        drive.setPoseEstimate(untitled0.start());
+        drive.followTrajectorySequence(untitled0);
+
+        //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
 
 
 

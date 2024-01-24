@@ -657,6 +657,12 @@ public class RobotHardware {
         spinny.setPower(0);
     }
 
+    public void startSuckingInPixels() {
+        CRServo spinny = servo1;
+        spaghettiIntake.setPower(-0.75);
+        spinny.setPower(-0.6);
+    }
+
     public double vectorToDegrees(double axial, double lateral){
         double degrees = 0;
         degrees = Math.atan2(lateral,axial);
