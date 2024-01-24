@@ -645,10 +645,16 @@ public class RobotHardware {
      * Split out the pixel. Only eixist because rian think thi sis a genius idea for some
      *
      */
-    public void splitOutPixles_btwPleaseReadTheJavaDocOfThisFunction() {
+    public void startSpittingOutPixels() {
         CRServo spinny = servo1;
         spaghettiIntake.setPower(0.75);
         spinny.setPower(0.6);
+    }
+
+    public void endSpittingOutPixels() {
+        CRServo spinny = servo1;
+        spaghettiIntake.setPower(0);
+        spinny.setPower(0);
     }
 
     public double vectorToDegrees(double axial, double lateral){
