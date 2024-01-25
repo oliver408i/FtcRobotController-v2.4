@@ -245,10 +245,9 @@ public class tapeDropRedSide extends LinearOpMode {
         }
 
         if(cubePosition.equals("right")){
-            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
-                    .UNSTABLE_addTemporalMarkerOffset(1.70,() -> {})
-                    .lineTo(new Vector2d(-36.74, -35.47))
-                    .splineToSplineHeading(new Pose2d(-36.32, -31.66, Math.toRadians(0.00)), Math.toRadians(0.00))
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(8.67, -65.23, Math.toRadians(90.82)))
+                    .splineToSplineHeading(new Pose2d(11.07, -47.46, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .splineToSplineHeading(new Pose2d(11.35, -31.38, Math.toRadians(0.00)), Math.toRadians(90.00))
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
