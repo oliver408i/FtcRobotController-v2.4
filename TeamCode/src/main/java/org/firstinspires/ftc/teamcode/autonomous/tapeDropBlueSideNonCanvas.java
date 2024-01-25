@@ -77,8 +77,50 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
     private VisionPortal visionPortal;
     RobotHardware robot = new RobotHardware();
 
+    private boolean wantToKillRobot = false;
+
+    private SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+    private Trajectory temp = null;
+
+    private ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+    private ArrayList<String> relativeMovement = new ArrayList<>();
+
+    private Thread failsafe = new Thread(() -> {
+        while (opModeIsActive()) {
+            if(wantToKillRobot) {
+                List<Double> driveVelocity;
+                Boolean wasStationary = false;
+                Double wheelVelocityTotal = 0.0;
+                while (drive.isBusy()) {
+                    driveVelocity = drive.getWheelVelocities();
+                    for (Double i : driveVelocity) {
+                        wheelVelocityTotal += i;
+                    }
+                    if (wheelVelocityTotal == 0) {
+                        wasStationary = true;
+                        sleep(3000);
+                        wheelVelocityTotal = 0.0;
+                        driveVelocity = drive.getWheelVelocities();
+                        for (Double i : driveVelocity) {
+                            wheelVelocityTotal += i;
+                        }
+                        if (wheelVelocityTotal == 0) {
+                            drive.setMotorPowers(0, 0, 0, 0);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+
     @Override
     public void runOpMode() {
+
+        failsafe.start(); // REMOVE THIS AS NESSECARY DON"T BREAK THE ROBOT THANKS
 
         initTfod();
         robot.init(hardwareMap);
@@ -151,12 +193,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
 
         //important: code copied from canvasBlueTeamAuto
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory temp = null;
-
-        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
-        ArrayList<String> relativeMovement = new ArrayList<>();
 
 
 
@@ -262,33 +299,10 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
 
         drive.setPoseEstimate(untitled0.start());
         drive.followTrajectorySequence(untitled0);
-        Boolean wantToKillRobot = false;
 
 
         // if you really want to run the failsafe which may or may not kill the bot
-        if(wantToKillRobot) {
-            List<Double> driveVelocity;
-            Boolean wasStationary = false;
-            Double wheelVelocityTotal = 0.0;
-            while (drive.isBusy()) {
-                driveVelocity = drive.getWheelVelocities();
-                for (Double i : driveVelocity) {
-                    wheelVelocityTotal += i;
-                }
-                if (wheelVelocityTotal == 0) {
-                    wasStationary = true;
-                    sleep(3000);
-                    wheelVelocityTotal = 0.0;
-                    driveVelocity = drive.getWheelVelocities();
-                    for (Double i : driveVelocity) {
-                        wheelVelocityTotal += i;
-                    }
-                    if (wheelVelocityTotal == 0) {
-                        drive.setMotorPowers(0, 0, 0, 0);
-                    }
-                }
-            }
-        }
+
 
         //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
 
