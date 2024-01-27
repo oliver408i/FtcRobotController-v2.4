@@ -93,13 +93,10 @@ public class tapeDropBlueSide extends LinearOpMode {
         String cubePosition = "";
 
         while(!opModeIsActive()){
-
             if(isStopRequested()){
                 visionPortal.close();
             }
             telemetryTfod();
-
-
 
             // Push telemetry to the Driver Station.
             telemetry.update();
@@ -113,7 +110,8 @@ public class tapeDropBlueSide extends LinearOpMode {
             exposureControl = visionPortal.getCameraControl(ExposureControl.class);
             //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
             exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 4, TimeUnit.MILLISECONDS);
+            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
+
 
             gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(255);
@@ -136,7 +134,6 @@ public class tapeDropBlueSide extends LinearOpMode {
                 double x = (recognition.getLeft() + recognition.getRight()) / 2;
                 double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-
                 if (0 < x && x < 400) {
                     cubePosition = "left";
                 } else if (500 < x && x < 900) {
@@ -144,38 +141,37 @@ public class tapeDropBlueSide extends LinearOpMode {
                 } else if (1000 < x && x < 1280) {
                     cubePosition = "right";
                 }
-
             }
 
-
-
         }
+
         visionPortal.close();
 
 
+        //important: code copied from canvasBlueTeamAuto
+
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        RobotHardware robot = new RobotHardware();
-        robot.init(hardwareMap);
+
 
         Trajectory temp = null;
 
-        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>(); // TODO: this to be remade into a sequence
-        ArrayList<String> relativeMovement = new ArrayList<>(); // TODO: Correct this to use markers instead
+        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+        ArrayList<String> relativeMovement = new ArrayList<>();
 
 
 
-//        if(cubePosition.equals("right")){
+//        if(cubePosition.equals("left")){ // old right side code
 //            temp = drive.trajectoryBuilder(new Pose2d())
-//                    .splineToLinearHeading(new Pose2d(20,5, Math.toRadians(-55)), Math.toRadians(-45))
+//                    .splineToLinearHeading(new Pose2d(17,-2, Math.toRadians(45)), Math.toRadians(45))
 //                    .build();
-//            relativeMovement.add("drop first pixel");
 //            lotsOfMovement.add(temp);
-//            temp = drive.trajectoryBuilder(new Pose2d(20,5, Math.toRadians(-55)))
+//            relativeMovement.add("drop first pixel");
+//            temp = drive.trajectoryBuilder(new Pose2d(20,-5, Math.toRadians(55)))
 //                    //TODO: Increase dist towards the canvas
-//                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
+//                    .splineToLinearHeading(new Pose2d(17,-36,Math.toRadians(-70)), Math.toRadians(-70))
 //                    .build();
 //            // armature should move down after this
-//            relativeMovement.add(("drop second pixel"));
+//            relativeMovement.add("drop second pixel");
 //            lotsOfMovement.add(temp);
 //        }
 //
@@ -194,67 +190,81 @@ public class tapeDropBlueSide extends LinearOpMode {
 //            lotsOfMovement.add(temp);
 //
 //            temp = drive.trajectoryBuilder(new Pose2d(15,0), Math.toRadians(0))
-//                    .splineToLinearHeading(new Pose2d(20,34,Math.toRadians(90)), Math.toRadians(90))
+//                    .splineToLinearHeading(new Pose2d(25,-34,Math.toRadians(-70)), Math.toRadians(-70))
 //                    .build();
 //            relativeMovement.add("drop second pixel");
 //            lotsOfMovement.add(temp);
 //        }
 //
-//        if (cubePosition.equals("left")) {
+//        if (cubePosition.equals("right")) { // old left side code
 //
 //            temp = drive.trajectoryBuilder(new Pose2d())
-//                    .splineToLinearHeading(new Pose2d(20,11, Math.toRadians(5)), Math.toRadians(5))
+//                    .splineToLinearHeading(new Pose2d(15,-7, Math.toRadians(-10)), Math.toRadians(-10))
 //                    .build();
 //            relativeMovement.add("drop first pixel");
 //            lotsOfMovement.add(temp);
-//            temp = drive.trajectoryBuilder(new Pose2d(20,11, Math.toRadians(5)))
-//                    .splineToLinearHeading(new Pose2d(15,11,Math.toRadians(-1)), Math.toRadians(-1))
+//            temp = drive.trajectoryBuilder(new Pose2d(15,-7, Math.toRadians(-10)))
+//                    .splineToLinearHeading(new Pose2d(5,-7,Math.toRadians(1)), Math.toRadians(1))
 //                    .build();
-//
 //            relativeMovement.add("");
 //            lotsOfMovement.add(temp);
-//            temp = drive.trajectoryBuilder(new Pose2d(15,11, Math.toRadians(55)), Math.toRadians(45))
-//                    .splineToLinearHeading(new Pose2d(20,35,Math.toRadians(110)), Math.toRadians(110))
+//            temp = drive.trajectoryBuilder(new Pose2d(5,-7, Math.toRadians(1)), Math.toRadians(1))
+//                    .splineToLinearHeading(new Pose2d(30,-30,Math.toRadians(-70)), Math.toRadians(-70))
 //                    .build();
 //            relativeMovement.add("drop second pixel");
 //            lotsOfMovement.add(temp);
 //            // armature should move down after this
 //        }
 
-
-
-
-        //drive.followTrajectory(headTowards);
-
-        //drive.followTrajectory(goBack);
-//            while (opModeIsActive()) {
-//
-//            }
-
+        TrajectorySequence untitled0 = null;
 
         if(cubePosition.equals("left")){ // old right side code
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
                     .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(180.00)), Math.toRadians(90.00))
+                    .addTemporalMarker(() -> {
+                        robot.startSpittingOutPixels();
+                    })
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                    })
                     .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
         }
 
         if(cubePosition.equals("center")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(90.00)), Math.toRadians(90.00))
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
+                    .splineToSplineHeading(new Pose2d(-36.88, -37.07, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .addTemporalMarker(() -> {
+                        robot.startSpittingOutPixels();
+                    })
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                    })
                     .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
+
         }
 
         if(cubePosition.equals("right")){
-            TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-36.88, -33.07, Math.toRadians(0.00)), Math.toRadians(90.00))
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(8.67, -65.23, Math.toRadians(90.82)))
+                    .splineToSplineHeading(new Pose2d(11.07, -47.46, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .splineToSplineHeading(new Pose2d(11.35, -31.38, Math.toRadians(0.00)), Math.toRadians(90.00))
+                    .addTemporalMarker(() -> {
+                        robot.startSpittingOutPixels();
+                    })
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                    })
                     .build();
-            drive.setPoseEstimate(untitled0.start());
-            drive.followTrajectorySequence(untitled0);
+
         }
+
+        drive.setPoseEstimate(untitled0.start());
+        drive.followTrajectorySequence(untitled0);
+
+        //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
+
 
 
         // Save more CPU resources when camera is no longer needed.
@@ -348,16 +358,23 @@ public class tapeDropBlueSide extends LinearOpMode {
      * Function to add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     private void telemetryTfod() {
-
+        double highestConf = 0;
         List<Recognition> currentRecognitions = tfod.getRecognitions();
+        Recognition recognition = null;
         telemetry.addData("# Objects Detected", currentRecognitions.size());
 
+        for(int i = 0; i<currentRecognitions.size(); i++){
+            if(currentRecognitions.get(i).getConfidence() > highestConf){
+                recognition = currentRecognitions.get(i);
+            }
+        }
+
         // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions) {
+        if(recognition != null){
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
 
-            if(100 < x && x < 400){
+            if(0 < x && x < 400){
                 telemetry.addData("Cube Pos: ", "left");
             }
             else if(500 < x && x < 900){
@@ -371,8 +388,11 @@ public class tapeDropBlueSide extends LinearOpMode {
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-        }   // end for() loop
+        }
+
 
     }   // end method telemetryTfod()
+
+
 
 }   // end class
