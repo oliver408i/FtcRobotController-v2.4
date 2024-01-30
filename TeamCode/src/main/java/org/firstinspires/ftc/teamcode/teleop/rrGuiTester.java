@@ -78,13 +78,13 @@ public class rrGuiTester extends LinearOpMode {
         viperSlideTarget += moveBy;
         encoderDrivingTarget = viperSlideTarget;
 
-        encoderDrivingTarget2 = -encoderDrivingTarget;
+        encoderDrivingTarget2 = -1*encoderDrivingTarget;
 
         robot.ViperSlide.setPower(0.5);
         robot.ViperSlide2.setPower(0.5);
 
         robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
-        robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
+        robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget*-1);
 
         robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -126,12 +126,13 @@ public class rrGuiTester extends LinearOpMode {
                     if (opModeIsActive() && !isOverride) {
                         isTriggered = false;
                         // Check for the most stupid going below 0 thing
-                        if (ViperSlide.getTargetPosition() > 1) {
+
+                        /*if (ViperSlide.getTargetPosition() >= 0) {
                             ViperSlide.setTargetPosition(0);
                             ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                             isTriggered = true;
                         }
-                        if (ViperSlide2.getTargetPosition() > 1) {
+                        if (ViperSlide2.getTargetPosition() <= 0) {
                             ViperSlide2.setTargetPosition(0);
                             ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                             isTriggered = true;
@@ -141,11 +142,11 @@ public class rrGuiTester extends LinearOpMode {
                             ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                             isTriggered = true;
                         }
-                        if (ViperSlide2.getTargetPosition() < -3501) {
-                            ViperSlide2.setTargetPosition(-3500);
+                        if (ViperSlide2.getTargetPosition() > 3501) {
+                            ViperSlide2.setTargetPosition(3500);
                             ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                             isTriggered = true;
-                        }
+                        }*/
                         if (Math.abs(Math.abs(ViperSlide.getCurrentPosition()) - Math.abs(ViperSlide2.getCurrentPosition())) > 30) {
                             ViperSlide.setPower(0);
                             ViperSlide2.setPower(0);
@@ -169,6 +170,11 @@ public class rrGuiTester extends LinearOpMode {
                     telemetry.addData("Selected Program Counter", selectedProgramCounter);
                     if(selectedProgram < nameList.size()){
                         telemetry.addData("Selected Program Name: ", nameList.get(selectedProgram));
+                        //TODO: Got to find a different location/if statement to put the telemetry in later
+                        telemetry.addData("Viper Slide 1 Tgt: ", ViperSlide.getTargetPosition());
+                        telemetry.addData("Viper Slide 2 Tgt: ", ViperSlide2.getTargetPosition());
+                        telemetry.addData("Viper Slide 1 Curr: ", ViperSlide.getCurrentPosition());
+                        telemetry.addData("Viper Slide 2 Curr: ", ViperSlide2.getCurrentPosition());
                     }
                     else{
                         telemetry.addData("Selected Program Name: ", "none + namelist len: ", +nameList.size());
@@ -198,7 +204,7 @@ public class rrGuiTester extends LinearOpMode {
 
 
 
-            TrajectorySequence testdrive = drive.trajectorySequenceBuilder(new Pose2d(-36.83, -57.37, Math.toRadians(88.34)))
+            /*TrajectorySequence testdrive = drive.trajectorySequenceBuilder(new Pose2d(-36.83, -57.37, Math.toRadians(88.34)))
                     .splineTo(new Vector2d(-36.30, -25.33), Math.toRadians(89.33))
                     .splineTo(new Vector2d(-9.14, -0.61), Math.toRadians(-6.34))
                     .splineTo(new Vector2d(55.98, -35.09), Math.toRadians(0.00))
@@ -253,18 +259,18 @@ public class rrGuiTester extends LinearOpMode {
                         // Run your action in here!
                         robot.viperSlideEncoderMovements(telemetry,20,0.5,true,robot.ViperSlide);
                         robot.viperSlideEncoderMovements(telemetry,20,0.5,false,robot.ViperSlide2);
-                    })  
+                    })
                     .build();
 
             drive.setPoseEstimate(untitled1.start());
 
             trajectorySequenceArrayList.add(untitled1);
-            nameList.add("iyer markers te77st");
+            nameList.add("iyer markers testing");*/
 
             TrajectorySequence viperSliding = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
                     .addTemporalMarker(() -> {
                         // TODO: not working make it run both motors
-                        runViperSlide(2000);
+                        runViperSlide(-2000);
                     })
                     .waitSeconds(4)
                     .addTemporalMarker(() -> {
@@ -272,7 +278,7 @@ public class rrGuiTester extends LinearOpMode {
                     })
                     .build();
             trajectorySequenceArrayList.add(viperSliding);
-            nameList.add("viper slide only test");
+            nameList.add("viper slide test by iyer");
 
 
         }

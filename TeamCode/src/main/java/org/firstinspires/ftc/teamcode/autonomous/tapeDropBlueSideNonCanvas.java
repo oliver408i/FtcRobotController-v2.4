@@ -120,7 +120,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        failsafe.start(); // REMOVE THIS AS NESSECARY DON"T BREAK THE ROBOT THANKS
+        //failsafe.start(); // REMOVE THIS AS NESSECARY DON"T BREAK THE ROBOT THANKS
 
         initTfod();
         robot.init(hardwareMap);
