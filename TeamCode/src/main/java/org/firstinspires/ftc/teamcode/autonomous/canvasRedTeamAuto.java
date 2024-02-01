@@ -363,6 +363,8 @@ public class canvasRedTeamAuto extends LinearOpMode {
         for(int i = 0; i<currentRecognitions.size(); i++){
             if(currentRecognitions.get(i).getConfidence() > highestConf){
                 recognition = currentRecognitions.get(i);
+                highestConf = recognition.getConfidence();
+
             }
         }
 

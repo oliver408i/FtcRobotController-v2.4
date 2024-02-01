@@ -74,22 +74,7 @@ public class rrGuiTester extends LinearOpMode {
     double rotationsNeeded = 0;
     double encoderDrivingTarget = 0;
     double encoderDrivingTarget2 = 0;
-    private void runViperSlide(int moveBy) {
-        viperSlideTarget += moveBy;
-        encoderDrivingTarget = viperSlideTarget;
 
-        encoderDrivingTarget2 = -1*encoderDrivingTarget;
-
-        robot.ViperSlide.setPower(0.5);
-        robot.ViperSlide2.setPower(0.5);
-
-        robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
-        robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget*-1);
-
-        robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    }
 
     @Override
     public void runOpMode() {
@@ -270,7 +255,7 @@ public class rrGuiTester extends LinearOpMode {
             TrajectorySequence viperSliding = drive.trajectorySequenceBuilder(new Pose2d(-36.35, -62.17, Math.toRadians(90.00)))
                     .addTemporalMarker(() -> {
                         // TODO: not working make it run both motors
-                        runViperSlide(-2000);
+                        robot.runViperSlide(-2000);
                     })
                     .waitSeconds(4)
                     .addTemporalMarker(() -> {
