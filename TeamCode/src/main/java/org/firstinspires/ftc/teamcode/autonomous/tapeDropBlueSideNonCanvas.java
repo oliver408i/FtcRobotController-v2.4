@@ -106,7 +106,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
         gainControl = visionPortal.getCameraControl(GainControl.class);
         gainControl.setGain(255);
 
-        exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
+        //exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
 
 
         while(!opModeIsActive()){
