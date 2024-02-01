@@ -75,6 +75,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
      * {@link #visionPortal} is the variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+
     RobotHardware robot = new RobotHardware();
 
 
@@ -91,9 +92,22 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
+
+        String cubePosition = "";
+
         ExposureControl exposureControl;
         GainControl gainControl;
-        String cubePosition = "";
+        exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+        exposureControl.setMode(ExposureControl.Mode.Manual);
+        exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
+
+
+        gainControl = visionPortal.getCameraControl(GainControl.class);
+        gainControl.setGain(255);
+
+        exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
+
 
         while(!opModeIsActive()){
             if(isStopRequested()){
@@ -110,16 +124,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
             } else if (gamepad1.dpad_up) {
                 visionPortal.resumeStreaming();
             }
-            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-            exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
 
-
-            gainControl = visionPortal.getCameraControl(GainControl.class);
-            gainControl.setGain(255);
-
-            exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
 
 
                 /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
