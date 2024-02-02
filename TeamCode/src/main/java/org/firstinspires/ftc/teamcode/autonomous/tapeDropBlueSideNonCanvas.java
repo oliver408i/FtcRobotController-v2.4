@@ -140,6 +140,8 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
             // Step through the list of recognitions and display info for each one.
             double highestConf = 0;
             Recognition recognition = null;
+            double x = 0;
+            double y = 0;
             telemetry.addData("# Objects Detected", currentRecognitions.size());
 
             for(int i = 0; i<currentRecognitions.size(); i++){
@@ -149,8 +151,8 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
                 }
             }
 
-            double x = (recognition.getLeft() + recognition.getRight()) / 2;
-            double y = (recognition.getTop() + recognition.getBottom()) / 2;
+            x = (recognition.getLeft() + recognition.getRight()) / 2;
+            y = (recognition.getTop() + recognition.getBottom()) / 2;
 
             if (0 < x && x < 400) {
                 cubePosition = "left";
