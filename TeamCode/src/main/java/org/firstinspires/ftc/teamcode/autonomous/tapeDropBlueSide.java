@@ -142,16 +142,17 @@ public class tapeDropBlueSide extends LinearOpMode {
                     highestConf = recognition.getConfidence();
                 }
             }
+            if(recognition != null) {
+                x = (recognition.getLeft() + recognition.getRight()) / 2;
+                y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-            x = (recognition.getLeft() + recognition.getRight()) / 2;
-            y = (recognition.getTop() + recognition.getBottom()) / 2;
-
-            if (0 < x && x < 400) {
-                cubePosition = "left";
-            } else if (500 < x && x < 900) {
-                cubePosition = "center";
-            } else if (1000 < x && x < 1280) {
-                cubePosition = "right";
+                if (0 < x && x < 400) {
+                    cubePosition = "left";
+                } else if (500 < x && x < 900) {
+                    cubePosition = "center";
+                } else if (1000 < x && x < 1280) {
+                    cubePosition = "right";
+                }
             }
 
         }
