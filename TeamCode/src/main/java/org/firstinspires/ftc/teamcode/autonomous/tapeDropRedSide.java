@@ -130,17 +130,26 @@ public class tapeDropRedSide extends LinearOpMode {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
 
             // Step through the list of recognitions and display info for each one.
-            for (Recognition recognition : currentRecognitions) {
-                double x = (recognition.getLeft() + recognition.getRight()) / 2;
-                double y = (recognition.getTop() + recognition.getBottom()) / 2;
+            double highestConf = 0;
+            Recognition recognition = null;
+            telemetry.addData("# Objects Detected", currentRecognitions.size());
 
-                if (0 < x && x < 400) {
-                    cubePosition = "left";
-                } else if (500 < x && x < 900) {
-                    cubePosition = "center";
-                } else if (1000 < x && x < 1280) {
-                    cubePosition = "right";
+            for(int i = 0; i<currentRecognitions.size(); i++){
+                if(currentRecognitions.get(i).getConfidence() > highestConf){
+                    recognition = currentRecognitions.get(i);
+                    highestConf = recognition.getConfidence();
                 }
+            }
+
+            double x = (recognition.getLeft() + recognition.getRight()) / 2;
+            double y = (recognition.getTop() + recognition.getBottom()) / 2;
+
+            if (0 < x && x < 400) {
+                cubePosition = "left";
+            } else if (500 < x && x < 900) {
+                cubePosition = "center";
+            } else if (1000 < x && x < 1280) {
+                cubePosition = "right";
             }
 
         }
