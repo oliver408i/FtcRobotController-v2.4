@@ -142,7 +142,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
             Recognition recognition = null;
             double x = 0;
             double y = 0;
-            telemetry.addData("# Objects Detected", currentRecognitions.size());
+            //telemetry.addData("# Objects Detected", currentRecognitions.size());
 
             for(int i = 0; i<currentRecognitions.size(); i++){
                 if(currentRecognitions.get(i).getConfidence() > highestConf){
