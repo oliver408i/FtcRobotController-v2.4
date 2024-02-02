@@ -130,9 +130,21 @@ public class tapeDropBlueSide extends LinearOpMode {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
 
             // Step through the list of recognitions and display info for each one.
-            for (Recognition recognition : currentRecognitions) {
-                double x = (recognition.getLeft() + recognition.getRight()) / 2;
-                double y = (recognition.getTop() + recognition.getBottom()) / 2;
+            double highestConf = 0;
+            Recognition recognition = null;
+            double x = 0;
+            double y = 0;
+            //telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+            for(int i = 0; i<currentRecognitions.size(); i++){
+                if(currentRecognitions.get(i).getConfidence() > highestConf){
+                    recognition = currentRecognitions.get(i);
+                    highestConf = recognition.getConfidence();
+                }
+            }
+            if(recognition != null) {
+                x = (recognition.getLeft() + recognition.getRight()) / 2;
+                y = (recognition.getTop() + recognition.getBottom()) / 2;
 
                 if (0 < x && x < 400) {
                     cubePosition = "left";
@@ -366,6 +378,8 @@ public class tapeDropBlueSide extends LinearOpMode {
         for(int i = 0; i<currentRecognitions.size(); i++){
             if(currentRecognitions.get(i).getConfidence() > highestConf){
                 recognition = currentRecognitions.get(i);
+                highestConf = recognition.getConfidence();
+
             }
         }
 

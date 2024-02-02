@@ -692,6 +692,23 @@ public class RobotHardware {
         strafe(x,y,0,hypotenuse,telemetry, power);
     }
 
+    public void runViperSlide(int moveBy) {
+        int viperSlideTarget = moveBy;
+        int encoderDrivingTarget = viperSlideTarget;
+
+        int encoderDrivingTarget2 = -1*encoderDrivingTarget;
+
+        ViperSlide.setPower(0.5);
+        ViperSlide2.setPower(0.5);
+
+        ViperSlide.setTargetPosition((int) encoderDrivingTarget);
+        ViperSlide2.setTargetPosition((int) encoderDrivingTarget*-1);
+
+        ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+    }
+
 
 
 

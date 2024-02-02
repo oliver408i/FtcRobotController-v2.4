@@ -75,52 +75,13 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
      * {@link #visionPortal} is the variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+
     RobotHardware robot = new RobotHardware();
-
-    private boolean wantToKillRobot = false;
-
-    private SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-    private Trajectory temp = null;
-
-    private ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
-    private ArrayList<String> relativeMovement = new ArrayList<>();
-
-    private Thread failsafe = new Thread(() -> {
-        while (opModeIsActive()) {
-            if(wantToKillRobot) {
-                List<Double> driveVelocity;
-                Boolean wasStationary = false;
-                Double wheelVelocityTotal = 0.0;
-                while (drive.isBusy()) {
-                    driveVelocity = drive.getWheelVelocities();
-                    for (Double i : driveVelocity) {
-                        wheelVelocityTotal += i;
-                    }
-                    if (wheelVelocityTotal == 0) {
-                        wasStationary = true;
-                        sleep(3000);
-                        wheelVelocityTotal = 0.0;
-                        driveVelocity = drive.getWheelVelocities();
-                        for (Double i : driveVelocity) {
-                            wheelVelocityTotal += i;
-                        }
-                        if (wheelVelocityTotal == 0) {
-                            drive.setMotorPowers(0, 0, 0, 0);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
 
 
     @Override
     public void runOpMode() {
 
-        //failsafe.start(); // REMOVE THIS AS NESSECARY DON"T BREAK THE ROBOT THANKS
 
         initTfod();
         robot.init(hardwareMap);
@@ -131,9 +92,22 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
+
+        String cubePosition = "";
+
         ExposureControl exposureControl;
         GainControl gainControl;
-        String cubePosition = "";
+        exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+        exposureControl.setMode(ExposureControl.Mode.Manual);
+        exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
+
+
+        gainControl = visionPortal.getCameraControl(GainControl.class);
+        gainControl.setGain(255);
+
+        //exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
+
 
         while(!opModeIsActive()){
             if(isStopRequested()){
@@ -150,16 +124,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
             } else if (gamepad1.dpad_up) {
                 visionPortal.resumeStreaming();
             }
-            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-            exposureControl.setMode(ExposureControl.Mode.Manual);
-            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
 
-
-            gainControl = visionPortal.getCameraControl(GainControl.class);
-            gainControl.setGain(255);
-
-            exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
 
 
                 /*telemetry.addData("exposure min: ", exposureControl.getMinExposure(TimeUnit.SECONDS));
@@ -173,9 +138,21 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
 
             // Step through the list of recognitions and display info for each one.
-            for (Recognition recognition : currentRecognitions) {
-                double x = (recognition.getLeft() + recognition.getRight()) / 2;
-                double y = (recognition.getTop() + recognition.getBottom()) / 2;
+            double highestConf = 0;
+            Recognition recognition = null;
+            double x = 0;
+            double y = 0;
+            //telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+            for(int i = 0; i<currentRecognitions.size(); i++){
+                if(currentRecognitions.get(i).getConfidence() > highestConf){
+                    recognition = currentRecognitions.get(i);
+                    highestConf = recognition.getConfidence();
+                }
+            }
+            if(recognition != null) {
+                x = (recognition.getLeft() + recognition.getRight()) / 2;
+                y = (recognition.getTop() + recognition.getBottom()) / 2;
 
                 if (0 < x && x < 400) {
                     cubePosition = "left";
@@ -185,6 +162,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
                     cubePosition = "right";
                 }
             }
+
 
         }
 
@@ -252,6 +230,18 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
 //            lotsOfMovement.add(temp);
 //            // armature should move down after this
 //        }
+
+
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        Trajectory temp = null;
+
+        ArrayList<Trajectory> lotsOfMovement = new ArrayList<>();
+        ArrayList<String> relativeMovement = new ArrayList<>();
+
+
+
+
 
         TrajectorySequence untitled0 = null;
 
@@ -407,6 +397,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
         for(int i = 0; i<currentRecognitions.size(); i++){
             if(currentRecognitions.get(i).getConfidence() > highestConf){
                 recognition = currentRecognitions.get(i);
+                highestConf = recognition.getConfidence();
             }
         }
 
