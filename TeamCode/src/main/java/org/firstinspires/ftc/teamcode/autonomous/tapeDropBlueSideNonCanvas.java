@@ -290,6 +290,21 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
         drive.setPoseEstimate(untitled0.start());
         drive.followTrajectorySequence(untitled0);
 
+        TrajectorySequence toBoard = drive.trajectorySequenceBuilder(untitled0.end())
+                .lineTo(new Vector2d(-37.05, 21.95))
+                .splineToSplineHeading(new Pose2d(17.56, 19.32, Math.toRadians(26.30)), Math.toRadians(26.30))
+                .splineToSplineHeading(new Pose2d(52.68, 34.77, Math.toRadians(0.00)), Math.toRadians(12.53))
+                .build();
+
+
+
+
+
+        //drive.followTrajectorySequence(toBoard);
+
+
+
+
 
         // if you really want to run the failsafe which may or may not kill the bot
 
