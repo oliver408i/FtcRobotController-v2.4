@@ -296,9 +296,15 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(52.68, 34.77, Math.toRadians(0.00)), Math.toRadians(12.53))
                 .build();
 
+        TrajectorySequence toBoard2 = drive.trajectorySequenceBuilder(untitled0.end())
+                .lineToSplineHeading(new Pose2d(11.64, 15.87, Math.toRadians(0.29)))
+                .splineToSplineHeading(new Pose2d(46.19, 35.19, Math.toRadians(0.00)), Math.toRadians(0.00))
+                .build();
 
 
+        drive.waitForIdle();
 
+        drive.followTrajectorySequence(toBoard2);
 
         //drive.followTrajectorySequence(toBoard);
 
