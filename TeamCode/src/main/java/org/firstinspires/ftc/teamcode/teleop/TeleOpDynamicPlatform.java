@@ -273,11 +273,11 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             }
 
             // plane code
-            if(gamepad2.dpad_up){
+            if(gamepad2.dpad_down){ //depends on servo orientation. swap at will
                 robot.servo2.setPosition(0.25);
             }
 
-            if(gamepad2.dpad_down){
+            if(gamepad2.dpad_up){
                 robot.servo2.setPosition(0);
             }
 
