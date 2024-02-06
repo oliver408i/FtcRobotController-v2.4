@@ -663,7 +663,7 @@ public class RobotHardware {
      * can use endSpittingOutPixels to stop
      */
     public void startSpittingOutPixelsOnlySpaghetti(){
-        spaghettiIntake.setPower(0.75);
+        spaghettiIntake.setPower(0.6);
     }
 
 

@@ -272,7 +272,7 @@ public class tapeDropRedSide extends LinearOpMode {
                     .lineToSplineHeading(new Pose2d(28.28, -33.07, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(47.88, -33.92, Math.toRadians(3.75)))
                     .addTemporalMarker(()->{
-                        robot.runViperSlide(1000);
+                        robot.runViperSlide(2200);
                     })
                     .waitSeconds(2)
                     .addTemporalMarker(()->{
