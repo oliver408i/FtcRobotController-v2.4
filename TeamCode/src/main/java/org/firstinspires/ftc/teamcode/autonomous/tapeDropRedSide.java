@@ -228,6 +228,7 @@ public class tapeDropRedSide extends LinearOpMode {
 //        }
 
         TrajectorySequence untitled0 = null;
+        TrajectorySequence toBoard = null;
 
         if(cubePosition.equals("left")){ // old right side code
             untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
@@ -240,6 +241,10 @@ public class tapeDropRedSide extends LinearOpMode {
                         robot.endSpittingOutPixels();
                     })
                     .build();
+            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.78, -31.10, Math.toRadians(180.00)))
+                    .lineToSplineHeading(new Pose2d(47.88, -29.55, Math.toRadians(0.74)))
+                    .build();
+            //drive.setPoseEstimate(untitled0.start());
         }
 
         if(cubePosition.equals("center")){
@@ -253,6 +258,12 @@ public class tapeDropRedSide extends LinearOpMode {
                         robot.endSpittingOutPixels();
                     })
                     .build();
+            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(90.00)))
+                    .lineToSplineHeading(new Pose2d(28.28, -33.07, Math.toRadians(90.00)))
+                    .lineToSplineHeading(new Pose2d(47.18, -36.32, Math.toRadians(0.74)))
+                    .build();
+
+            //drive.setPoseEstimate(untitled0.start());
 
         }
 
@@ -268,6 +279,12 @@ public class tapeDropRedSide extends LinearOpMode {
                         robot.endSpittingOutPixels();
                     })
                     .build();
+            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(11.35, -49.57, Math.toRadians(90.00)))
+                    .lineToSplineHeading(new Pose2d(39.28, -50.14, Math.toRadians(90.00)))
+                    .lineToSplineHeading(new Pose2d(47.04, -42.38, Math.toRadians(0.74)))
+                    .build();
+            //drive.setPoseEstimate(untitled0.start());
 
         }
 
