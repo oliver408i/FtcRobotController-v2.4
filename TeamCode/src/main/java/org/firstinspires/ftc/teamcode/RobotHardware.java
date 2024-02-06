@@ -703,7 +703,7 @@ public class RobotHardware {
     }
 
     public void runViperSlide(int moveBy) {
-        int viperSlideTarget = moveBy;
+        int viperSlideTarget = -moveBy;
         int encoderDrivingTarget = viperSlideTarget;
 
         int encoderDrivingTarget2 = -1*encoderDrivingTarget;
