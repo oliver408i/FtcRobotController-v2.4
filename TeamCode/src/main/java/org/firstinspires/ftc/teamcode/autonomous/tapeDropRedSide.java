@@ -236,12 +236,12 @@ public class tapeDropRedSide extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(0.75)
+                    .waitSeconds(0.25)
                     .addTemporalMarker(() -> {
                         robot.endSpittingOutPixels();
                         robot.startSpittingOutPixelsOnlySpaghetti();
                     })
-                    .waitSeconds(0.75)
+                    .waitSeconds(1.25)
                     .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
@@ -258,12 +258,12 @@ public class tapeDropRedSide extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(0.75)
+                    .waitSeconds(0.25)
                     .addTemporalMarker(() -> {
                         robot.endSpittingOutPixels();
                         robot.startSpittingOutPixelsOnlySpaghetti();
                     })
-                    .waitSeconds(0.75)
+                    .waitSeconds(1.25)
                     .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
@@ -284,12 +284,12 @@ public class tapeDropRedSide extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(0.75)
+                    .waitSeconds(0.25)
                     .addTemporalMarker(() -> {
                         robot.endSpittingOutPixels();
                         robot.startSpittingOutPixelsOnlySpaghetti();
                     })
-                    .waitSeconds(0.75)
+                    .waitSeconds(1.25)
                     .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })

@@ -182,7 +182,8 @@ public class RobotHardware {
         servo3 = ahwMap.get(CRServo.class, "servo3");
         servo1.setDirection(DcMotorSimple.Direction.FORWARD);
         servo1.setPower(0);
-        servo2.setPosition(0);
+        //servo2.setPosition(0);
+        servo2.setPosition(0.25);
         servo3.setPower(0);
 
 
