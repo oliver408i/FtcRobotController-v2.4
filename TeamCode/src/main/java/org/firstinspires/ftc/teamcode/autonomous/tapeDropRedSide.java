@@ -260,7 +260,7 @@ public class tapeDropRedSide extends LinearOpMode {
                     .build();
             toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(28.28, -33.07, Math.toRadians(90.00)))
-                    .lineToSplineHeading(new Pose2d(47.18, -36.32, Math.toRadians(0.74)))
+                    .lineToSplineHeading(new Pose2d(48.73, -35.61, Math.toRadians(3.75)))
                     .build();
 
             //drive.setPoseEstimate(untitled0.start());
@@ -268,7 +268,7 @@ public class tapeDropRedSide extends LinearOpMode {
         }
 
         if(cubePosition.equals("right")){
-            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(8.67, -65.23, Math.toRadians(90.82)))
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(8.67, -65.23, Math.toRadians(90.00)))
                     .splineToSplineHeading(new Pose2d(11.07, -47.46, Math.toRadians(90.00)), Math.toRadians(90.00))
                     .splineToSplineHeading(new Pose2d(11.35, -31.38, Math.toRadians(0.00)), Math.toRadians(90.00))
                     .addTemporalMarker(() -> {
@@ -279,7 +279,7 @@ public class tapeDropRedSide extends LinearOpMode {
                         robot.endSpittingOutPixels();
                     })
                     .build();
-            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(0.00)))
+            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(180.00)))
                     .lineToSplineHeading(new Pose2d(11.35, -49.57, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(39.28, -50.14, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(47.04, -42.38, Math.toRadians(0.74)))
@@ -290,6 +290,9 @@ public class tapeDropRedSide extends LinearOpMode {
 
         drive.setPoseEstimate(untitled0.start());
         drive.followTrajectorySequence(untitled0);
+        drive.waitForIdle();
+        drive.setPoseEstimate(toBoard.start());
+        drive.followTrajectorySequence(toBoard);
 
         //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
 
