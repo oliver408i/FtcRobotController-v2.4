@@ -657,6 +657,15 @@ public class RobotHardware {
         spinny.setPower(0);
     }
 
+
+    /**
+     * can use endSpittingOutPixels to stop
+     */
+    public void startSpittingOutPixelsOnlySpaghetti(){
+        spaghettiIntake.setPower(0.75);
+    }
+
+
     public void startSuckingInPixels() {
         CRServo spinny = servo1;
         spaghettiIntake.setPower(-0.75);

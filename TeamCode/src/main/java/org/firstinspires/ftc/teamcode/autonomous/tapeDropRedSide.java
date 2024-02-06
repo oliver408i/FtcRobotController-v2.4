@@ -236,8 +236,13 @@ public class tapeDropRedSide extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(1.5)
+                    .waitSeconds(0.75)
                     .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                        robot.startSpittingOutPixelsOnlySpaghetti();
+                    })
+                    .waitSeconds(0.75)
+                    .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
                     .build();
@@ -253,8 +258,13 @@ public class tapeDropRedSide extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(1.5)
+                    .waitSeconds(0.75)
                     .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                        robot.startSpittingOutPixelsOnlySpaghetti();
+                    })
+                    .waitSeconds(0.75)
+                    .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
                     .build();
@@ -274,8 +284,13 @@ public class tapeDropRedSide extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(1.5)
+                    .waitSeconds(0.75)
                     .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                        robot.startSpittingOutPixelsOnlySpaghetti();
+                    })
+                    .waitSeconds(0.75)
+                    .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
                     .build();
