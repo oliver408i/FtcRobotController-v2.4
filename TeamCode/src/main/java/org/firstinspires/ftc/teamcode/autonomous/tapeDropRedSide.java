@@ -270,18 +270,21 @@ public class tapeDropRedSide extends LinearOpMode {
                     .build();
             toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(28.28, -33.07, Math.toRadians(90.00)))
-                    .lineToSplineHeading(new Pose2d(47.88, -33.92, Math.toRadians(0)))
+                    .lineToSplineHeading(new Pose2d(47.88, -38.5, Math.toRadians(6)))
                     .addTemporalMarker(()->{
-                        robot.runViperSlide(2200);
+                        robot.runViperSlide(2250);
                     })
                     .waitSeconds(2)
                     .addTemporalMarker(()->{
                         robot.startSpittingOutPixels();
+                        robot.runViperSlidePowerSpecified(-2250, 0.1);
                     })
                     .waitSeconds(1)
                     .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
+                        //robot.runViperSlide(-1000);
                     })
+                    .waitSeconds(1)
                     .build();
 
             //drive.setPoseEstimate(untitled0.start());
