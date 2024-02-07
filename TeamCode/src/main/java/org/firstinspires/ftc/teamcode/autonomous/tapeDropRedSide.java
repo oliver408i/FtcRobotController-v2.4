@@ -254,7 +254,7 @@ public class tapeDropRedSide extends LinearOpMode {
 
         if(cubePosition.equals("center")){
             untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-36.88, -37.07, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .splineToSplineHeading(new Pose2d(-36.88, -38.07, Math.toRadians(90.00)), Math.toRadians(90.00))
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
@@ -263,14 +263,17 @@ public class tapeDropRedSide extends LinearOpMode {
                         robot.endSpittingOutPixels();
                         robot.startSpittingOutPixelsOnlySpaghetti();
                     })
-                    .waitSeconds(1.5)
+                    .waitSeconds(1.75)
                     .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
                     .build();
             toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(90.00)))
+                    .addTemporalMarker(()->{
+                        robot.servo1.setPower(-0.6); //suck in pixels only box
+                    })
                     .lineToSplineHeading(new Pose2d(28.28, -33.07, Math.toRadians(90.00)))
-                    .lineToSplineHeading(new Pose2d(47.88, -38.5, Math.toRadians(6)))
+                    .lineToSplineHeading(new Pose2d(47.88, -33, Math.toRadians(7)))
                     .addTemporalMarker(()->{
                         robot.runViperSlide(2250);
                     })
