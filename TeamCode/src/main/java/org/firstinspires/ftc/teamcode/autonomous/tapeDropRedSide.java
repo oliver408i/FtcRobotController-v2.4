@@ -247,7 +247,24 @@ public class tapeDropRedSide extends LinearOpMode {
                     })
                     .build();
             toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.78, -31.10, Math.toRadians(180.00)))
+                    .addTemporalMarker(()->{
+                        robot.servo1.setPower(-0.3); //suck in pixels only box
+                    })
                     .lineToSplineHeading(new Pose2d(47.88, -29.55, Math.toRadians(0.74)))
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(2250);
+                    })
+                    .waitSeconds(2)
+                    .addTemporalMarker(()->{
+                        robot.startSpittingOutPixels();
+                        robot.runViperSlidePowerSpecified(-2250, 0.1);
+                    })
+                    .waitSeconds(1)
+                    .addTemporalMarker(()->{
+                        robot.endSpittingOutPixels();
+                        //robot.runViperSlide(-1000);
+                    })
+                    .waitSeconds(1)
                     .build();
             //drive.setPoseEstimate(untitled0.start());
         }
@@ -270,7 +287,7 @@ public class tapeDropRedSide extends LinearOpMode {
                     .build();
             toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(90.00)))
                     .addTemporalMarker(()->{
-                        robot.servo1.setPower(-0.6); //suck in pixels only box
+                        robot.servo1.setPower(-0.3); //suck in pixels only box
                     })
                     .lineToSplineHeading(new Pose2d(28.28, -33.07, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(47.88, -33, Math.toRadians(7)))
@@ -312,10 +329,31 @@ public class tapeDropRedSide extends LinearOpMode {
                     })
                     .build();
             toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(180.00)))
+                    .addTemporalMarker(()->{
+                        robot.servo1.setPower(-0.3); //suck in pixels only box
+                    })
+
                     .lineToSplineHeading(new Pose2d(11.35, -49.57, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(39.28, -50.14, Math.toRadians(90.00)))
                     .lineToSplineHeading(new Pose2d(47.04, -42.38, Math.toRadians(0.74)))
+
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(2250);
+                    })
+                    .waitSeconds(2)
+                    .addTemporalMarker(()->{
+                        robot.startSpittingOutPixels();
+                        robot.runViperSlidePowerSpecified(-2250, 0.1);
+                    })
+                    .waitSeconds(1)
+                    .addTemporalMarker(()->{
+                        robot.endSpittingOutPixels();
+                        //robot.runViperSlide(-1000);
+                    })
+                    .waitSeconds(1)
                     .build();
+
+
             //drive.setPoseEstimate(untitled0.start());
 
         }
