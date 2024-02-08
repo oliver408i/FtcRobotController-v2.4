@@ -230,6 +230,7 @@ public class tapeDropBlueSide extends LinearOpMode {
 
         TrajectorySequence untitled0 = null;
         TrajectorySequence toBoard = null;
+        TrajectorySequence park = null;
 
         if(cubePosition.equals("left")){ // old right side code
             untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
@@ -270,6 +271,15 @@ public class tapeDropBlueSide extends LinearOpMode {
                     .waitSeconds(1)
                     .build();
 
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.16, 29.27, Math.toRadians(0.00)))
+                    .lineToConstantHeading(new Vector2d(42.95, 44.78))
+                    .lineToSplineHeading(new Pose2d(48.73, 65.37, Math.toRadians(181.00)))
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(-(2250-500));
+                    })
+                    .build();
+
+
         }
 
         if(cubePosition.equals("center")){
@@ -295,7 +305,7 @@ public class tapeDropBlueSide extends LinearOpMode {
                         robot.servo1.setPower(-0.3); //suck in pixels only box
                     })
                     .lineToSplineHeading(new Pose2d(26.30, 36.32, Math.toRadians(270.00)))
-                    .lineToSplineHeading(new Pose2d(49.57, 36.04, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(49.57, 36.04, Math.toRadians(-3.00)))
                     .addTemporalMarker(()->{
                         robot.runViperSlide(2250);
                     })
@@ -310,6 +320,15 @@ public class tapeDropBlueSide extends LinearOpMode {
                         //robot.runViperSlide(-1000);
                     })
                     .build();
+
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.16, 35.89, Math.toRadians(0.00)))
+                    .lineToConstantHeading(new Vector2d(42.95, 44.78))
+                    .lineToSplineHeading(new Pose2d(48.73, 65.37, Math.toRadians(181.00)))
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(-(2250-500));
+                    })
+                    .build();
+
 
 
         }
@@ -352,14 +371,28 @@ public class tapeDropBlueSide extends LinearOpMode {
                     })
                     .build();
 
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.45, 43.09, Math.toRadians(0.00)))
+                    .lineToConstantHeading(new Vector2d(42.95, 44.78))
+                    .lineToSplineHeading(new Pose2d(48.73, 65.37, Math.toRadians(181.00)))
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(-(2250-500));
+                    })
+                    .build();
+
 
         }
 
         drive.setPoseEstimate(untitled0.start());
         drive.followTrajectorySequence(untitled0);
         drive.waitForIdle();
+
         drive.setPoseEstimate(toBoard.start());
         drive.followTrajectorySequence(toBoard);
+        drive.waitForIdle();
+
+        drive.setPoseEstimate(park.start());
+        drive.followTrajectorySequence(park);
+
 
         //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
 
