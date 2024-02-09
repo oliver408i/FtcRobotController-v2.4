@@ -274,9 +274,9 @@ public class tapeDropBlueSide extends LinearOpMode {
             park = drive.trajectorySequenceBuilder(new Pose2d(48.16, 29.27, Math.toRadians(0.00)))
                     .lineToConstantHeading(new Vector2d(42.95, 44.78))
                     .lineToSplineHeading(new Pose2d(48.73, 65.37, Math.toRadians(181.00)))
-                    .addTemporalMarker(()->{
-                        robot.runViperSlide(-(2250-500));
-                    })
+//                    .addTemporalMarker(()->{
+//                        robot.runViperSlide(-(2250-500));
+//                    })
                     .build();
 
 
@@ -324,9 +324,9 @@ public class tapeDropBlueSide extends LinearOpMode {
             park = drive.trajectorySequenceBuilder(new Pose2d(48.16, 35.89, Math.toRadians(0.00)))
                     .lineToConstantHeading(new Vector2d(42.95, 44.78))
                     .lineToSplineHeading(new Pose2d(48.73, 65.37, Math.toRadians(181.00)))
-                    .addTemporalMarker(()->{
-                        robot.runViperSlide(-(2250-500));
-                    })
+//                    .addTemporalMarker(()->{
+//                        robot.runViperSlide(-(2250-500));
+//                    })
                     .build();
 
 
@@ -374,9 +374,9 @@ public class tapeDropBlueSide extends LinearOpMode {
             park = drive.trajectorySequenceBuilder(new Pose2d(48.45, 43.09, Math.toRadians(0.00)))
                     .lineToConstantHeading(new Vector2d(42.95, 44.78))
                     .lineToSplineHeading(new Pose2d(48.73, 65.37, Math.toRadians(181.00)))
-                    .addTemporalMarker(()->{
-                        robot.runViperSlide(-(2250-500));
-                    })
+//                    .addTemporalMarker(()->{
+//                        robot.runViperSlide(-(2250-500));
+//                    })
                     .build();
 
 
@@ -392,6 +392,7 @@ public class tapeDropBlueSide extends LinearOpMode {
 
         drive.setPoseEstimate(park.start());
         drive.followTrajectorySequence(park);
+        drive.waitForIdle();
 
 
         //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
