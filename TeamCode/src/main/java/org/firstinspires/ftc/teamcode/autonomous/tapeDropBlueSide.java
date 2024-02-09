@@ -362,7 +362,7 @@ public class tapeDropBlueSide extends LinearOpMode {
                     .waitSeconds(2)
                     .addTemporalMarker(()->{
                         robot.startSpittingOutPixels();
-                        robot.runViperSlidePowerSpecified(-500, 0.2);
+                        robot.runViperSlide(-500);
                     })
                     .waitSeconds(1)
                     .addTemporalMarker(()->{
