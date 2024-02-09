@@ -229,6 +229,7 @@ public class tapeDropRedSide extends LinearOpMode {
 
         TrajectorySequence untitled0 = null;
         TrajectorySequence toBoard = null;
+        TrajectorySequence park = null;
 
         if(cubePosition.equals("left")){ // old right side code
             untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
@@ -266,6 +267,10 @@ public class tapeDropRedSide extends LinearOpMode {
                     })
                     .waitSeconds(1)
                     .build();
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.45, -29.83, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(45.20, -63.26, Math.toRadians(180.32)))
+                    .build();
+
             //drive.setPoseEstimate(untitled0.start());
         }
 
@@ -306,6 +311,11 @@ public class tapeDropRedSide extends LinearOpMode {
                     })
                     .waitSeconds(1)
                     .build();
+
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.16, -36.18, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(45.20, -63.26, Math.toRadians(180.32)))
+                    .build();
+
 
             //drive.setPoseEstimate(untitled0.start());
 
@@ -353,6 +363,10 @@ public class tapeDropRedSide extends LinearOpMode {
                     .waitSeconds(1)
                     .build();
 
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.31, -42.52, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(45.20, -63.26, Math.toRadians(180.32)))
+                    .build();
+
 
             //drive.setPoseEstimate(untitled0.start());
 
@@ -361,8 +375,14 @@ public class tapeDropRedSide extends LinearOpMode {
         drive.setPoseEstimate(untitled0.start());
         drive.followTrajectorySequence(untitled0);
         drive.waitForIdle();
+
         drive.setPoseEstimate(toBoard.start());
         drive.followTrajectorySequence(toBoard);
+        drive.waitForIdle();
+
+        drive.setPoseEstimate(park.start());
+        drive.followTrajectorySequence(park);
+        drive.waitForIdle();
 
         //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
 
