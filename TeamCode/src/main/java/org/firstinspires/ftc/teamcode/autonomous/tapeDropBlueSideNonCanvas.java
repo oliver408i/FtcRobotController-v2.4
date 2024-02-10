@@ -97,14 +97,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
 
         ExposureControl exposureControl;
         GainControl gainControl;
-        exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-        exposureControl.setMode(ExposureControl.Mode.Manual);
-        exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
 
-
-        gainControl = visionPortal.getCameraControl(GainControl.class);
-        gainControl.setGain(255);
 
         //exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
 
@@ -114,6 +107,15 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
                 visionPortal.close();
             }
             telemetryTfod();
+
+            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
+
+
+            gainControl = visionPortal.getCameraControl(GainControl.class);
+            gainControl.setGain(255);
 
             // Push telemetry to the Driver Station.
             telemetry.update();
