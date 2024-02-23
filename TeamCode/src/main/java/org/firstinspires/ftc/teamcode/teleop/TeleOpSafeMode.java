@@ -1,17 +1,10 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.control.PIDFController;
-//import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
@@ -23,8 +16,8 @@ import org.firstinspires.ftc.teamcode.RobotHardware;
  */
 
 @Config
-@TeleOp(name = "Omni Op Test Platform", group= "Linear Opmode")
-public class TeleOpDynamicPlatform extends LinearOpMode {
+@TeleOp(name = "TeleOp Safe Mode", group= "Linear Opmode")
+public class TeleOpSafeMode extends LinearOpMode {
     RobotHardware robot = new RobotHardware();
     private ElapsedTime runtime = new ElapsedTime();
     double additionalYaw = 0;
@@ -197,8 +190,8 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
             double max; // get top wheel speed
 
-            double regularSpeed = 0.5;
-            double superSpeed = 1;
+            double regularSpeed = 0.2;
+            double superSpeed = regularSpeed;
             //superspeed is used only when there's a stretch
             // of ground to be covered, normally not
             // to be used during matches
@@ -206,12 +199,6 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
             double axial   = -gamepad1.left_stick_y * regularSpeed;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x * regularSpeed;
             double yaw     =  gamepad1.right_stick_x* regularSpeed;
-
-            if(gamepad1.left_bumper){
-                axial   *=  superSpeed/regularSpeed; //recalculating all values, least year's method was less elegant
-                lateral *=  superSpeed/regularSpeed;
-                yaw     *=  superSpeed/regularSpeed;
-            }
 
             double leftFrontPower  = (axial + lateral + yaw);
             double rightFrontPower = (axial - lateral - yaw);
@@ -243,9 +230,6 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                 rightYawCoolDown = runtime.seconds();
             }
 
-            if (gamepad1.dpad_down) {
-
-            }
 /*
             if(gamepad2.dpad_up){
                 robot.singleMotorEncoderMovements(telemetry,2,0.05,robot.EncoderTest)\
