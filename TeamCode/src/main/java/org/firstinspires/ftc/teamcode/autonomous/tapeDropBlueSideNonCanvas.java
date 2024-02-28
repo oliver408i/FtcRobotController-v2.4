@@ -97,14 +97,7 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
 
         ExposureControl exposureControl;
         GainControl gainControl;
-        exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
-        exposureControl.setMode(ExposureControl.Mode.Manual);
-        exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
 
-
-        gainControl = visionPortal.getCameraControl(GainControl.class);
-        gainControl.setGain(255);
 
         //exposureControl.setExposure((long) 0, TimeUnit.MILLISECONDS); //prev 655
 
@@ -114,6 +107,15 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
                 visionPortal.close();
             }
             telemetryTfod();
+
+            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            //exposureControl.setMode(ExposureControl.Mode.ContinuousAuto); // prev continuousAuto
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            exposureControl.setExposure((long) 1, TimeUnit.MILLISECONDS);
+
+
+            gainControl = visionPortal.getCameraControl(GainControl.class);
+            gainControl.setGain(255);
 
             // Push telemetry to the Driver Station.
             telemetry.update();
@@ -290,24 +292,32 @@ public class tapeDropBlueSideNonCanvas extends LinearOpMode {
         drive.setPoseEstimate(untitled0.start());
         drive.followTrajectorySequence(untitled0);
 
-        TrajectorySequence toBoard = drive.trajectorySequenceBuilder(untitled0.end())
-                .lineTo(new Vector2d(-37.05, 21.95))
-                .splineToSplineHeading(new Pose2d(17.56, 19.32, Math.toRadians(26.30)), Math.toRadians(26.30))
-                .splineToSplineHeading(new Pose2d(52.68, 34.77, Math.toRadians(0.00)), Math.toRadians(12.53))
-                .build();
+//        TrajectorySequence toBoard = drive.trajectorySequenceBuilder(untitled0.end())
+//                .lineTo(new Vector2d(-37.05, 21.95))
+//                .splineToSplineHeading(new Pose2d(17.56, 19.32, Math.toRadians(26.30)), Math.toRadians(26.30))
+//                .splineToSplineHeading(new Pose2d(52.68, 34.77, Math.toRadians(0.00)), Math.toRadians(12.53))
+//                .build();
+//
+//
+//        drive.setPoseEstimate(new Pose2d(-36.60, 31.95, Math.toRadians(0.00)));
+//
+//        TrajectorySequence toBoard2 = drive.trajectorySequenceBuilder(new Pose2d(-36.60, 31.95, Math.toRadians(270.00)))
+//                //.splineToSplineHeading(new Pose2d(-31.66, 12.76, Math.toRadians(0.00)), Math.toRadians(0.00))
+//                //.splineToSplineHeading(new Pose2d(36.88, 12.06, Math.toRadians(1.54)), Math.toRadians(1.54))
+//                //.lineToSplineHeading(new Pose2d(47.32, 41.68, Math.toRadians(-1.67)))
+//                .addTemporalMarker(()->{
+//                    robot.runViperSlide(-100); //up
+//                })
+//                .build();
 
-        drive.setPoseEstimate(new Pose2d(-36.32, 31.52, Math.toRadians(270.00)));
-        TrajectorySequence toBoard2 = drive.trajectorySequenceBuilder(new Pose2d(-36.32, 31.52, Math.toRadians(270.00)))
-                .splineToSplineHeading(new Pose2d(-23.20, 15.16, Math.toRadians(0.00)), Math.toRadians(0.00))
-                .splineToSplineHeading(new Pose2d(37.59, 34.62, Math.toRadians(87.27)), Math.toRadians(87.27))
-                .splineToSplineHeading(new Pose2d(45.06, 38.29, Math.toRadians(1.35)), Math.toRadians(1.35))
-                .build();
+
 
 
 
         drive.waitForIdle();
 
-        drive.followTrajectorySequence(toBoard2);
+//        drive.followTrajectorySequence(toBoard2);
+//        drive.waitForIdle();
 
         //drive.followTrajectorySequence(toBoard);
 

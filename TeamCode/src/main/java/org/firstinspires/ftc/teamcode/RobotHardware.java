@@ -182,7 +182,8 @@ public class RobotHardware {
         servo3 = ahwMap.get(CRServo.class, "servo3");
         servo1.setDirection(DcMotorSimple.Direction.FORWARD);
         servo1.setPower(0);
-        servo2.setPosition(0);
+        //servo2.setPosition(0);
+        servo2.setPosition(0.25);
         servo3.setPower(0);
 
 
@@ -657,6 +658,15 @@ public class RobotHardware {
         spinny.setPower(0);
     }
 
+
+    /**
+     * can use endSpittingOutPixels to stop
+     */
+    public void startSpittingOutPixelsOnlySpaghetti(){
+        spaghettiIntake.setPower(0.6);
+    }
+
+
     public void startSuckingInPixels() {
         CRServo spinny = servo1;
         spaghettiIntake.setPower(-0.75);
@@ -692,14 +702,14 @@ public class RobotHardware {
         strafe(x,y,0,hypotenuse,telemetry, power);
     }
 
-    public void runViperSlide(int moveBy) {
-        int viperSlideTarget = moveBy;
+    public void runViperSlidePowerSpecified(int moveBy, double power) {
+        int viperSlideTarget = -moveBy;
         int encoderDrivingTarget = viperSlideTarget;
 
         int encoderDrivingTarget2 = -1*encoderDrivingTarget;
 
-        ViperSlide.setPower(0.5);
-        ViperSlide2.setPower(0.5);
+        ViperSlide.setPower(power);
+        ViperSlide2.setPower(power);
 
         ViperSlide.setTargetPosition((int) encoderDrivingTarget);
         ViperSlide2.setTargetPosition((int) encoderDrivingTarget*-1);
@@ -707,6 +717,10 @@ public class RobotHardware {
         ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+    }
+
+    public void runViperSlide(int moveBy){
+        runViperSlidePowerSpecified(moveBy, 0.5);
     }
 
 

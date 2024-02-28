@@ -228,6 +228,8 @@ public class tapeDropRedSide extends LinearOpMode {
 //        }
 
         TrajectorySequence untitled0 = null;
+        TrajectorySequence toBoard = null;
+        TrajectorySequence park = null;
 
         if(cubePosition.equals("left")){ // old right side code
             untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
@@ -235,44 +237,152 @@ public class tapeDropRedSide extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(1.5)
+                    .waitSeconds(0.15)
                     .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                        robot.startSpittingOutPixelsOnlySpaghetti();
+                    })
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
                     .build();
+            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.78, -31.10, Math.toRadians(180.00)))
+                    .addTemporalMarker(()->{
+                        robot.servo1.setPower(-0.3); //suck in pixels only box
+                    })
+                    .lineToSplineHeading(new Pose2d(48.3, -29.55, Math.toRadians(9)))
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(2250);
+                    })
+                    .waitSeconds(2)
+                    .addTemporalMarker(()->{
+                        robot.startSpittingOutPixels();
+                        robot.runViperSlidePowerSpecified(-2250, 0.1);
+                    })
+                    .waitSeconds(1)
+                    .addTemporalMarker(()->{
+                        robot.endSpittingOutPixels();
+                        //robot.runViperSlide(-1000);
+                    })
+                    .waitSeconds(1)
+                    .build();
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.45, -29.83, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(45.20, -63.26, Math.toRadians(180.32)))
+                    .build();
+
+            //drive.setPoseEstimate(untitled0.start());
         }
 
         if(cubePosition.equals("center")){
             untitled0 = drive.trajectorySequenceBuilder(new Pose2d(-39.14, -65.23, Math.toRadians(90.00)))
-                    .splineToSplineHeading(new Pose2d(-36.88, -37.07, Math.toRadians(90.00)), Math.toRadians(90.00))
+                    .splineToSplineHeading(new Pose2d(-36.88, -38.07, Math.toRadians(90.00)), Math.toRadians(90.00))
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(1.5)
+                    .waitSeconds(0.15)
                     .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                        robot.startSpittingOutPixelsOnlySpaghetti();
+                    })
+                    .waitSeconds(1.75)
+                    .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
                     .build();
+            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.66, Math.toRadians(90.00)))
+                    .addTemporalMarker(()->{
+                        robot.servo1.setPower(-0.3); //suck in pixels only box
+                    })
+                    .lineToSplineHeading(new Pose2d(28.28, -33.07, Math.toRadians(90.00)))
+                    .lineToSplineHeading(new Pose2d(48.3, -33, Math.toRadians(7)))
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(2250);
+                    })
+                    .waitSeconds(2)
+                    .addTemporalMarker(()->{
+                        robot.startSpittingOutPixels();
+                        robot.runViperSlidePowerSpecified(-2250, 0.1);
+                    })
+                    .waitSeconds(1)
+                    .addTemporalMarker(()->{
+                        robot.endSpittingOutPixels();
+                        //robot.runViperSlide(-1000);
+                    })
+                    .waitSeconds(1)
+                    .build();
+
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.16, -36.18, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(45.20, -63.26, Math.toRadians(180.32)))
+                    .build();
+
+
+            //drive.setPoseEstimate(untitled0.start());
 
         }
 
         if(cubePosition.equals("right")){
-            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(8.67, -65.23, Math.toRadians(90.82)))
+            untitled0 = drive.trajectorySequenceBuilder(new Pose2d(8.67, -65.23, Math.toRadians(90.00)))
                     .splineToSplineHeading(new Pose2d(11.07, -47.46, Math.toRadians(90.00)), Math.toRadians(90.00))
                     .splineToSplineHeading(new Pose2d(11.35, -31.38, Math.toRadians(0.00)), Math.toRadians(90.00))
                     .addTemporalMarker(() -> {
                         robot.startSpittingOutPixels();
                     })
-                    .waitSeconds(1.5)
+                    .waitSeconds(0.15)
                     .addTemporalMarker(() -> {
+                        robot.endSpittingOutPixels();
+                        robot.startSpittingOutPixelsOnlySpaghetti();
+                    })
+                    .waitSeconds(1.5)
+                    .addTemporalMarker(()->{
                         robot.endSpittingOutPixels();
                     })
                     .build();
+
+            toBoard = drive.trajectorySequenceBuilder(new Pose2d(11.92, -31.38, Math.toRadians(0.00)))
+                    .addTemporalMarker(()->{
+                        robot.servo1.setPower(-0.3); //suck in pixels only box
+                    })
+
+                    .lineToSplineHeading(new Pose2d(12.48, -52.25, Math.toRadians(0.55)))
+                    .splineToSplineHeading(new Pose2d(47.46, -42.38, Math.toRadians(7.00)), Math.toRadians(1.96))
+
+                    .addTemporalMarker(()->{
+                        robot.runViperSlide(2250);
+                    })
+                    .waitSeconds(2)
+                    .addTemporalMarker(()->{
+                        robot.startSpittingOutPixels();
+                        robot.runViperSlidePowerSpecified(-500, 0.5);
+                    })
+                    .waitSeconds(1)
+                    .addTemporalMarker(()->{
+                        robot.endSpittingOutPixels();
+                        //robot.runViperSlide(-1000);
+                    })
+                    .waitSeconds(1)
+                    .build();
+
+            park = drive.trajectorySequenceBuilder(new Pose2d(48.31, -42.52, Math.toRadians(0.00)))
+                    .lineToSplineHeading(new Pose2d(45.20, -63.26, Math.toRadians(180.32)))
+                    .build();
+
+
+            //drive.setPoseEstimate(untitled0.start());
 
         }
 
         drive.setPoseEstimate(untitled0.start());
         drive.followTrajectorySequence(untitled0);
+        drive.waitForIdle();
+
+        drive.setPoseEstimate(toBoard.start());
+        drive.followTrajectorySequence(toBoard);
+        drive.waitForIdle();
+
+        drive.setPoseEstimate(park.start());
+        drive.followTrajectorySequence(park);
+        drive.waitForIdle();
 
         //TrajectorySequence moveToBoard = drive.trajectorySequenceBuilder(untitled0.end());
 
