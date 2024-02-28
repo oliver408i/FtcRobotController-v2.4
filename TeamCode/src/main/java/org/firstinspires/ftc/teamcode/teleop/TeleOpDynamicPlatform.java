@@ -59,14 +59,14 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
 
     boolean viperSlideAlternativeControl = false;
 
+
     Thread vsController = new Thread() {
+        double encoderDrivingTarget = 0;
+        double encoderDrivingTarget2 = 0;
         public void run() {
             // Init vars
             double viperSlideTarget = 0;
             double rotationsNeeded = 0;
-            double encoderDrivingTarget = 0;
-            double encoderDrivingTarget2 = 0;
-
             // Init viperslides
             robot.ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -115,32 +115,40 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                     robot.ViperSlide2.setPower(0.5);
                     viperSlideTarget = 0;
                     rotationsNeeded = 0;
-                    encoderDrivingTarget = 0;
-                    encoderDrivingTarget2 = 0;
+                    this.encoderDrivingTarget = 0;
+                    this.encoderDrivingTarget2 = 0;
                     viperSlideAlternativeControl = false;
                 }
 
                 if (!viperSlideAlternativeControl) {
-                    viperSlideTarget += gamepad2.left_stick_y * 0.5;
-                    rotationsNeeded = viperSlideTarget / RobotHardware.VS_CIRCUMFERENCE;
-
-                    encoderDrivingTarget = rotationsNeeded * RobotHardware.TICK_COUNT;
-
-                    if (encoderDrivingTarget > 1) {
-                        encoderDrivingTarget = 0;
-                    }
-
-                    if (encoderDrivingTarget < -3501) {
-                        encoderDrivingTarget = -3500;
-                    }
-
-                    encoderDrivingTarget2 = -encoderDrivingTarget;
-
                     robot.ViperSlide.setPower(0.5);
                     robot.ViperSlide2.setPower(0.5);
 
-                    robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
-                    robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
+                    if (gamepad2.left_stick_y < 0.5 && gamepad2.left_stick_y > -0.5) {
+                        robot.ViperSlide.setTargetPosition((int) robot.ViperSlide.getCurrentPosition());
+                        robot.ViperSlide2.setTargetPosition((int) robot.ViperSlide2.getCurrentPosition());
+                        encoderDrivingTarget = robot.ViperSlide.getTargetPosition();
+                    } else {
+                        viperSlideTarget += gamepad2.left_stick_y * 0.5;
+                        rotationsNeeded = viperSlideTarget / RobotHardware.VS_CIRCUMFERENCE;
+
+                        encoderDrivingTarget = rotationsNeeded * RobotHardware.TICK_COUNT;
+
+                        if (encoderDrivingTarget > 1) {
+                            encoderDrivingTarget = 0;
+                        }
+
+                        if (encoderDrivingTarget < -3501) {
+                            encoderDrivingTarget = -3500;
+                        }
+
+                        encoderDrivingTarget2 = -encoderDrivingTarget;
+
+
+
+                        robot.ViperSlide.setTargetPosition((int) encoderDrivingTarget);
+                        robot.ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
+                    }
 
                     robot.ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);

@@ -190,8 +190,8 @@ public class TeleOpSafeMode extends LinearOpMode {
 
             double max; // get top wheel speed
 
-            double regularSpeed = 0.2;
-            double superSpeed = regularSpeed;
+            double regularSpeed = 0.5;
+            double superSpeed = 1;
             //superspeed is used only when there's a stretch
             // of ground to be covered, normally not
             // to be used during matches
