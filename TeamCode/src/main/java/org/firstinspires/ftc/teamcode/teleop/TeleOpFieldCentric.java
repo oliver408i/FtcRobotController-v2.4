@@ -26,10 +26,11 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // We want to turn off velocity control for teleop
         // Velocity control per wheel is not necessary outside of motion profiled auto
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setMotorPowers(0.5,0.5,0.5,0.5);
 
         // Retrieve our pose from the PoseStorage.currentPose static field
         // See AutoTransferPose.java for further details
-        Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(0, 0, 0);
 
         drive.setPoseEstimate(startPose);
 
@@ -54,7 +55,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                     new Pose2d(
                             input.getX(),
                             input.getY(),
-                            -gamepad1.right_stick_x
+                            -gamepad1.right_stick_x*0.5
                     )
             );
 

@@ -128,6 +128,9 @@ public class TeleOpDynamicPlatform extends LinearOpMode {
                         robot.ViperSlide.setTargetPosition((int) robot.ViperSlide.getCurrentPosition());
                         robot.ViperSlide2.setTargetPosition((int) robot.ViperSlide2.getCurrentPosition());
                         this.encoderDrivingTarget = robot.ViperSlide.getTargetPosition();
+                        double rotationsNeed = encoderDrivingTarget / RobotHardware.TICK_COUNT;
+                        viperSlideTarget = rotationsNeed * RobotHardware.VS_CIRCUMFERENCE;
+
                     } else {
                         viperSlideTarget += gamepad2.left_stick_y * 0.5;
                         rotationsNeeded = viperSlideTarget / RobotHardware.VS_CIRCUMFERENCE;
