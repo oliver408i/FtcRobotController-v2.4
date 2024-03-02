@@ -22,7 +22,10 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Initialize SampleMecanumDrive
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        //
+        DcMotor ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
+        DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
+        DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
+
         CRServo spinny = hardwareMap.crservo.get("servo1");
 
         // We want to turn off velocity control for teleop
