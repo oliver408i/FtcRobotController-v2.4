@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 /**
@@ -29,11 +30,123 @@ public class TeleOpFieldCentric extends LinearOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         drive.setPoseEstimate(new Pose2d(0,0,0));
+        boolean viperSlideAlternativeControl = false;
 
+
+        Thread vsController = new Thread() {
+            double encoderDrivingTarget = 0;
+            double encoderDrivingTarget2 = 0;
+            public void run() {
+                // Init vars
+                double viperSlideTarget = 0;
+                double rotationsNeeded = 0;
+                // Init viperslides
+                ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                ViperSlide.setTargetPosition(0);
+                ViperSlide2.setTargetPosition(0);
+
+
+                ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                ViperSlide.setPower(0.5);
+                ViperSlide2.setPower(0.5);
+
+                while (opModeIsActive()) {
+
+                    // Gamepad 2 x to activate alt control
+                    if (!viperSlideAlternativeControl && gamepad2.x) {
+                        ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        ViperSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        ViperSlide2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        ViperSlide.setPower(0);
+                        ViperSlide2.setPower(0);
+                        viperSlideAlternativeControl = true;
+                    }
+
+                    if (viperSlideAlternativeControl && gamepad2.y) {
+                        // This ensures the slide is in 0 position
+                        ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        ViperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        ViperSlide2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                        ViperSlide.setTargetPosition(0);
+                        ViperSlide2.setTargetPosition(0);
+
+
+                        ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        ViperSlide.setPower(0.5);
+                        ViperSlide2.setPower(0.5);
+                        viperSlideTarget = 0;
+                        rotationsNeeded = 0;
+                        this.encoderDrivingTarget = 0;
+                        this.encoderDrivingTarget2 = 0;
+                        viperSlideAlternativeControl = false;
+                    }
+
+                    if (!viperSlideAlternativeControl) {
+                        ViperSlide.setPower(0.5);
+                        ViperSlide2.setPower(0.5);
+
+                        if (gamepad2.left_stick_y < 0.1 && gamepad2.left_stick_y > -0.1) {
+                            ViperSlide.setTargetPosition((int) ViperSlide.getCurrentPosition());
+                            ViperSlide2.setTargetPosition((int) ViperSlide2.getCurrentPosition());
+                            this.encoderDrivingTarget = ViperSlide.getTargetPosition();
+                            double rotationsNeed = encoderDrivingTarget / RobotHardware.TICK_COUNT;
+                            viperSlideTarget = rotationsNeed * RobotHardware.VS_CIRCUMFERENCE;
+
+                        } else {
+                            viperSlideTarget += gamepad2.left_stick_y * 0.5;
+                            rotationsNeeded = viperSlideTarget / RobotHardware.VS_CIRCUMFERENCE;
+
+                            encoderDrivingTarget = rotationsNeeded * RobotHardware.TICK_COUNT;
+
+                            if (encoderDrivingTarget > 1) {
+                                encoderDrivingTarget = 0;
+                            }
+
+                            if (encoderDrivingTarget < -3501) {
+                                encoderDrivingTarget = -3500;
+                            }
+
+                            encoderDrivingTarget2 = -encoderDrivingTarget;
+
+
+
+                            ViperSlide.setTargetPosition((int) encoderDrivingTarget);
+                            ViperSlide2.setTargetPosition((int) encoderDrivingTarget2);
+                        }
+
+                        ViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        ViperSlide2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        //viperslide1 is positive when extended
+                        //viperslide2 is negative when extended
+
+                    } else {
+                        ViperSlide.setPower(gamepad2.left_stick_y*0.5);
+                        ViperSlide2.setPower(gamepad2.left_stick_y*-0.5);
+                    }
+                }
+            }
+        };
+
+        
+        
         waitForStart();
-
         if (isStopRequested()) return;
-
+        
+        
+        
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
             Pose2d poseEstimate = drive.getPoseEstimate();
