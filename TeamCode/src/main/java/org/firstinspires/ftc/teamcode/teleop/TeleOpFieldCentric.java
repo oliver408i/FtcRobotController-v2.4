@@ -29,6 +29,8 @@ public class TeleOpFieldCentric extends LinearOpMode {
         DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
         DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
 
+        double speedMultiplier = 0.5;
+
         CRServo spinny = hardwareMap.get(CRServo.class, "servo1");
         Servo servo2 = hardwareMap.get(Servo.class, "servo2");
 
@@ -41,6 +43,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         drive.setPoseEstimate(new Pose2d(0,0,0));
+        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 
         Thread vsController = new Thread() {
@@ -166,8 +169,8 @@ public class TeleOpFieldCentric extends LinearOpMode {
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading
             Vector2d input = new Vector2d(
-                    -gamepad1.left_stick_y*0.5,
-                    -gamepad1.left_stick_x*0.5
+                    -gamepad1.left_stick_y*speedMultiplier,
+                    -gamepad1.left_stick_x*speedMultiplier
             ).rotated(-poseEstimate.getHeading());
 
             // Pass in the rotated input + right stick value for rotation
@@ -200,6 +203,13 @@ public class TeleOpFieldCentric extends LinearOpMode {
 
             if(gamepad2.dpad_up){
                 servo2.setPosition(0);
+            }
+
+            // superspeed
+            if (gamepad1.left_bumper) {
+                speedMultiplier = 1;
+            } else {
+                speedMultiplier = 0.5;
             }
 
             // intake lifter code
