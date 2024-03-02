@@ -157,7 +157,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
         
-        
+        vsController.start();
         
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
