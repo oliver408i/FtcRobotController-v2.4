@@ -27,6 +27,9 @@ public class TeleOpFieldCentric extends LinearOpMode {
         DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
 
         CRServo spinny = hardwareMap.crservo.get("servo1");
+        ViperSlide.setDirection(DcMotor.Direction.FORWARD);
+        ViperSlide2.setDirection(DcMotor.Direction.FORWARD);
+        spaghettiIntake.setDirection(DcMotor.Direction.FORWARD);
 
         // We want to turn off velocity control for teleop
         // Velocity control per wheel is not necessary outside of motion profiled auto
