@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -19,6 +20,9 @@ public class TeleOpFieldCentric extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Initialize SampleMecanumDrive
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        //
+        CRServo spinny = hardwareMap.crservo.get("servo1");
 
         // We want to turn off velocity control for teleop
         // Velocity control per wheel is not necessary outside of motion profiled auto
@@ -50,6 +54,37 @@ public class TeleOpFieldCentric extends LinearOpMode {
                             -gamepad1.right_stick_x*0.5
                     )
             );
+            // Spinny (Intake) control
+            // A - pixel in
+            if(gamepad2.a){
+                spinny.setPower(-0.6);
+            }
+
+            //B - pixel out
+            else if (gamepad2.b) {
+                spinny.setPower(0.6);
+            }
+            else{
+                spinny.setPower(0);
+            }
+
+            //plane launcher code
+            if(gamepad2.dpad_down){ //depends on servo orientation. swap at will
+                servo2.setPosition(0.25);
+            }
+
+            if(gamepad2.dpad_up){
+                servo2.setPosition(0);
+            }
+
+            // intake lifter code
+            if(gamepad2.dpad_left){
+                spaghettiIntake.setPower(0.75); //shoot out
+            }else if(gamepad2.dpad_right){
+                spaghettiIntake.setPower(-0.75); //suck in
+            }else{
+                spaghettiIntake.setPower(0);
+            }
 
             // Update everything. Odometry. Etc.
             drive.update();
