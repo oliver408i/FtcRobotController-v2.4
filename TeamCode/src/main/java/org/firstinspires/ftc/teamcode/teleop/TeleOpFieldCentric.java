@@ -25,15 +25,19 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Initialize SampleMecanumDrive
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+        // Grab motors
         DcMotor ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
         DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
         DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
 
+        // Superspeed use
         double speedMultiplier = 0.5;
 
+        // Grab servos
         CRServo spinny = hardwareMap.get(CRServo.class, "servo1");
         Servo servo2 = hardwareMap.get(Servo.class, "servo2");
 
+        // Init motors
         ViperSlide.setDirection(DcMotor.Direction.FORWARD);
         ViperSlide2.setDirection(DcMotor.Direction.FORWARD);
         spaghettiIntake.setDirection(DcMotor.Direction.FORWARD);
@@ -42,13 +46,18 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Velocity control per wheel is not necessary outside of motion profiled auto
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        // Set a starting pose
         drive.setPoseEstimate(new Pose2d(0,0,0));
+
+        // Set the brake mode for all motors
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-
+        // Viper slide controller thread
         Thread vsController = new Thread() {
             double encoderDrivingTarget = 0;
             boolean viperSlideAlternativeControl = false;
+
+            // TODO: Find a way to pass viperSlideAltControl outside for telemetry
 
             double encoderDrivingTarget2 = 0;
             public void run() {
@@ -85,6 +94,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         viperSlideAlternativeControl = true;
                     }
 
+                    // Reset to pid mode
                     if (viperSlideAlternativeControl && gamepad2.y) {
                         // This ensures the slide is in 0 position
                         ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -108,23 +118,30 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         viperSlideAlternativeControl = false;
                     }
 
+                    // Pid Mode
                     if (!viperSlideAlternativeControl) {
                         ViperSlide.setPower(0.5);
                         ViperSlide2.setPower(0.5);
 
+                        // If joystick is released, reset target position to current position
                         if (gamepad2.left_stick_y < 0.1 && gamepad2.left_stick_y > -0.1) {
                             ViperSlide.setTargetPosition((int) ViperSlide.getCurrentPosition());
                             ViperSlide2.setTargetPosition((int) ViperSlide2.getCurrentPosition());
+
+                            // Reverse calculate rotations
                             this.encoderDrivingTarget = ViperSlide.getTargetPosition();
                             double rotationsNeed = encoderDrivingTarget / RobotHardware.TICK_COUNT;
                             viperSlideTarget = rotationsNeed * RobotHardware.VS_CIRCUMFERENCE;
 
                         } else {
+
+                            // Normal PID Operation
                             viperSlideTarget += gamepad2.left_stick_y * 0.5;
                             rotationsNeeded = viperSlideTarget / RobotHardware.VS_CIRCUMFERENCE;
 
                             encoderDrivingTarget = rotationsNeeded * RobotHardware.TICK_COUNT;
 
+                            // Check bounds
                             if (encoderDrivingTarget > 1) {
                                 encoderDrivingTarget = 0;
                             }
@@ -148,6 +165,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         //viperslide2 is negative when extended
 
                     } else {
+                        // Alternative control mode
                         ViperSlide.setPower(gamepad2.left_stick_y*0.5);
                         ViperSlide2.setPower(gamepad2.left_stick_y*-0.5);
                     }
@@ -160,7 +178,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
         
-        vsController.start();
+        vsController.start(); // Activate vs Controller
         
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
@@ -179,10 +197,10 @@ public class TeleOpFieldCentric extends LinearOpMode {
                     new Pose2d(
                             input.getX(),
                             input.getY(),
-                            -gamepad1.right_stick_x*0.5
+                            -gamepad1.right_stick_x*0.5 // Rotation go less
                     )
             );
-            // Spinny (Intake) control
+            // Spinny (Intake wheel) control
             // A - pixel in
             if(gamepad2.a){
                 spinny.setPower(-0.6);
@@ -196,12 +214,12 @@ public class TeleOpFieldCentric extends LinearOpMode {
                 spinny.setPower(0);
             }
 
-            //plane launcher code
-            if(gamepad2.dpad_down){ //depends on servo orientation. swap at will
+            // plane launcher code
+            if(gamepad2.dpad_down){ // Reset
                 servo2.setPosition(0.25);
             }
 
-            if(gamepad2.dpad_up){
+            if(gamepad2.dpad_up){ // Launch
                 servo2.setPosition(0);
             }
 
