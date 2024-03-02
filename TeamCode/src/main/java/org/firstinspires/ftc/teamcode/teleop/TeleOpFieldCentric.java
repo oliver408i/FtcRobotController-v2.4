@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
@@ -26,7 +27,9 @@ public class TeleOpFieldCentric extends LinearOpMode {
         DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
         DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
 
-        CRServo spinny = hardwareMap.crservo.get("servo1");
+        CRServo spinny = hardwareMap.get(CRServo.class, "servo1");
+        Servo servo2 = hardwareMap.get(Servo.class, "servo2");
+
         ViperSlide.setDirection(DcMotor.Direction.FORWARD);
         ViperSlide2.setDirection(DcMotor.Direction.FORWARD);
         spaghettiIntake.setDirection(DcMotor.Direction.FORWARD);
@@ -36,11 +39,12 @@ public class TeleOpFieldCentric extends LinearOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         drive.setPoseEstimate(new Pose2d(0,0,0));
-        boolean viperSlideAlternativeControl = false;
 
 
         Thread vsController = new Thread() {
             double encoderDrivingTarget = 0;
+            boolean viperSlideAlternativeControl = false;
+
             double encoderDrivingTarget2 = 0;
             public void run() {
                 // Init vars
