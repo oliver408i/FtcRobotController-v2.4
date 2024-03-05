@@ -214,6 +214,11 @@ public class TeleOpFieldCentric extends LinearOpMode {
                 spinny.setPower(0);
             }
 
+            // Rest the rotation/heading of the robot to 0 degrees in case of drift
+            if (gamepad1.y) {
+                drive.setPoseEstimate(new Pose2d(0,0,0));
+            }
+
             // plane launcher code
             if(gamepad2.dpad_down){ // Reset
                 servo2.setPosition(0.25);
