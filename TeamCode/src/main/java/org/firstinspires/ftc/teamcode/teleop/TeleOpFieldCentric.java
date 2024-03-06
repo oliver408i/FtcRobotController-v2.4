@@ -42,6 +42,9 @@ public class TeleOpFieldCentric extends LinearOpMode {
         ViperSlide2.setDirection(DcMotor.Direction.FORWARD);
         spaghettiIntake.setDirection(DcMotor.Direction.FORWARD);
 
+        //triggerOffset for trigger movements
+        double triggerOffset = gamepad1.left_stick_x * speedMultiplier;
+
         // We want to turn off velocity control for teleop
         // Velocity control per wheel is not necessary outside of motion profiled auto
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -184,12 +187,21 @@ public class TeleOpFieldCentric extends LinearOpMode {
             // Read pose
             Pose2d poseEstimate = drive.getPoseEstimate();
 
+
+            //checks if user pressed trigger or moved stick, move robot is corresponding way
+            if (gamepad1.left_trigger < 0.05 || gamepad1.right_trigger < 0.05){
+                triggerOffset = gamepad1.right_trigger - gamepad1.left_trigger;
+            }else{
+                triggerOffset = gamepad1.left_stick_x * speedMultiplier;
+            }
+
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading
             Vector2d input = new Vector2d(
-                    -gamepad1.left_stick_y*speedMultiplier,
-                    -gamepad1.left_stick_x*speedMultiplier
+                    -gamepad1.left_stick_y * speedMultiplier,
+                     -triggerOffset
             ).rotated(-poseEstimate.getHeading());
+
 
             // Pass in the rotated input + right stick value for rotation
             // Rotation is not part of the rotated input thus must be passed in separately
