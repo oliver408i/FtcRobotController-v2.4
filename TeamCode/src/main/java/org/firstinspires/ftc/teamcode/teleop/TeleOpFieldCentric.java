@@ -189,7 +189,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
 
 
             //checks if user pressed trigger or moved stick, move robot is corresponding way
-            if (gamepad1.left_trigger < 0.05 || gamepad1.right_trigger < 0.05){
+            if (gamepad1.left_trigger > 0.05 || gamepad1.right_trigger > 0.05){
                 triggerOffset = gamepad1.right_trigger - gamepad1.left_trigger;
             }else{
                 triggerOffset = gamepad1.left_stick_x * speedMultiplier;
