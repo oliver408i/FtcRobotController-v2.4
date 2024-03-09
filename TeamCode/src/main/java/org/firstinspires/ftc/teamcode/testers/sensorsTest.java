@@ -27,6 +27,8 @@ public class sensorsTest extends LinearOpMode{
     Field[] ledPatternFields = RevBlinkinLedDriver.BlinkinPattern.class.getFields(); // Get all variables of the class
     int fIndex = 0;
 
+    // This was a signed commit
+
     @Override
     public void runOpMode() {
         touch = hardwareMap.get(TouchSensor.class, "touch");
