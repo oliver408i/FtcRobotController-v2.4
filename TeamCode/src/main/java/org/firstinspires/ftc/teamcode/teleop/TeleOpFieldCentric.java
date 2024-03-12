@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import android.util.Pair;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -11,10 +13,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
+import java.util.ArrayList;
 
 /**
  * This teleop program aims to create a separate teleop drive that is field-centric.
@@ -33,12 +38,17 @@ public class TeleOpFieldCentric extends LinearOpMode {
         DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
         DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
 
+        // Grab distance sensor
         final DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "color");
 
+        // Grab LED driver
         final RevBlinkinLedDriver ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "ledDriver");
 
         // Superspeed use
         double speedMultiplier = 0.5;
+
+        // Grab runtime
+        ElapsedTime runtime = new ElapsedTime();
 
         // Grab servos
         CRServo spinny = hardwareMap.get(CRServo.class, "servo1");
@@ -62,15 +72,25 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Set the brake mode for all motors
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        // LED Controller
         Thread LedController = new Thread() {
             public void run() {
+                double lastTime = runtime.seconds();
+                double timeRemaining = 0;
+                double distance;
+
+                final long LEDChangeDuration = 3; // Second to flash an intermediate color when enviroment changes
+
+                int lastCode = 0;
                 while (opModeIsActive()) {
-                    if (dist.getDistance(DistanceUnit.CM) > 6) {
-                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-                    } else if (dist.getDistance(DistanceUnit.CM) > 1) {
-                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
-                    } else if (dist.getDistance(DistanceUnit.CM) < 1) {
+                    distance = dist.getDistance(DistanceUnit.CM);
+
+                    if (distance > 6) { // No pixels
                         ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+                    } else if (distance > 1) { // One pixel only
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
+                    } else { // Both pixels
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
                     }
                 }
             }
@@ -203,7 +223,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
         
         vsController.start(); // Activate vs Controller
         LedController.start();
-        
+
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
             Pose2d poseEstimate = drive.getPoseEstimate();
