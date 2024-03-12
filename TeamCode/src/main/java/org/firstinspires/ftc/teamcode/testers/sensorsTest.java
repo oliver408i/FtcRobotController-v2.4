@@ -2,10 +2,13 @@ package org.firstinspires.ftc.teamcode.testers;
 
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import android.graphics.Color;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.lang.reflect.Field;
 
@@ -21,6 +24,7 @@ import java.lang.reflect.Field;
 public class sensorsTest extends LinearOpMode{
     TouchSensor touch;
     ColorSensor color;
+    DistanceSensor dist;
     String colorR;
     RevBlinkinLedDriver ledDriver;
     boolean prevTouch = false;
@@ -33,6 +37,7 @@ public class sensorsTest extends LinearOpMode{
     public void runOpMode() {
         touch = hardwareMap.get(TouchSensor.class, "touch");
         color = hardwareMap.get(ColorSensor.class, "color");
+        dist = hardwareMap.get(DistanceSensor.class, "color");
 
 
         // Remove if no led yet
@@ -117,6 +122,7 @@ public class sensorsTest extends LinearOpMode{
             telemetry.addData("Value", hsvValues[2]);
             telemetry.addData("ledPattern", ledPatternFields[fIndex].getName());
             telemetry.addData("touch", touch.getValue()); // Touch sensor direct output
+            telemetry.addData("Distance",dist.getDistance(DistanceUnit.CM));
             // May use touch.isPressed()
             telemetry.update();
         }

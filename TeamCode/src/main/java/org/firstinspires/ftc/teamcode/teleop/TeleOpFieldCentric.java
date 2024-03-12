@@ -2,14 +2,17 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -29,6 +32,10 @@ public class TeleOpFieldCentric extends LinearOpMode {
         DcMotor ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
         DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
         DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
+
+        final DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "color");
+
+        final RevBlinkinLedDriver ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "ledDriver");
 
         // Superspeed use
         double speedMultiplier = 0.5;
@@ -55,6 +62,19 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Set the brake mode for all motors
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        Thread LedController = new Thread() {
+            public void run() {
+                while (opModeIsActive()) {
+                    if (dist.getDistance(DistanceUnit.CM) > 6) {
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+                    } else if (dist.getDistance(DistanceUnit.CM) > 1) {
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
+                    } else if (dist.getDistance(DistanceUnit.CM) < 1) {
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+                    }
+                }
+            }
+        };
         // Viper slide controller thread
         Thread vsController = new Thread() {
             double encoderDrivingTarget = 0;
@@ -182,6 +202,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
         if (isStopRequested()) return;
         
         vsController.start(); // Activate vs Controller
+        LedController.start();
         
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
@@ -263,6 +284,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.addData("distance", dist.getDistance(DistanceUnit.CM));
             telemetry.update();
         }
     }
