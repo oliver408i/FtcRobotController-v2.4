@@ -210,17 +210,20 @@ public class TeleOpFieldCentric extends LinearOpMode {
             }
         };
 
-        
-        
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+
         waitForStart();
         if (isStopRequested()) return;
         
         vsController.start(); // Activate vs Controller
-        LedController.start();
+        //LedController.start();
 
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
             Pose2d poseEstimate = drive.getPoseEstimate();
+
+            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+
 
 
             //checks if user pressed trigger or moved stick, move robot is corresponding way
