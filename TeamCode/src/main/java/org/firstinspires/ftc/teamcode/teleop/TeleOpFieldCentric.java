@@ -79,7 +79,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                 while (opModeIsActive()) {
                     distance = dist.getDistance(DistanceUnit.CM);
 
-                    if (distance > 6) { // No pixels
+                    if (distance > 4.5) { // No pixels
                         ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
                     } else if (distance > 1) { // One pixel only
                         ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
@@ -210,20 +210,17 @@ public class TeleOpFieldCentric extends LinearOpMode {
             }
         };
 
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
 
         waitForStart();
         if (isStopRequested()) return;
         
         vsController.start(); // Activate vs Controller
-        //LedController.start();
+        LedController.start();
 
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
             Pose2d poseEstimate = drive.getPoseEstimate();
-
-            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-
 
 
             //checks if user pressed trigger or moved stick, move robot is corresponding way
