@@ -2,14 +2,16 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -30,8 +32,17 @@ public class TeleOpFieldCentric extends LinearOpMode {
         DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
         DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
 
+        // Grab distance sensor
+        final DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "color");
+
+        // Grab LED driver
+        final RevBlinkinLedDriver ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "ledDriver");
+
         // Superspeed use
         double speedMultiplier = 0.5;
+
+        // Grab runtime
+        ElapsedTime runtime = new ElapsedTime();
 
         // Grab servos
         CRServo spinny = hardwareMap.get(CRServo.class, "servo1");
@@ -55,6 +66,29 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Set the brake mode for all motors
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        // LED Controller
+        Thread LedController = new Thread() {
+            public void run() {
+                double lastTime = runtime.seconds();
+                double timeRemaining = 0;
+                double distance;
+
+                final long LEDChangeDuration = 3; // Second to flash an intermediate color when enviroment changes
+
+                int lastCode = 0;
+                while (opModeIsActive()) {
+                    distance = dist.getDistance(DistanceUnit.CM);
+
+                    if (distance > 6) { // No pixels
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+                    } else if (distance > 1) { // One pixel only
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
+                    } else { // Both pixels
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+                    }
+                }
+            }
+        };
         // Viper slide controller thread
         Thread vsController = new Thread() {
             double encoderDrivingTarget = 0;
@@ -176,16 +210,20 @@ public class TeleOpFieldCentric extends LinearOpMode {
             }
         };
 
-        
-        
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+
         waitForStart();
         if (isStopRequested()) return;
         
         vsController.start(); // Activate vs Controller
-        
+        //LedController.start();
+
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
             Pose2d poseEstimate = drive.getPoseEstimate();
+
+            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+
 
 
             //checks if user pressed trigger or moved stick, move robot is corresponding way
@@ -263,6 +301,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.addData("distance", dist.getDistance(DistanceUnit.CM));
             telemetry.update();
         }
     }

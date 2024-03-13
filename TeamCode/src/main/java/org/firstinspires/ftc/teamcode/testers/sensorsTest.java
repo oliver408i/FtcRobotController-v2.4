@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.testers;
 
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import android.graphics.Color;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.lang.reflect.Field;
 
@@ -21,6 +25,7 @@ import java.lang.reflect.Field;
 public class sensorsTest extends LinearOpMode{
     TouchSensor touch;
     ColorSensor color;
+    DistanceSensor dist;
     String colorR;
     RevBlinkinLedDriver ledDriver;
     boolean prevTouch = false;
@@ -32,18 +37,25 @@ public class sensorsTest extends LinearOpMode{
     @Override
     public void runOpMode() {
         touch = hardwareMap.get(TouchSensor.class, "touch");
-        color = hardwareMap.get(ColorSensor.class, "color");
+        //color = hardwareMap.get(ColorSensor.class, "color");
+        //dist = hardwareMap.get(DistanceSensor.class, "color");
 
 
         // Remove if no led yet
         ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "ledDriver");
 
+        //ledDriver.resetDeviceConfigurationForOpMode();
+
+        //Servo led = hardwareMap.get(Servo.class, "led");
+
 
         float hsvValues[] = {0F, 0F, 0F};
         final double SCALE_FACTOR = 255;
         waitForStart();
+        //led.setPosition(0.5);
         while (opModeIsActive()) {
-
+            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+            /*
             if (touch.isPressed() && !prevTouch) {
                 prevTouch = true;
                 if (fIndex == ledPatternFields.length-1) {
@@ -53,10 +65,11 @@ public class sensorsTest extends LinearOpMode{
                 }
             } else if (!touch.isPressed() && prevTouch) {
                 prevTouch = false;
-            }
+            }*/
 
-            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.valueOf(ledPatternFields[fIndex].getName()));
+            //ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.valueOf(ledPatternFields[fIndex].getName()));
 
+            /*
             // Grab color RGBs
             int R = (int) color.red();
             int G = (int) color.green();
@@ -70,7 +83,7 @@ public class sensorsTest extends LinearOpMode{
             The ratios (proportions) seem to be more stable at a set distance than the raw values
 
             Note that the pixel still passes through too fast for an accurate color detection
-             */
+             /
             double R2G = (double)R / G;
             double G2B = (double)G / B;
             double R2B = (double)R / B;
@@ -82,7 +95,7 @@ public class sensorsTest extends LinearOpMode{
             /*
             The ratio G:B seems to be most unique amongst the pixel colors
             Therefore, we are using it
-             */
+             /
             double xe = G2B;
             if (0 <= xe && xe < 0.8) {
                 colorR = "purple";
@@ -101,7 +114,7 @@ public class sensorsTest extends LinearOpMode{
             Hue is correct, 0 - 999
             Saturation is correct, 0 - 1
             However, value goes extremely high
-             */
+             /
             Color.RGBToHSV((int) (color.red() * SCALE_FACTOR),
                     (int) (color.green() * SCALE_FACTOR),
                     (int) (color.blue() * SCALE_FACTOR),
@@ -109,14 +122,19 @@ public class sensorsTest extends LinearOpMode{
             if (R > G && B > G && (R + B) > (2 * G)) {
                 telemetry.addData("Purple", "Yes");
             }
+
             telemetry.addData("R", R);
             telemetry.addData("G", G);
             telemetry.addData("B", B);
+
+             *//*
             telemetry.addData("Hue", hsvValues[0]);
             telemetry.addData("Saturation", hsvValues[1]);
             telemetry.addData("Value", hsvValues[2]);
+            */
             telemetry.addData("ledPattern", ledPatternFields[fIndex].getName());
             telemetry.addData("touch", touch.getValue()); // Touch sensor direct output
+            //telemetry.addData("Distance",dist.getDistance(DistanceUnit.CM));
             // May use touch.isPressed()
             telemetry.update();
         }
