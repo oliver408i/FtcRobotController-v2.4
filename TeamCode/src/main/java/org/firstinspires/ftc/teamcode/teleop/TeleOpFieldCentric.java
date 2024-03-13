@@ -66,25 +66,28 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Set the brake mode for all motors
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        // MET in seconds for the thread to NOT change the leds
+        // Is a final array because it needs to be accessed in inner class (threads)
+        final double[] doNotChangeLedsUtil = {0};
+
+
         // LED Controller
         Thread LedController = new Thread() {
             public void run() {
-                double lastTime = runtime.seconds();
-                double timeRemaining = 0;
                 double distance;
-
-                final long LEDChangeDuration = 3; // Second to flash an intermediate color when enviroment changes
 
                 int lastCode = 0;
                 while (opModeIsActive()) {
-                    distance = dist.getDistance(DistanceUnit.CM);
+                    if (doNotChangeLedsUtil[0] < runtime.seconds()) {
+                        distance = dist.getDistance(DistanceUnit.CM);
 
-                    if (distance > 4.5) { // No pixels
-                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
-                    } else if (distance > 1) { // One pixel only
-                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
-                    } else { // Both pixels
-                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+                        if (distance > 4.5) { // No pixels
+                            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+                        } else if (distance > 1) { // One pixel only
+                            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
+                        } else { // Both pixels
+                            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+                        }
                     }
                 }
             }
@@ -129,6 +132,8 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         ViperSlide.setPower(0);
                         ViperSlide2.setPower(0);
                         viperSlideAlternativeControl = true;
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+                        doNotChangeLedsUtil[0] = runtime.seconds() + 1;
                     }
 
                     // Reset to pid mode
@@ -153,6 +158,8 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         this.encoderDrivingTarget = 0;
                         this.encoderDrivingTarget2 = 0;
                         viperSlideAlternativeControl = false;
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
+                        doNotChangeLedsUtil[0] = runtime.seconds() + 1;
                     }
 
                     // Pid Mode
@@ -210,13 +217,17 @@ public class TeleOpFieldCentric extends LinearOpMode {
             }
         };
 
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_BREATH_FAST);
 
         waitForStart();
         if (isStopRequested()) return;
         
         vsController.start(); // Activate vs Controller
         LedController.start();
+
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_SPARKLE_1_ON_2);
+        doNotChangeLedsUtil[0] = runtime.seconds() + 2;
+
 
         while (opModeIsActive() && !isStopRequested()) {
             // Read pose
