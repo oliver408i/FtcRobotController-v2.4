@@ -25,12 +25,12 @@ public class TeleOpFieldCentric extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize SampleMecanumDrive
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        final SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         // Grab motors
-        DcMotor ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
-        DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
-        DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
+        final DcMotor ViperSlide = hardwareMap.get(DcMotor.class, "ViperSlide");
+        final DcMotor ViperSlide2 = hardwareMap.get(DcMotor.class, "ViperSlide2");
+        final DcMotor spaghettiIntake = hardwareMap.get(DcMotor.class, "spaghettiIntake");
 
         // Grab distance sensor
         final DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "color");
@@ -42,11 +42,11 @@ public class TeleOpFieldCentric extends LinearOpMode {
         double speedMultiplier = 0.5;
 
         // Grab runtime
-        ElapsedTime runtime = new ElapsedTime();
+        final ElapsedTime runtime = new ElapsedTime();
 
         // Grab servos
-        CRServo spinny = hardwareMap.get(CRServo.class, "servo1");
-        Servo servo2 = hardwareMap.get(Servo.class, "servo2");
+        final CRServo spinny = hardwareMap.get(CRServo.class, "servo1");
+        final Servo servo2 = hardwareMap.get(Servo.class, "servo2");
 
         // Init motors
         ViperSlide.setDirection(DcMotor.Direction.FORWARD);
@@ -72,12 +72,13 @@ public class TeleOpFieldCentric extends LinearOpMode {
 
         double distance; // For use in led
 
+        // Viper slide control mode for telemetry
+        // Is a final array because it needs to be accessed in inner class (threads)
+        final boolean[] viperSlideAlternativeControl = {false};
+
         // Viper slide controller thread
         Thread vsController = new Thread() {
             double encoderDrivingTarget = 0;
-            boolean viperSlideAlternativeControl = false;
-
-            // TODO: Find a way to pass viperSlideAltControl outside for telemetry
 
             double encoderDrivingTarget2 = 0;
             public void run() {
@@ -104,7 +105,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                 while (opModeIsActive()) {
 
                     // Gamepad 2 x to activate alt control
-                    if (!viperSlideAlternativeControl && gamepad2.x) {
+                    if (!viperSlideAlternativeControl[0] && gamepad2.x) {
                         ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -112,14 +113,14 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         ViperSlide2.setPower(0);
                         ViperSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         ViperSlide2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        viperSlideAlternativeControl = true;
+                        viperSlideAlternativeControl[0] = true;
 
                         doNotChangeLedsUtil[0] = runtime.seconds() + 1;
                         ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
                     }
 
                     // Reset to pid mode
-                    if (viperSlideAlternativeControl && gamepad2.y) {
+                    if (viperSlideAlternativeControl[0] && gamepad2.y) {
                         // This ensures the slide is in 0 position
                         ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -139,7 +140,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         rotationsNeeded = 0;
                         this.encoderDrivingTarget = 0;
                         this.encoderDrivingTarget2 = 0;
-                        viperSlideAlternativeControl = false;
+                        viperSlideAlternativeControl[0] = false;
 
                         doNotChangeLedsUtil[0] = runtime.seconds() + 1;
                         ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
@@ -147,7 +148,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                     }
 
                     // Pid Mode
-                    if (!viperSlideAlternativeControl) {
+                    if (!viperSlideAlternativeControl[0]) {
                         ViperSlide.setPower(0.5);
                         ViperSlide2.setPower(0.5);
 
@@ -205,12 +206,12 @@ public class TeleOpFieldCentric extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
-        
+
         vsController.start(); // Activate vs Controller
 
 
 
-        doNotChangeLedsUtil[0] = runtime.seconds() + 2;
+        doNotChangeLedsUtil[0] = runtime.seconds() + 1;
         ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
 
 
@@ -303,7 +304,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
 
             // Reset LED
             if (gamepad1.x) {
-                doNotChangeLedsUtil[0] = runtime.seconds() + 2;
+                doNotChangeLedsUtil[0] = runtime.seconds() + 1;
                 ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
             }
 
@@ -315,6 +316,11 @@ public class TeleOpFieldCentric extends LinearOpMode {
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
             telemetry.addData("distance", dist.getDistance(DistanceUnit.CM));
+            if (viperSlideAlternativeControl[0]) {
+                telemetry.addData("Viper Slide Control Mode","🆘 ALT EXTEND MODE");
+            } else {
+                telemetry.addData("Viper Slide Control Mode","✳️ Normal Target Mode");
+            }
             telemetry.update();
         }
     }
