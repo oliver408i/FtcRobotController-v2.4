@@ -70,28 +70,8 @@ public class TeleOpFieldCentric extends LinearOpMode {
         // Is a final array because it needs to be accessed in inner class (threads)
         final double[] doNotChangeLedsUtil = {0};
 
+        double distance; // For use in led
 
-        // LED Controller
-        Thread LedController = new Thread() {
-            public void run() {
-                double distance;
-
-                int lastCode = 0;
-                while (opModeIsActive()) {
-                    if (doNotChangeLedsUtil[0] < runtime.seconds()) {
-                        distance = dist.getDistance(DistanceUnit.CM);
-
-                        if (distance > 4.5) { // No pixels
-                            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
-                        } else if (distance > 1) { // One pixel only
-                            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
-                        } else { // Both pixels
-                            ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-                        }
-                    }
-                }
-            }
-        };
         // Viper slide controller thread
         Thread vsController = new Thread() {
             double encoderDrivingTarget = 0;
@@ -127,13 +107,15 @@ public class TeleOpFieldCentric extends LinearOpMode {
                     if (!viperSlideAlternativeControl && gamepad2.x) {
                         ViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         ViperSlide2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        ViperSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        ViperSlide2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
                         ViperSlide.setPower(0);
                         ViperSlide2.setPower(0);
+                        ViperSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        ViperSlide2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         viperSlideAlternativeControl = true;
-                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+
                         doNotChangeLedsUtil[0] = runtime.seconds() + 1;
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
                     }
 
                     // Reset to pid mode
@@ -158,8 +140,10 @@ public class TeleOpFieldCentric extends LinearOpMode {
                         this.encoderDrivingTarget = 0;
                         this.encoderDrivingTarget2 = 0;
                         viperSlideAlternativeControl = false;
-                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
+
                         doNotChangeLedsUtil[0] = runtime.seconds() + 1;
+                        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
+
                     }
 
                     // Pid Mode
@@ -223,10 +207,12 @@ public class TeleOpFieldCentric extends LinearOpMode {
         if (isStopRequested()) return;
         
         vsController.start(); // Activate vs Controller
-        LedController.start();
 
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_SPARKLE_1_ON_2);
+
+
         doNotChangeLedsUtil[0] = runtime.seconds() + 2;
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
+
 
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -300,6 +286,25 @@ public class TeleOpFieldCentric extends LinearOpMode {
                 spaghettiIntake.setPower(-0.75); //suck in
             }else{
                 spaghettiIntake.setPower(0);
+            }
+
+            // LED stuff
+            if (doNotChangeLedsUtil[0] < runtime.seconds()) {
+                distance = dist.getDistance(DistanceUnit.CM);
+
+                if (distance > 4.5) { // No pixels
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_END_TO_END_BLEND_1_TO_2);
+                } else if (distance > 1.5) { // One pixel only
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
+                } else { // Both pixels
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+                }
+            }
+
+            // Reset LED
+            if (gamepad1.x) {
+                doNotChangeLedsUtil[0] = runtime.seconds() + 2;
+                ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
             }
 
             // Update everything. Odometry. Etc.
