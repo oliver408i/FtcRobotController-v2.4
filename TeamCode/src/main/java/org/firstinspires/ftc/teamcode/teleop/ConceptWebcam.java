@@ -36,9 +36,6 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
-
-import com.google.mediapipe.tasks.components.containers.Category;
-import com.google.mediapipe.tasks.components.containers.Detection;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -69,6 +66,8 @@ import com.google.mediapipe.tasks.core.BaseOptions;
 import com.google.mediapipe.tasks.vision.core.RunningMode;
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector;
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetectorResult;
+import com.google.mediapipe.tasks.components.containers.Category;
+import com.google.mediapipe.tasks.components.containers.Detection;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -79,13 +78,14 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This OpMode illustrates how to open a webcam and retrieve images from it. It requires a configuration
- * containing a webcam with the default name ("Webcam 1"). When the opmode runs, pressing the 'A' button
- * will cause a frame from the camera to be written to a file on the device, which can then be retrieved
- * by various means (e.g.: Device File Explorer in Android Studio; plugging the device into a PC and
- * using Media Transfer; ADB; etc)
+ * This OpMode, a modification of the ConceptWebcam example opmode, demonstrates the use of Mediapipe (Google's replacement for TF) in an FTC Opmode
+ * Note that not much is changed/edited. To use this, follow the setup for the original ConceptWebcam opmode, then make an assets folder for the TeamCode project
+ * Upload your custom model.tflite into that assets folder. Train models using mediapipe-model-maker. Supports all four models from mm
+ * See here for example models: https://github.com/oliver408i/FtcRobotController-v2.4/releases/tag/models-0.1
+ * You may edit the model filepath if you use your own model
+ * Press A to capture a frame, then put all detection info into telemetry. Edit that part as needed
  */
-@TeleOp(name="Concept: Webcam", group ="Concept")
+@TeleOp(name="Concept: Mediapipe", group ="Concept")
 public class ConceptWebcam extends LinearOpMode {
 
     //----------------------------------------------------------------------------------------------
@@ -98,6 +98,7 @@ public class ConceptWebcam extends LinearOpMode {
      * we wait indefinitely */
     private static final int secondsPermissionTimeout = Integer.MAX_VALUE;
 
+    /** Null ObjectDetector object, is init later in the init stage of the opmode */
     private ObjectDetector objectDetector = null;
 
     /** State regarding our interaction with the camera */
@@ -126,13 +127,17 @@ public class ConceptWebcam extends LinearOpMode {
     //----------------------------------------------------------------------------------------------
 
     @Override public void runOpMode() {
+        // Here, we make the acutal ObjectDetector object
         ObjectDetector.ObjectDetectorOptions options =
                 ObjectDetector.ObjectDetectorOptions.builder()
-                        .setBaseOptions(BaseOptions.builder().setModelAssetPath("model.tflite").build())
+                        .setBaseOptions(BaseOptions.builder().setModelAssetPath("model.tflite").build()) // Model filepath here
                         .setRunningMode(RunningMode.IMAGE)
                         .setMaxResults(5)
                         .build();
+        // Note, hardwareMap is null before init, so the ObjectDetector must be made here
         objectDetector = ObjectDetector.createFromOptions(hardwareMap.appContext,options);
+
+        // The rest is unmodified from ConceptWebcam
 
         callbackHandler = CallbackLooper.getDefault().getHandler();
 
@@ -180,22 +185,23 @@ public class ConceptWebcam extends LinearOpMode {
         }
     }
 
-    /** Do something with the frame */
+    /** Do something with the frame. In this case, get detections*/
     private void onNewFrame(Bitmap frame) {
-        MPImage mpImage = new BitmapImageBuilder(frame).build();
-        ObjectDetectorResult detectionResult = objectDetector.detect(mpImage);
-        List<Detection> thing = detectionResult.detections();
+        MPImage mpImage = new BitmapImageBuilder(frame).build(); // Get a MPImage from the bitmap
+        ObjectDetectorResult detectionResult = objectDetector.detect(mpImage); // Run detection
+        List<Detection> thing = detectionResult.detections(); // Get detection results
         for (Detection a: thing) {
-            List<Category> b = a.categories();
+            List<Category> b = a.categories(); // This is just the score and label. This seems to be a size 1 list always
 
-            RectF boundaryBox = a.boundingBox();
+            RectF boundaryBox = a.boundingBox(); // The boundaryBox, more can be done with this
 
             telemetry.addData("Detection x", boundaryBox.centerX());
             telemetry.addData("Detection y", boundaryBox.centerY());
             telemetry.addData("Score", b.get(0).score());
+            telemetry.addData("Label",b.get(0).displayName());
 
         }
-        telemetry.update();
+
         frame.recycle(); // not strictly necessary, but helpful
     }
 
