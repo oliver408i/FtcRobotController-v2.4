@@ -155,6 +155,7 @@ public class ConceptWebcam extends LinearOpMode {
             if (cameraCaptureSession == null) return;
 
             telemetry.addData(">", "Press Play to start");
+            telemetry.addData("Log directory", captureDirectory);
             telemetry.update();
             waitForStart();
             telemetry.clear();
@@ -198,8 +199,12 @@ public class ConceptWebcam extends LinearOpMode {
             telemetry.addData("Detection x", boundaryBox.centerX());
             telemetry.addData("Detection y", boundaryBox.centerY());
             telemetry.addData("Score", b.get(0).score());
-            telemetry.addData("Label",b.get(0).displayName());
+            telemetry.addData("Label",b.get(0).categoryName());
 
+        }
+
+        if (gamepad1.b) {
+            saveBitmap(frame);
         }
 
         frame.recycle(); // not strictly necessary, but helpful
